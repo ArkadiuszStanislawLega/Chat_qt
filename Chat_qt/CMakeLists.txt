@@ -16,6 +16,19 @@ qt_add_qml_module(appChat_qt
     URI Chat_qt
     VERSION 1.0
     QML_FILES Main.qml
+    RESOURCES
+           "images/Albert_Einstein.png"
+           "images/Albert_Einstein@2x.png"
+           "images/Albert_Einstein@3x.png"
+           "images/Albert_Einstein@4x.png"
+           "images/Ernest_Hemingway.png"
+           "images/Ernest_Hemingway@2x.png"
+           "images/Ernest_Hemingway@3x.png"
+           "images/Ernest_Hemingway@4x.png"
+           "images/Hans_Gude.png"
+           "images/Hans_Gude@2x.png"
+           "images/Hans_Gude@3x.png"
+           "images/Hans_Gude@4x.png"
 )
 
 set_target_properties(appChat_qt PROPERTIES
