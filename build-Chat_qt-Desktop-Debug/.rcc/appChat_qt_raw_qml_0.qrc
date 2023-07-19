@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/Chat_qt/">
+    <file alias="Main.qml">/home/aro/Projects/Qt/Chat_qt/Chat_qt/Main.qml</file>
+  </qresource>
+</RCC>
+

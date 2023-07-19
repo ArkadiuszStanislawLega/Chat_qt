@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/Chat_qt">
+    <file alias="qmldir">/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/Chat_qt/qmldir</file>
+  </qresource>
+</RCC>
+

@@ -1,0 +1,14 @@
+-rootPath
+/home/aro/Projects/Qt/Chat_qt/Chat_qt
+-cmake-output
+-output-file
+/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/.qt_plugins/Qt6_QmlPlugins_Imports_appChat_qt.cmake
+-importPath
+/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/Chat_qt
+-importPath
+/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug
+-importPath
+/home/aro/Qt/6.4.2/gcc_64/./qml
+-qrcFiles
+/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/.rcc/qmake_Chat_qt.qrc
+/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/.rcc/appChat_qt_raw_qml_0.qrc
