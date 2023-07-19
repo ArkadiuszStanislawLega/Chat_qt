@@ -1,0 +1,33 @@
+{
+	"BUILD_DIR" : "/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/appChat_qt_autogen",
+	"CMAKE_BINARY_DIR" : "/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/aro/Projects/Qt/Chat_qt/Chat_qt",
+	"CMAKE_SOURCE_DIR" : "/home/aro/Projects/Qt/Chat_qt/Chat_qt",
+	"INCLUDE_DIR" : "/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/appChat_qt_autogen/include",
+	"INPUTS" : 
+	[
+		"/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/Hans_Gude@3x.png",
+		"/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/Ernest_Hemingway@2x.png",
+		"/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/Hans_Gude.png",
+		"/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/Albert_Einstein@4x.png",
+		"/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/Hans_Gude@2x.png",
+		"/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/Ernest_Hemingway@3x.png",
+		"/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/Hans_Gude@4x.png",
+		"/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/Albert_Einstein@3x.png",
+		"/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/Ernest_Hemingway.png",
+		"/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/Ernest_Hemingway@4x.png",
+		"/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/Albert_Einstein.png",
+		"/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/Albert_Einstein@2x.png"
+	],
+	"LOCK_FILE" : "/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/CMakeFiles/appChat_qt_autogen.dir/AutoRcc_images_4UGIYD6VGQ_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "images" ],
+	"OUTPUT_CHECKSUM" : "4UGIYD6VGQ",
+	"OUTPUT_NAME" : "qrc_images.cpp",
+	"RCC_EXECUTABLE" : "/home/aro/Qt/6.4.2/gcc_64/./libexec/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/CMakeFiles/appChat_qt_autogen.dir/AutoRcc_images_4UGIYD6VGQ_Used.txt",
+	"SOURCE" : "/home/aro/Projects/Qt/Chat_qt/Chat_qt/images/images.qrc",
+	"VERBOSITY" : 0
+}

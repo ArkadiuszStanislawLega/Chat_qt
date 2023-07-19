@@ -4,12 +4,14 @@ project(Chat_qt VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Sql)
 
 qt_standard_project_setup()
 
 qt_add_executable(appChat_qt
     main.cpp
+    sqlcontactmodel.h
+    sqlcontactmodel.cpp
 )
 
 qt_add_qml_module(appChat_qt
@@ -43,7 +45,7 @@ set_target_properties(appChat_qt PROPERTIES
 )
 
 target_link_libraries(appChat_qt
-    PRIVATE Qt6::Quick
+    PRIVATE Qt6::Quick Qt6::Sql
 )
 
 install(TARGETS appChat_qt

@@ -1,5 +1,7 @@
 module Chat_qt
 typeinfo appChat_qt.qmltypes
 prefer :/Chat_qt/
+ConversationPage 1.0 ConversationPage.qml
+ContactPage 1.0 ContactPage.qml
 Main 1.0 Main.qml
 
