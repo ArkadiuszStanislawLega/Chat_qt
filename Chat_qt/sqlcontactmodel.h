@@ -6,8 +6,8 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
-class SqlContactModel : public QSqlQueryModel
-{
+class SqlContactModel : public QSqlQueryModel{
+    Q_OBJECT
 public:
     SqlContactModel(QObject *parent = nullptr);
 };

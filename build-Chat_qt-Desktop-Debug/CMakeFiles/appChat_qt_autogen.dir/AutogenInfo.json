@@ -1072,6 +1072,12 @@
 			"MU",
 			"EWIEGA46WW/moc_sqlcontactmodel.cpp",
 			null
+		],
+		[
+			"/home/aro/Projects/Qt/Chat_qt/Chat_qt/sqlconversationmodel.h",
+			"MU",
+			"EWIEGA46WW/moc_sqlconversationmodel.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -1164,6 +1170,11 @@
 		[ "/home/aro/Projects/Qt/Chat_qt/Chat_qt/main.cpp", "MU", null ],
 		[
 			"/home/aro/Projects/Qt/Chat_qt/Chat_qt/sqlcontactmodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/aro/Projects/Qt/Chat_qt/Chat_qt/sqlconversationmodel.cpp",
 			"MU",
 			null
 		],

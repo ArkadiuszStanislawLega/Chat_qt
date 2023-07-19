@@ -8,8 +8,7 @@
 			"_qt_internal_target_enable_qmllint",
 			"qt6_target_qml_sources",
 			"qt6_add_qml_module",
-			"qt_add_qml_module",
-			"add_dependencies"
+			"qt_add_qml_module"
 		],
 		"files" : 
 		[
@@ -24,7 +23,7 @@
 			{
 				"command" : 4,
 				"file" : 1,
-				"line" : 15,
+				"line" : 19,
 				"parent" : 0
 			},
 			{
@@ -48,13 +47,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 828,
-				"parent" : 4
-			},
-			{
-				"command" : 5,
-				"file" : 0,
-				"line" : 830,
+				"line" : 798,
 				"parent" : 4
 			}
 		]
@@ -62,17 +55,47 @@
 	"dependencies" : 
 	[
 		{
-			"backtrace" : 6,
-			"id" : "appChat_qt_qmllint::@6890427a1f51a3e7e1df"
+			"id" : "all_qmltyperegistrations::@6890427a1f51a3e7e1df"
 		}
 	],
-	"id" : "all_qmllint::@6890427a1f51a3e7e1df",
-	"name" : "all_qmllint",
+	"id" : "appChat_qt_qmllint::@6890427a1f51a3e7e1df",
+	"name" : "appChat_qt_qmllint",
 	"paths" : 
 	{
 		"build" : ".",
 		"source" : "."
 	},
-	"sources" : [],
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 5,
+			"isGenerated" : true,
+			"path" : "/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/CMakeFiles/appChat_qt_qmllint",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/CMakeFiles/appChat_qt_qmllint.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
 	"type" : "UTILITY"
 }

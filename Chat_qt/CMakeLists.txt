@@ -12,6 +12,8 @@ qt_add_executable(appChat_qt
     main.cpp
     sqlcontactmodel.h
     sqlcontactmodel.cpp
+    sqlconversationmodel.h
+    sqlconversationmodel.cpp
 )
 
 qt_add_qml_module(appChat_qt
