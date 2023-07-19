@@ -53,7 +53,7 @@ Page {
                 Rectangle{
                     width: 80
                     height: 40
-                    color: sent_by_me ? "lightGrey" : "steelblue"
+                    color: sent_by_me ? "lightgrey" : "steelblue"
 
                     Label{
                         anchors.centerIn: parent
@@ -68,6 +68,23 @@ Page {
         Pane{
             id: pane
             layout.fillWidth: true
+
+            RowLayout{
+                width: parent.width
+
+                TextArea{
+                    id: message_field
+                    Layout.fillWidth: true
+                    placeholderText: qsTr("Compose message")
+                    wrapMode: TextArea.Wrap
+                }
+
+                Button {
+                    id: send_button
+                    text: qsTr("Send")
+                    enabled:  message_field.length > 0
+                }
+            }
         }
     }
 

@@ -15,8 +15,10 @@ qt_add_executable(appChat_qt
 qt_add_qml_module(appChat_qt
     URI Chat_qt
     VERSION 1.0
-    QML_FILES Main.qml
+    QML_FILES
+            ConversationPage.qml
             ContactPage.qml
+            Main.qml
     RESOURCES
            "images/Albert_Einstein.png"
            "images/Albert_Einstein@2x.png"
