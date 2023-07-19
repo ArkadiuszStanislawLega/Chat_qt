@@ -8,37 +8,11 @@ Window {
     visible: true
     title: qsTr("Chat")
 
-    Page{
+    StackView{
+        id: stackView
         anchors.fill: parent
-        header: Label {
-            padding: 10
-            text: qsTr("Contacts")
-            font.pixelSize: 20
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-        }
-        ListView{
-            id: list_view
-            anchors.fill: parent
-            topMargin: 48
-            leftMargin: 48
-            bottomMargin: 48
-            rightMargin: 48
-            spacing: 20
-            model: ["Albert Einstein" , "Ernest Hemingway", "Hans Gude"]
-            delegate: ItemDelegate {
-                text: modelData
-                width: list_view.width - list_view.leftMargin - list_view.rightMargin
-                height: avatar.implicitHeight
-                leftPadding: avatar.implicitWidth + 32
+        initialItem: ContactPage{
 
-
-                Image {
-                    id: avatar
-                    source: "images/" + modelData.replace(" ", "_") + ".png"
-                }
-
-            }
         }
     }
 }

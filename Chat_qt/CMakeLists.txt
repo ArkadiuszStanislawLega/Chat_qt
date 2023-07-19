@@ -16,6 +16,7 @@ qt_add_qml_module(appChat_qt
     URI Chat_qt
     VERSION 1.0
     QML_FILES Main.qml
+            ContactPage.qml
     RESOURCES
            "images/Albert_Einstein.png"
            "images/Albert_Einstein@2x.png"
