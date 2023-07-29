@@ -1,2 +1,0 @@
-/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/appChat_qt_autogen/include/../EWIEGA46WW/moc_sqlcontactmodel.cpp.json
-/home/aro/Projects/Qt/Chat_qt/build-Chat_qt-Desktop-Debug/appChat_qt_autogen/include/../EWIEGA46WW/moc_sqlconversationmodel.cpp.json

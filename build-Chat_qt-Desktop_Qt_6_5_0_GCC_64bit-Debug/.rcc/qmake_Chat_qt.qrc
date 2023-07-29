@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/Chat_qt">
-    <file alias="qmldir">/home/aro/projects/Chat_qt/build-Chat_qt-Desktop_Qt_6_5_0_GCC_64bit-Debug/Chat_qt/qmldir</file>
-  </qresource>
-</RCC>
-

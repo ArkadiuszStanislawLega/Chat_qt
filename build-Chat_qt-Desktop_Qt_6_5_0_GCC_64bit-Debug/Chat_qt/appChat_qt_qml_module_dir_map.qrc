@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/">
-    <file alias="/Chat_qt">/home/aro/projects/Chat_qt/build-Chat_qt-Desktop_Qt_6_5_0_GCC_64bit-Debug/Chat_qt</file>
-
-  </qresource>
-</RCC>
