@@ -4,18 +4,19 @@ import QtQuick.Controls
 
 import io.qt.chat
 
-Page{
+Page {
+    id: root
+
     header: ToolBar {
-        Label{
+        Label {
             text: qsTr("Contacts")
             font.pixelSize: 20
             anchors.centerIn: parent
-            padding: 10
         }
     }
 
-    ListView{
-        id: list_view
+    ListView {
+        id: listView
         anchors.fill: parent
         topMargin: 48
         leftMargin: 48
@@ -24,17 +25,16 @@ Page{
         spacing: 20
         model: SqlContactModel {}
         delegate: ItemDelegate {
-            text: mode.display
-            width: list_view.width - list_view.leftMargin - list_view.rightMargin
+            text: model.display
+            width: listView.width - listView.leftMargin - listView.rightMargin
             height: avatar.implicitHeight
             leftPadding: avatar.implicitWidth + 32
-            onClicked: root.StackView.view.push("ConversationPage.qml", {inConversationWith: modelData})
+            onClicked: root.StackView.view.push("ConversationPage.qml", { inConversationWith: model.display })
 
             Image {
                 id: avatar
-                source: "images/" + modelData.replace(" ", "_") + ".png"
+                source: "images/" + model.display.replace(" ", "_") + ".png"
             }
-
         }
     }
 }

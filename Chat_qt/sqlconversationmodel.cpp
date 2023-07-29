@@ -19,7 +19,7 @@ static void create_table(){
             "'timestamp' TEXT NOT NULL,"
             "'message' TEXT NOT NULL,"
             "FOREIGN KEY('author') REFERENCES Contacts (name),"
-            "FROEIGN KEY('recipient') REFERENCES Contacts (name)"
+            "FOREIGN KEY('recipient') REFERENCES Contacts (name)"
             ")")) {
         qFatal("Failed to query database: %s", qPrintable(query.lastError().text()));
     }

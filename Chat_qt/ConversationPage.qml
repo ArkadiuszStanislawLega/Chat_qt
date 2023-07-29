@@ -20,7 +20,7 @@ Page {
 
     Label{
         id: page_title
-        text: inConvesationWith
+        text: inConversationWith
         font.pixelSize: 20
         anchors.centerIn: parent
     }
@@ -32,7 +32,7 @@ Page {
             id: list_view
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.margins: pane.leftPadding + messageField.leftPadding
+            Layout.margins: pane.leftPadding + message_field.leftPadding
             displayMarginBeginning: 40
             displayMarginEnd: 40
             verticalLayoutDirection: ListView.BottomToTop
@@ -41,10 +41,10 @@ Page {
                 recipient: inConversationWith
             }
             delegate: Column {
-                readonly property bool sent_by_me: index % 2 == 0
 
-                anchors.right: sent_by_me ? list_view.contentItem : undefined
+                anchors.right: sent_by_me ? list_view.contentItem.right : undefined
                 spacing: 6
+                readonly property bool sent_by_me: model.recipient !== "Me"
 
                 Row{
                     id:message_row
@@ -53,7 +53,7 @@ Page {
 
                     Image{
                         id: avatar
-                        source: !sent_by_me ? "images/" + mode.author.replace(" ", "_") + ".png": ""
+                        source: !sent_by_me ? "images/" + model.author.replace(" ", "_") + ".png": ""
                     }
                     Rectangle{
                         width: Math.min(message_text.implicitWidth + 24,
@@ -64,7 +64,7 @@ Page {
                         Label{
                             id: message_text
                             text: model.message
-                            color: sent_by_my ? "black" : "white"
+                            color: sent_by_me ? "black" : "white"
                             anchors.margins: 12
                             wrapMode: Label.Wrap
                         }
