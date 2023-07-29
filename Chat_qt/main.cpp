@@ -30,6 +30,11 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+    qmlRegisterType<SqlContactModel>("io.qt.chat", 1, 0, "SqlContactModel");
+    qmlRegisterType<SqlConversationModel>("io.qt.chat", 1, 0, "SqlConversationModel");
+
+    connect_database();
+
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:/Chat_qt/Main.qml"_qs);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,

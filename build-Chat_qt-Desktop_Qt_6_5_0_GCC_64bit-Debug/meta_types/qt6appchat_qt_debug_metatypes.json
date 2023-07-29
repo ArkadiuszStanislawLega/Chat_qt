@@ -1,0 +1,77 @@
+[
+    {
+        "classes": [
+            {
+                "className": "SqlContactModel",
+                "object": true,
+                "qualifiedClassName": "SqlContactModel",
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QSqlQueryModel"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "sqlcontactmodel.h",
+        "outputRevision": 68
+    },
+    {
+        "classes": [
+            {
+                "className": "SqlConversationModel",
+                "methods": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "recipient",
+                                "type": "QString"
+                            },
+                            {
+                                "name": "message",
+                                "type": "QString"
+                            }
+                        ],
+                        "name": "send_message",
+                        "returnType": "void"
+                    }
+                ],
+                "object": true,
+                "properties": [
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 0,
+                        "name": "recipient",
+                        "notify": "recipient_change",
+                        "read": "recipient",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "QString",
+                        "user": false,
+                        "write": "set_recipient"
+                    }
+                ],
+                "qualifiedClassName": "SqlConversationModel",
+                "signals": [
+                    {
+                        "access": "public",
+                        "name": "recipient_change",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QSqlTableModel"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "sqlconversationmodel.h",
+        "outputRevision": 68
+    }
+]

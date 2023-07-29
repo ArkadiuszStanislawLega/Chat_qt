@@ -1,0 +1,17 @@
+{
+    "classes": [
+        {
+            "className": "SqlContactModel",
+            "object": true,
+            "qualifiedClassName": "SqlContactModel",
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "QSqlQueryModel"
+                }
+            ]
+        }
+    ],
+    "inputFile": "sqlcontactmodel.h",
+    "outputRevision": 68
+}
