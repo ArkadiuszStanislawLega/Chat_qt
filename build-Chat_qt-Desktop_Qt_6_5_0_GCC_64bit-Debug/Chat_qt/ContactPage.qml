@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 
+import io.qt.chat
+
 Page{
     header: ToolBar {
         Label{
@@ -20,9 +22,9 @@ Page{
         bottomMargin: 48
         rightMargin: 48
         spacing: 20
-        model: ["Albert Einstein" , "Ernest Hemingway", "Hans Gude"]
+        model: SqlContactModel {}
         delegate: ItemDelegate {
-            text: modelData
+            text: mode.display
             width: list_view.width - list_view.leftMargin - list_view.rightMargin
             height: avatar.implicitHeight
             leftPadding: avatar.implicitWidth + 32

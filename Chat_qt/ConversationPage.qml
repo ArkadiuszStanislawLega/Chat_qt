@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import io.qt.chat
+
 Page {
     id: root
     property string inConversationWith
@@ -33,33 +35,47 @@ Page {
             Layout.margins: pane.leftPadding + messageField.leftPadding
             displayMarginBeginning: 40
             displayMarginEnd: 40
-            verticalLayoutDirection: ListViewBottomToTop
+            verticalLayoutDirection: ListView.BottomToTop
             spacing: 12
-            model: 10
-            delegate: Row {
+            model: SqlConversationModel{
+                recipient: inConversationWith
+            }
+            delegate: Column {
                 readonly property bool sent_by_me: index % 2 == 0
 
                 anchors.right: sent_by_me ? list_view.contentItem : undefined
                 spacing: 6
 
-                Rectangle {
-                   id: avatar
-                   width: height
-                   height: parent.height
-                   color: "grey"
-                   visible: !sent_by_me
+                Row{
+                    id:message_row
+                    spacing: 6
+                    anchors.right: sent_by_me ? parent.right : undefined
+
+                    Image{
+                        id: avatar
+                        source: !sent_by_me ? "images/" + mode.author.replace(" ", "_") + ".png": ""
+                    }
+                    Rectangle{
+                        width: Math.min(message_text.implicitWidth + 24,
+                                        list_view.width - (!sent_by_me ? avatar.width + message_row.spacing:0))
+                        height: message_text.implicitHeight + 24
+                        color: sent_by_me ? "lightgrey" : "steelblue"
+
+                        Label{
+                            id: message_text
+                            text: model.message
+                            color: sent_by_my ? "black" : "white"
+                            anchors.margins: 12
+                            wrapMode: Label.Wrap
+                        }
+                    }
                 }
 
-                Rectangle{
-                    width: 80
-                    height: 40
-                    color: sent_by_me ? "lightgrey" : "steelblue"
-
-                    Label{
-                        anchors.centerIn: parent
-                        text: index
-                        color: sent_by_me ? "black" : "white"
-                    }
+                Label {
+                    id: timestamp_text
+                    text: Qt.formatDateTime(model.timestamp, "d MMM hh:mm")
+                    color: "lightgrey"
+                    anchors.right: sent_by_me ? parent.right : undefined
                 }
             }
             ScrollBar.vertical: ScrollBar{}
@@ -67,7 +83,7 @@ Page {
 
         Pane{
             id: pane
-            layout.fillWidth: true
+            Layout.fillWidth: true
 
             RowLayout{
                 width: parent.width
