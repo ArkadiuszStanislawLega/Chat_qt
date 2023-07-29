@@ -16,7 +16,7 @@ Page {
     }
 
     ListView {
-        id: listView
+        id: list_view
         anchors.fill: parent
         topMargin: 48
         leftMargin: 48
@@ -26,7 +26,7 @@ Page {
         model: SqlContactModel {}
         delegate: ItemDelegate {
             text: model.display
-            width: listView.width - listView.leftMargin - listView.rightMargin
+            width: list_view.width - list_view.leftMargin - list_view.rightMargin
             height: avatar.implicitHeight
             leftPadding: avatar.implicitWidth + 32
             onClicked: root.StackView.view.push("ConversationPage.qml", { inConversationWith: model.display })
