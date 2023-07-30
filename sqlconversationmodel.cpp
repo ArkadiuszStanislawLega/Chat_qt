@@ -1,26 +1,20 @@
 #include "sqlconversationmodel.h"
 
-static const char *CONVERSATION_TABLE_NAME = "Conversations";
-static const char *AUTHOR_COLUMN = "author";
-static const char *RECIPIENT_COLUMN = "recipient";
-static const char *TIME_COLUMN = "timestamp";
-static const char *MESSAGE_COLUMN = "message";
-
 static void create_table(){
-    if(QSqlDatabase::database().tables().contains(CONVERSATION_TABLE_NAME)){
+    if(QSqlDatabase::database().tables().contains(*CONVERSATION_TABLE_NAME)){
         return;
     }
 
     QSqlQuery query;
-    if(!query.exec(
-            "CREATE TABLE IF NOT EXISTS 'Conversations' ("
-            "'author' TEXT NOT NULL,"
-            "'recipient' TEXT NOT NULL,"
-            "'timestamp' TEXT NOT NULL,"
-            "'message' TEXT NOT NULL,"
-            "FOREIGN KEY('author') REFERENCES Contacts (name),"
-            "FOREIGN KEY('recipient') REFERENCES Contacts (name)"
-            ")")) {
+    query.prepare("CREATE TABLE IF NOT EXISTS '" + *CONVERSATION_TABLE_NAME + "' ("
+            "'" + *AUTHOR_COLUMN + "' TEXT NOT NULL,"
+            "'" + *RECIPIENT_COLUMN + "' TEXT NOT NULL,"
+            "'" + *TIME_COLUMN + "' TEXT NOT NULL,"
+            "'" + *MESSAGE_COLUMN + "' TEXT NOT NULL,"
+            "FOREIGN KEY('" + *AUTHOR_COLUMN + "') REFERENCES " + *CONTACTS_TABLE_NAME+ "(" + *NAME_COLUMN + "),"
+            "FOREIGN KEY('" + *RECIPIENT_COLUMN + "') REFERENCES " +  *CONTACTS_TABLE_NAME + "(" + *NAME_COLUMN + ")"
+            ")");
+    if(!query.exec()) {
         qFatal("Failed to query database: %s", qPrintable(query.lastError().text()));
     }
 
@@ -35,7 +29,7 @@ static void create_table(){
 
 SqlConversationModel::SqlConversationModel(QObject *parent) : QSqlTableModel(parent){
     create_table();
-    setTable(CONVERSATION_TABLE_NAME);
+    setTable(*CONVERSATION_TABLE_NAME);
     setSort(2, Qt::DescendingOrder);
     setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
@@ -69,10 +63,10 @@ QVariant SqlConversationModel::data(const QModelIndex &index, int role) const{
 
 QHash<int, QByteArray> SqlConversationModel::roleNames()const{
     QHash<int, QByteArray> names;
-    names[Qt::UserRole] = AUTHOR_COLUMN;
-    names[Qt::UserRole + 1] = RECIPIENT_COLUMN;
-    names[Qt::UserRole + 2] = TIME_COLUMN;
-    names[Qt::UserRole + 3] = MESSAGE_COLUMN;
+    names[Qt::UserRole]  = AUTHOR_COLUMN->toLatin1();
+    names[Qt::UserRole + 1] = RECIPIENT_COLUMN->toLatin1();
+    names[Qt::UserRole + 2] = TIME_COLUMN->toLatin1();
+    names[Qt::UserRole + 3] = MESSAGE_COLUMN->toLatin1();
     return names;
 }
 
@@ -80,10 +74,10 @@ void SqlConversationModel::send_message(const QString &recipient, const QString 
     const QString timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
 
     QSqlRecord n_record = record();
-    n_record.setValue(AUTHOR_COLUMN, "Me");
-    n_record.setValue(RECIPIENT_COLUMN, recipient);
-    n_record.setValue(TIME_COLUMN, timestamp);
-    n_record.setValue(MESSAGE_COLUMN, message);
+    n_record.setValue(*AUTHOR_COLUMN, "Me");
+    n_record.setValue(*RECIPIENT_COLUMN, recipient);
+    n_record.setValue(*TIME_COLUMN, timestamp);
+    n_record.setValue(*MESSAGE_COLUMN, message);
 
     if(!insertRecord(rowCount(), n_record)){
         qWarning() << "Failed to send message: " << lastError().text();

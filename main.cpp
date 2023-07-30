@@ -18,7 +18,10 @@ static void connect_database(){
     if(!write_directory.mkpath(".")){
         qFatal("Failed to create writable directory at %s", qPrintable(write_directory.absolutePath()));
     }
-    const QString file_name = write_directory.absolutePath() + "/chat_database.sqlite3";
+
+    const QString file_name = write_directory.absolutePath() + "/chat_database.db";
+    qDebug() << file_name;
+
     database.setDatabaseName(file_name);
     if(!database.open()){
         qFatal("Cannot open database: %s", qPrintable(database.lastError().text()));
