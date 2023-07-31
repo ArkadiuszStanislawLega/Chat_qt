@@ -26,8 +26,6 @@ SqlContactModel::SqlContactModel(QObject *parent) : QSqlQueryModel(parent){
         qFatal("Contacts Select query failed: %s", qPrintable(query.lastError().text()));
     }
 
-    qDebug() << query.result();
-
     setQuery(std::move(query));
 
     if(lastError().isValid()){

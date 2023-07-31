@@ -20,7 +20,6 @@ static void connect_database(){
     }
 
     const QString file_name = write_directory.absolutePath() + "/chat_database.db";
-    qDebug() << file_name;
 
     database.setDatabaseName(file_name);
     if(!database.open()){
