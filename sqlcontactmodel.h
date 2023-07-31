@@ -5,9 +5,7 @@
 #include <QDebug>
 #include <QSqlError>
 #include <QSqlQuery>
-
-Q_GLOBAL_STATIC(QString, CONTACTS_TABLE_NAME, "Contacts");
-Q_GLOBAL_STATIC(QString, NAME_COLUMN, "name");
+#include "dbmanager.h"
 
 class SqlContactModel : public QSqlQueryModel{
 public:

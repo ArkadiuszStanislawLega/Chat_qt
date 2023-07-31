@@ -41,9 +41,9 @@ Page {
                 recipient: inConversationWith
             }
             delegate: Column {
-
                 anchors.right: sent_by_me ? list_view.contentItem.right : undefined
                 spacing: 6
+
                 readonly property bool sent_by_me: model.recipient !== "Me"
 
                 Row{
@@ -57,7 +57,7 @@ Page {
                     }
                     Rectangle{
                         width: Math.min(message_text.implicitWidth + 24,
-                                        list_view.width - (!sent_by_me ? avatar.width + message_row.spacing:0))
+                                        list_view.width - (!sent_by_me ? avatar.width + message_row.spacing : 0))
                         height: message_text.implicitHeight + 24
                         color: sent_by_me ? "lightgrey" : "steelblue"
 
@@ -65,6 +65,7 @@ Page {
                             id: message_text
                             text: model.message
                             color: sent_by_me ? "black" : "white"
+                            anchors.fill: parent
                             anchors.margins: 12
                             wrapMode: Label.Wrap
                         }

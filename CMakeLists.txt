@@ -36,6 +36,7 @@ qt_add_qml_module(appChat_qt
            "images/Hans_Gude@2x.png"
            "images/Hans_Gude@3x.png"
            "images/Hans_Gude@4x.png"
+           SOURCES dbmanager.h dbmanager.cpp
 )
 
 set_target_properties(appChat_qt PROPERTIES

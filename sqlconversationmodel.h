@@ -10,12 +10,7 @@
 #include <QSqlQuery>
 
 #include "sqlcontactmodel.h"
-
-Q_GLOBAL_STATIC(QString, CONVERSATION_TABLE_NAME, "Conversations");
-Q_GLOBAL_STATIC(QString, AUTHOR_COLUMN, "author");
-Q_GLOBAL_STATIC(QString, RECIPIENT_COLUMN, "recipient");
-Q_GLOBAL_STATIC(QString, TIME_COLUMN, "timestamp");
-Q_GLOBAL_STATIC(QString, MESSAGE_COLUMN, "message");
+#include "dbmanager.h"
 
 class SqlConversationModel : public QSqlTableModel
 {
