@@ -96,7 +96,7 @@ Page {
                     wrapMode: TextArea.Wrap
                 }
 
-                Button {
+                RoundButton {
                     id: send_button
                     text: qsTr("Send")
                     enabled:  message_field.length > 0

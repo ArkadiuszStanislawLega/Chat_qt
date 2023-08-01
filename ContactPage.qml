@@ -33,7 +33,7 @@ Page {
 
             Image {
                 id: avatar
-                source: "images/" + model.display.replace(" ", "_") + ".png"
+                source: model.display === "Me" ? "" : "images/" + model.display.replace(" ", "_") + ".png"
             }
         }
     }
