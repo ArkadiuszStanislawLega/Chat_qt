@@ -1,10 +1,7 @@
 #include "sqlconversationmodel.h"
 
-static void create_table(){
-}
 
 SqlConversationModel::SqlConversationModel(QObject *parent) : QSqlTableModel(parent){
-    create_table();
     setTable(*CONVERSATION_TABLE_NAME);
     setSort(2, Qt::DescendingOrder);
     setEditStrategy(QSqlTableModel::OnManualSubmit);

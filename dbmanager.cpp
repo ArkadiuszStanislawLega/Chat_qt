@@ -5,9 +5,9 @@ DbManager::DbManager(QObject *parent) : QObject(parent) {
     this->_database.setDatabaseName(*DATABASE_NAME);
 
     if(!this->_database.open()){
-        qDebug() << "Error databse";
+        qDebug() << "Error during connecting to databse.";
     }else{
-        qDebug() << "Db connection ok";
+        qDebug() << "Db connection is ok.";
         this->CreateTables();
     }
 }
@@ -27,7 +27,6 @@ void DbManager::CreateContactsTable(){
 }
 
 void DbManager::CreateConversationTable(){
-
     QSqlQuery query;
     query.prepare( *CREATE_TABLE + " '" + *CONVERSATION_TABLE_NAME + "' ("
             "'" + *AUTHOR_COLUMN + "' " + *TEXT_NO_NULL + ", "

@@ -1,12 +1,7 @@
 #include "sqlcontactmodel.h"
 
 
-static void createTable(){
-}
-
 SqlContactModel::SqlContactModel(QObject *parent) : QSqlQueryModel(parent){
-    createTable();
-
     QSqlQuery query;
     query.prepare("SELECT * FROM " + *CONTACTS_TABLE_NAME);
     if(!query.exec()){

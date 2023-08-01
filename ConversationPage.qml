@@ -8,7 +8,7 @@ Page {
     id: root
     property string inConversationWith
 
-    header: ToolBar{
+    header: ChatToolBar{
         ToolButton{
             text: qsTr("Back")
             anchors.left: parent.left
@@ -16,14 +16,14 @@ Page {
             anchors.verticalCenter: parent.verticalCenter
             onClicked: root.StackView.view.pop()
         }
+        Label{
+            id: page_title
+            text: inConversationWith
+            font.pixelSize: 20
+            anchors.centerIn: parent
+        }
     }
 
-    Label{
-        id: page_title
-        text: inConversationWith
-        font.pixelSize: 20
-        anchors.centerIn: parent
-    }
 
     ColumnLayout{
         anchors.fill: parent

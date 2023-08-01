@@ -10,6 +10,8 @@ qt_standard_project_setup()
 
 qt_add_executable(appChat_qt
     main.cpp
+    dbmanager.h
+    dbmanager.cpp
     sqlcontactmodel.h
     sqlcontactmodel.cpp
     sqlconversationmodel.h
@@ -20,6 +22,7 @@ qt_add_qml_module(appChat_qt
     URI Chat_qt
     VERSION 1.0
     QML_FILES
+            ChatToolBar.qml
             ConversationPage.qml
             ContactPage.qml
             Main.qml
@@ -37,6 +40,8 @@ qt_add_qml_module(appChat_qt
            "images/Hans_Gude@3x.png"
            "images/Hans_Gude@4x.png"
            SOURCES dbmanager.h dbmanager.cpp
+           QML_FILES ChatToolBar.qml
+           RESOURCES README.md
 )
 
 set_target_properties(appChat_qt PROPERTIES

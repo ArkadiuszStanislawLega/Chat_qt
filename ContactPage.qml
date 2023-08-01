@@ -7,7 +7,7 @@ import io.qt.chat
 Page {
     id: root
 
-    header: ToolBar {
+    header: ChatToolBar {
         Label {
             text: qsTr("Contacts")
             font.pixelSize: 20
