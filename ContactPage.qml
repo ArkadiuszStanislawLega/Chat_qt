@@ -6,10 +6,11 @@ import io.qt.chat
 
 Page {
     id: root
+    property string username
 
     header: ChatToolBar {
         Label {
-            text: qsTr("Contacts")
+            text: username
             font.pixelSize: 20
             anchors.centerIn: parent
         }

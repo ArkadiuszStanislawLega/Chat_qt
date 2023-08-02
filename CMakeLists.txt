@@ -22,6 +22,7 @@ qt_add_qml_module(appChat_qt
             URI Chat_qt
             VERSION 1.0
             QML_FILES
+            LoginPage.qml
             RoundButton.qml
             +Materials/RoundButton.qml
             ChatToolBar.qml
