@@ -22,6 +22,7 @@ qt_add_qml_module(appChat_qt
             URI Chat_qt
             VERSION 1.0
             QML_FILES
+            RegisterPage.qml
             LoginPage.qml
             RoundButton.qml
             +Materials/RoundButton.qml
@@ -43,6 +44,7 @@ qt_add_qml_module(appChat_qt
            "images/Hans_Gude@2x.png"
            "images/Hans_Gude@3x.png"
            "images/Hans_Gude@4x.png"
+           RESOURCES
 )
 
 set_target_properties(appChat_qt PROPERTIES

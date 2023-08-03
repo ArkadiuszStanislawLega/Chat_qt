@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import io.qt.chat
+
 Page {
     id: root
 
@@ -14,7 +16,6 @@ Page {
                 verticalCenter: parent.verticalCenter
         }
         ColumnLayout{
-            id: layout
             spacing: 6
             width: parent.width-20
             height: parent.height-20
@@ -30,8 +31,8 @@ Page {
                 height: 20
                 width: parent.width-20
                 validator: IntValidator{
-                    bottom: 0
-                    top: 200000
+                    bottom: 1
+                    top: 2000000
                 }
             }
 
@@ -66,6 +67,7 @@ Page {
                     id: register_button
                     text: qsTr("Register")
                     onClicked:{
+                        root.StackView.view.push("RegisterPage.qml")
                     }
                 }
             }
