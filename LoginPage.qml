@@ -7,7 +7,7 @@ Page {
 
     Rectangle{
         width: root.width-20
-        height: 300
+        height: 250
         color: "transparent"
         anchors{
                 horizontalCenter: parent.horizontalCenter
@@ -21,15 +21,22 @@ Page {
             Layout.alignment: parent.Center
 
             Label{
+                font.pixelSize: 20
                 text: qsTr("Login:")
             }
+
             TextField {
                 id: login_field
                 height: 20
                 width: parent.width-20
+                validator: IntValidator{
+                    bottom: 0
+                    top: 200000
+                }
             }
 
             Label{
+                font.pixelSize: 20
                 text: qsTr("Password:")
             }
 
