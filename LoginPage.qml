@@ -2,34 +2,33 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import io.qt.chat
-
 Page {
     id: root
 
     Rectangle{
-        width: root.width-20
+        id: rec
+        width: parent.width-40
         height: 250
-        color: "transparent"
-        anchors{
-                horizontalCenter: parent.horizontalCenter
-                verticalCenter: parent.verticalCenter
-        }
+        anchors.centerIn: parent
+        color:"transparent"
+
         ColumnLayout{
             spacing: 6
-            width: parent.width-20
-            height: parent.height-20
+            anchors.fill: parent
             Layout.alignment: parent.Center
 
             Label{
-                font.pixelSize: 20
-                text: qsTr("Login:")
+                font{
+                    pixelSize: 20
+                    bold: true
+                }
+                text: qsTr("Id:")
             }
 
             TextField {
                 id: login_field
+                Layout.fillWidth: true
                 height: 20
-                width: parent.width-20
                 validator: IntValidator{
                     bottom: 1
                     top: 2000000
@@ -37,15 +36,19 @@ Page {
             }
 
             Label{
-                font.pixelSize: 20
+                font{
+                    pixelSize: 20
+                    bold: true
+                }
+
                 text: qsTr("Password:")
             }
 
 
             TextField{
                 id: password_field
+                Layout.fillWidth: true
                 height: 20
-                width: parent.width-20
                 echoMode: TextInput.Password
             }
 

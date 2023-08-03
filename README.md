@@ -1,4 +1,6 @@
 # Chat app in Qt
+
+## Target
 App chat with anonymous user. Is not required e-mail address or phone number. 
 Messages are removed from server after 30 days.
 If user doesn't use his account, after 30 all data will be deleted and user lost his account. 

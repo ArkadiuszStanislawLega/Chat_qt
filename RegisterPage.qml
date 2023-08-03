@@ -2,17 +2,14 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import io.qt.chat
 
 Page {
     id: root
         ColumnLayout{
             spacing:  6
-            width: parent.width-20
-            anchors{
-                horizontalCenter: parent.horizontalCenter
-                verticalCenter: parent.verticalCenter
-            }
+            width: parent.width-40
+            height: 250
+            anchors.centerIn: parent
 
             Label{
                 font.pixelSize: 20
@@ -21,8 +18,8 @@ Page {
 
             TextField{
                 id: id_field
+                Layout.fillWidth: true
                 height: 20
-                width: 400
                 validator: IntValidator{
                     bottom: 1
                     top: 2000000
@@ -36,6 +33,7 @@ Page {
 
             TextField{
                 id: password_field
+                Layout.fillWidth: true
                 height: 20
                 width: 400
                 echoMode: TextInput.Password
@@ -43,8 +41,8 @@ Page {
 
             TextField{
                 id: repassword_field
+                Layout.fillWidth: true
                 height: 20
-                width: parent.width-20
                 echoMode: TextInput.Password
             }
 
