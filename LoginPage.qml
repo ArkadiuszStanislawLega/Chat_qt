@@ -4,59 +4,64 @@ import QtQuick.Controls
 
 Page {
     id: root
+    padding: 20
 
     ColumnLayout{
-        spacing: 6
         width: parent.width
-        height: 200
         anchors.centerIn: parent
+        spacing: 10
 
-        Label{
-            font{
-                pixelSize: 20
-                bold: true
-            }
-            text: qsTr("Id:")
-        }
+        GridLayout{
+            columns: 2
+            rows: 3
 
-        TextField {
-            id: tf_id
-            Layout.fillWidth: true
-            height: 20
-            validator: IntValidator{
-                bottom: 1
-                top: 2000000
-            }
-        }
-
-        Label{
-            font{
-                pixelSize: 20
-                bold: true
+            Label{
+                font{
+                    pixelSize: 20
+                    bold: true
+                }
+                text: qsTr("Id:")
             }
 
-            text: qsTr("Password:")
-        }
+            TextField {
+                id: tf_id
+                Layout.fillWidth: true
+                height: 20
+                validator: IntValidator{
+                    bottom: 1
+                    top: 2000000
+                }
+            }
+
+            Label{
+                font{
+                    pixelSize: 20
+                    bold: true
+                }
+
+                text: qsTr("Password:")
+            }
 
 
-        TextField{
-            id: tf_password
-            Layout.fillWidth: true
-            height: 20
-            echoMode: TextInput.Password
+            TextField{
+                id: tf_password
+                Layout.fillWidth: true
+                height: 20
+                echoMode: TextInput.Password
+            }
         }
 
         Row{
             id: r_buttons
-            spacing: 6
-            Layout.alignment: parent.Center
+            spacing: 10
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
             RoundButton{
                 id: b_login
                 text: qsTr("Login")
                 enabled: tf_id.length > 0 && tf_password.length > 0
                 onClicked:{
-                    root.StackView.view.push("ContactPage.qml", {username: tf_login.text})
+                    root.StackView.view.push("ContactPage.qml", {username: tf_id.text})
                 }
             }
 
@@ -68,5 +73,6 @@ Page {
                 }
             }
         }
+
     }
 }

@@ -16,7 +16,6 @@ Page {
         GridLayout{
             columns: 2
             rows: 5
-            width: parent.width-(2*parent.magins)
 
             Label{
                 id: l_id
@@ -57,7 +56,6 @@ Page {
                 id: tf_repassword
                 Layout.fillWidth: true
                 height: 30
-                width: 300
                 echoMode: TextInput.Password
             }
         }
@@ -65,7 +63,7 @@ Page {
         Row{
             id: buttons_row
             Layout.alignment: Qt.AlignHCenter | Qt.AlignHCenter
-            spacing: 6
+            spacing: 10
 
             RoundButton{
                 id: register_button
