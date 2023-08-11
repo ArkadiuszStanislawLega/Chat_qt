@@ -5,13 +5,15 @@
 #include "sqlcontactmodel.h"
 #include "sqlconversationmodel.h"
 #include "dbmanager.h"
+#include "register.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    qmlRegisterType<SqlContactModel>("io.qt.chat", 1, 0, "SqlContactModel");
-    qmlRegisterType<SqlConversationModel>("io.qt.chat", 1, 0, "SqlConversationModel");
+    qmlRegisterType<SqlContactModel>("io.qt.chat.contact_model", 1, 0, "SqlContactModel");
+    qmlRegisterType<SqlConversationModel>("io.qt.chat.conversation_model", 1, 0, "SqlConversationModel");
+    qmlRegisterType<Register>("io.qt.chat.register", 1, 0, "Register");
 
     DbManager(nullptr);
 

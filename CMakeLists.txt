@@ -16,6 +16,7 @@ qt_add_executable(appChat_qt
     sqlcontactmodel.cpp
     sqlconversationmodel.h
     sqlconversationmodel.cpp
+    register.h register.cpp
 )
 
 qt_add_qml_module(appChat_qt
@@ -44,7 +45,6 @@ qt_add_qml_module(appChat_qt
            "images/Hans_Gude@2x.png"
            "images/Hans_Gude@3x.png"
            "images/Hans_Gude@4x.png"
-           RESOURCES
 )
 
 set_target_properties(appChat_qt PROPERTIES

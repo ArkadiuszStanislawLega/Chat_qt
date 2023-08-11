@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 
-import io.qt.chat
+import io.qt.chat.contact_model
 
 Page {
     id: root

@@ -42,7 +42,6 @@ Page {
                 text: qsTr("Password:")
             }
 
-
             TextField{
                 id: tf_password
                 Layout.fillWidth: true
