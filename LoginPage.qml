@@ -2,9 +2,15 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import io.qt.chat.user
+
 Page {
     id: root
     padding: 20
+
+    User{
+        id: user
+    }
 
     ColumnLayout{
         width: parent.width
@@ -60,7 +66,11 @@ Page {
                 text: qsTr("Login")
                 enabled: tf_id.length > 0 && tf_password.length > 0
                 onClicked:{
-                    root.StackView.view.push("ContactPage.qml", {username: tf_id.text})
+                    user.password = tf_password.text
+                    user.id = tf_id.text
+                    //TODO: update this username to name from DB.
+                    user.username = tf_id.text
+                    root.StackView.view.push("ContactPage.qml", {user: user})
                 }
             }
 

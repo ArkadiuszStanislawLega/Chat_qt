@@ -3,14 +3,15 @@ import QtQuick.Window
 import QtQuick.Controls
 
 import io.qt.chat.contact_model
+import io.qt.chat.user
 
 Page {
     id: root
-    property string username
+    property User user
 
     header: ChatToolBar {
         Label {
-            text: username
+            text: user.username
             font.pixelSize: 20
             anchors.centerIn: parent
         }
