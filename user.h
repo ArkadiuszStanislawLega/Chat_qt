@@ -8,9 +8,9 @@
 class User : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString username READ getUsername WRITE setUsername NOTIFY created FINAL)
-    Q_PROPERTY(QString password READ getPassword WRITE setPassword NOTIFY created FINAL)
-    Q_PROPERTY(QString dbId READ getDbId WRITE setDbId NOTIFY created FINAL)
+    Q_PROPERTY(QString username READ getUsername WRITE setUsername NOTIFY usernameChanged FINAL)
+    Q_PROPERTY(QString password READ getPassword WRITE setPassword NOTIFY passwordChanged FINAL)
+    Q_PROPERTY(QString dbId READ getDbId WRITE setDbId NOTIFY idChanged FINAL)
 
 
 public:
@@ -25,16 +25,19 @@ public:
     void setDbId(QString id);
 
 signals:
-    void created();
+    void createdConfirmed();
+    void createdError();
+    void usernameChanged();
+    void passwordChanged();
+    void idChanged();
 
 public slots:
-    void registration();
+    void registerUser();
 
 private:
     QString _password;
     QString _username;
     QString _id;
-
 };
 
 

@@ -25,22 +25,22 @@ QString User::getDbId(){
 void User::setPassword(QString password){
     this->_password = QString(QCryptographicHash::hash((password.toUtf8()),QCryptographicHash::Md5).toHex());
     qDebug() << "setPassword:" << this->_password;
-    emit this->created();
 }
 
 void User::setUsername(QString username){
     this->_username = username;
     qDebug() << "setUsername:" << username;
-    emit this->created();
 
 }
 
 void User::setDbId(QString id){
     this->_id = id;
     qDebug() << "setId:" << id;
-    emit this->created();
 }
 
-void User::registration(){
+void User::registerUser(){
+    qDebug() << "register";
+    emit this->createdConfirmed();
+    emit this->createdError();
 
 }
