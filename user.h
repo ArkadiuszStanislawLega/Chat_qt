@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QCryptographicHash>
 #include <QSqlDatabase>
+#include <QSqlRecord>
 
 #include "dbmanager.h"
 
