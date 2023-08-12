@@ -10,7 +10,6 @@ User::User(QObject *parent)
     //TODO: Move this to server. Get empty id from server.
     QSqlQuery query;
     query.prepare("SELECT MAX(" + *ID_COLUMN_NAME + ") from " + *USERS_TABLE_NAME + ";");
-    qDebug() << query.lastQuery();
     if(query.exec()){
         while(query.next()){
             int db_next_id = query.value(0).toInt();
@@ -74,7 +73,7 @@ void User::addUserToDb(){
 bool User::auteticateUser(){
     //TODO: Move this to server.
     QSqlQuery query;
-    query.prepare("SELECT * FROM " + *USERS_TABLE_NAME + " WHERE id = '" + this->_id + "';");
+    query.prepare(*SELECT_ALL + " " + *USERS_TABLE_NAME + " WHERE "+ *ID_COLUMN_NAME + " = '" + this->_id + "';");
     if(query.exec()){
         while(query.next()){
             int password_column {}, username_column {};
@@ -82,9 +81,7 @@ bool User::auteticateUser(){
             password_column = query.record().indexOf(*PASSWORD_COLUMN_NAME);
             username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
 
-            QString db_password = query.value(password_column).toString();
-
-            if( db_password == this->_password){
+            if( query.value(password_column).toString() == this->_password){
                 this->_username = query.value(username_column).toString();
                 return true;
             } else
