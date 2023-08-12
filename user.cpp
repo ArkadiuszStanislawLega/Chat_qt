@@ -20,8 +20,8 @@ QString User::getId(){
 }
 
 void User::setPassword(QString password){
-    this->_password = password;
-    qDebug() << "setPassword:" << password;
+    this->_password = QString(QCryptographicHash::hash((password.toUtf8()),QCryptographicHash::Md5).toHex());
+    qDebug() << "setPassword:" << this->_password;
     emit this->created();
 }
 
