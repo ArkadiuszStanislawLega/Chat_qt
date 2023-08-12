@@ -46,7 +46,7 @@ void DbManager::CreateUsersTable(){
     QSqlQuery query;
 
     query.prepare( *CREATE_TABLE + " '" + *USERS_TABLE_NAME + "' ("
-                                  "'" + *ID_COLUMN_NAME + "' " + *TEXT_NO_NULL + ", "
+                                  "'" + *ID_COLUMN_NAME + "' " + *TEXT_NO_NULL + " UNIQUE, "
                                     "'" + *USERNAME_COLUMN_NAME + "' TEXT" + ", "
                     "'" + *PASSWORD_COLUMN_NAME + "' " + *TEXT_NO_NULL + "); "
                   );

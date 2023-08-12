@@ -48,7 +48,6 @@ void User::addUserToDb(){
         QSqlQuery query;
         //TODO: Change insert into to update - after create server.
         query.prepare("INSERT INTO " + *USERS_TABLE_NAME + " values('" + this->_id + "', '" + this->_username + "','" + this->_password + "');");
-        qDebug() << query.lastQuery();
         if(query.exec()){
             emit this->createdConfirmed();
         } else {
