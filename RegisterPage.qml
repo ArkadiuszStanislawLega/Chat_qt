@@ -107,7 +107,7 @@ Page {
 
             RoundButton{
                 id: cancel_button
-                text: qsTr("Cancel")
+                text: qsTr("Back")
                 onClicked: {
                     root.StackView.view.pop();
                 }
@@ -123,12 +123,9 @@ Page {
         width: parent.width
         visible: false
 
-        //Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         Label{
             id: info
             anchors.horizontalCenter: parent.horizontalCenter
         }
-
     }
-
 }

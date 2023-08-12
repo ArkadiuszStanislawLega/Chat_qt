@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QDebug>
 #include <QCryptographicHash>
+#include <QSqlDatabase>
+
+#include "dbmanager.h"
 
 class User : public QObject
 {
@@ -38,6 +41,9 @@ private:
     QString _password;
     QString _username;
     QString _id;
+    QSqlDatabase _database;
+
+    void addUserToDb();
 };
 
 

@@ -2,7 +2,7 @@
 
 User::User(QObject *parent)
     : QObject{parent}{
-    this->_id = "1";
+    this->_id = "2";
     this->_password = "";
     this->_username = "";
 
@@ -39,8 +39,20 @@ void User::setDbId(QString id){
 }
 
 void User::registerUser(){
-    qDebug() << "register";
-    emit this->createdConfirmed();
-    emit this->createdError();
+    this->addUserToDb();
+}
 
+void User::addUserToDb(){
+    //TODO: Move this to server.
+
+        QSqlQuery query;
+        //TODO: Change insert into to update - after create server.
+        query.prepare("INSERT INTO " + *USERS_TABLE_NAME + " values('" + this->_id + "', '" + this->_username + "','" + this->_password + "');");
+        qDebug() << query.lastQuery();
+        if(query.exec()){
+            emit this->createdConfirmed();
+        } else {
+            qDebug() << query.lastError().text();
+            emit this->createdError();
+        }
 }
