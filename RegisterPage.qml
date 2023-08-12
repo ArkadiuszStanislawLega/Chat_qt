@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import io.qt.chat.register
+import io.qt.chat.user
 
 Page {
     id: root
@@ -10,11 +10,11 @@ Page {
 
     Label{
         id: createdPswd
-        text: register.password
+        text: user.password
     }
 
-    Register{
-        id: register
+    User{
+        id: user
     }
 
     ColumnLayout{
@@ -80,7 +80,7 @@ Page {
                 text: qsTr("Register")
                 enabled: tf_password.length > 0 && tf_password.text === tf_repassword.text
                 onClicked: {
-                    register.password = tf_password.text;
+                    user.password = tf_password.text;
                 }
             }
 

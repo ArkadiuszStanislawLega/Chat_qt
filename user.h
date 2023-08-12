@@ -1,16 +1,16 @@
-#ifndef REGISTER_H
-#define REGISTER_H
+#ifndef USER_H
+#define USER_H
 
 #include <QObject>
 #include <QDebug>
 #include <QCryptographicHash>
 
-class Register : public QObject
+class User : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString password READ getPassword WRITE setPassword NOTIFY created FINAL)
 public:
-    explicit Register(QObject *parent = nullptr);
+    explicit User(QObject *parent = nullptr);
 
     QString getPassword();
     void setPassword(QString password);
@@ -26,4 +26,4 @@ private:
 };
 
 
-#endif // REGISTER_H
+#endif // USER_H
