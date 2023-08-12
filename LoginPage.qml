@@ -10,6 +10,13 @@ Page {
 
     User{
         id: user
+        onLoginInFail: {
+            //TODO: Make information about bad login.
+        }
+
+        onIsLoginIn: {
+            root.StackView.view.push("ContactPage.qml", {user: user})
+        }
     }
 
     ColumnLayout{
@@ -68,9 +75,7 @@ Page {
                 onClicked:{
                     user.password = tf_password.text
                     user.dbId = tf_id.text
-                    //TODO: update this username to name from DB.
-                    user.username = tf_id.text
-                    root.StackView.view.push("ContactPage.qml", {user: user})
+                    user.isUserLogin();
                 }
             }
 

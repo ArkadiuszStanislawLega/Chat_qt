@@ -3,23 +3,21 @@
 User::User(QObject *parent)
     : QObject{parent}{
 
-    this->_id = "2";
+    this->_id = "1";
     this->_password = "";
     this->_username = "";
 
-    //TODO: Move this to server. Get free id from server.
+    //TODO: Move this to server. Get empty id from server.
     QSqlQuery query;
     query.prepare("SELECT MAX(" + *ID_COLUMN_NAME + ") from " + *USERS_TABLE_NAME + ";");
     qDebug() << query.lastQuery();
     if(query.exec()){
         while(query.next()){
-            int next_value = query.value(0).toInt();
-            next_value++;
-
-            this->_id = QString::number(next_value);
+            int db_next_id = query.value(0).toInt();
+            db_next_id++;
+            this->_id = QString::number(db_next_id);
         }
     }
-    qDebug() << "Id: " << this->_id;
 }
 
 QString User::getPassword(){
@@ -43,7 +41,6 @@ void User::setPassword(QString password){
 void User::setUsername(QString username){
     this->_username = username;
     qDebug() << "setUsername:" << username;
-
 }
 
 void User::setDbId(QString id){
@@ -53,6 +50,11 @@ void User::setDbId(QString id){
 
 void User::registerUser(){
     this->addUserToDb();
+}
+
+void User::isUserLogin(){
+    if(this->auteticateUser()) emit this->isLoginIn();
+    else emit this->loginInFail();
 }
 
 void User::addUserToDb(){
@@ -67,4 +69,27 @@ void User::addUserToDb(){
         qDebug() << query.lastError().text();
         emit this->createdError();
     }
+}
+
+bool User::auteticateUser(){
+    //TODO: Move this to server.
+    QSqlQuery query;
+    query.prepare("SELECT * FROM " + *USERS_TABLE_NAME + " WHERE id = '" + this->_id + "';");
+    if(query.exec()){
+        while(query.next()){
+            int password_column {}, username_column {};
+
+            password_column = query.record().indexOf(*PASSWORD_COLUMN_NAME);
+            username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
+
+            QString db_password = query.value(password_column).toString();
+
+            if( db_password == this->_password){
+                this->_username = query.value(username_column).toString();
+                return true;
+            } else
+                return false;
+        }
+    }
+    return false;
 }

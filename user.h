@@ -34,9 +34,12 @@ signals:
     void usernameChanged();
     void passwordChanged();
     void idChanged();
+    void isLoginIn();
+    void loginInFail();
 
 public slots:
     void registerUser();
+    void isUserLogin();
 
 private:
     QString _password;
@@ -45,6 +48,7 @@ private:
     QSqlDatabase _database;
 
     void addUserToDb();
+    bool auteticateUser();
 };
 
 
