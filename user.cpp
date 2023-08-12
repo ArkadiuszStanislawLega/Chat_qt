@@ -1,9 +1,12 @@
 #include "user.h"
 
 User::User(QObject *parent)
-    : QObject{parent}
-{
+    : QObject{parent}{
+    this->_id = "1";
+    this->_password = "";
+    this->_username = "";
 
+    //TODO: Get from server free id.
 }
 
 QString User::getPassword(){
@@ -15,7 +18,7 @@ QString User::getUsername(){
 
 }
 
-QString User::getId(){
+QString User::getDbId(){
     return this->_id;
 }
 
@@ -32,8 +35,12 @@ void User::setUsername(QString username){
 
 }
 
-void User::setId(QString id){
+void User::setDbId(QString id){
     this->_id = id;
     qDebug() << "setId:" << id;
     emit this->created();
+}
+
+void User::registration(){
+
 }

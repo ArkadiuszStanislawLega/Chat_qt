@@ -67,7 +67,7 @@ Page {
                 enabled: tf_id.length > 0 && tf_password.length > 0
                 onClicked:{
                     user.password = tf_password.text
-                    user.id = tf_id.text
+                    user.dbId = tf_id.text
                     //TODO: update this username to name from DB.
                     user.username = tf_id.text
                     root.StackView.view.push("ContactPage.qml", {user: user})

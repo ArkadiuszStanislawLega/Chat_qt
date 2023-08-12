@@ -8,11 +8,6 @@ Page {
     id: root
     padding: 20
 
-    Label{
-        id: createdPswd
-        text: user.password
-    }
-
     User{
         id: user
     }
@@ -25,22 +20,33 @@ Page {
 
         GridLayout{
             columns: 2
-            rows: 5
+            rows: 4
 
             Label{
-                id: l_id
+                id: l_id_info
                 font.pixelSize: 20
-                text: qsTr("Id:")
+                text: qsTr("Account id:")
+            }
+
+            Label{
+                id: l_id_from_db
+                font {
+                    pixelSize: 20
+                    italic: true
+                }
+                text: user.dbId
+            }
+
+            Label{
+                id: l_username
+                font.pixelSize: 20
+                text: qsTr("Username (optional):")
             }
 
             TextField{
-                id: tf_id
+                id: tf_username
                 height: 30
                 Layout.fillWidth: true
-                validator: IntValidator{
-                    bottom: 1
-                    top: 2000000
-                }
             }
 
             Label{
@@ -80,7 +86,9 @@ Page {
                 text: qsTr("Register")
                 enabled: tf_password.length > 0 && tf_password.text === tf_repassword.text
                 onClicked: {
-                    user.password = tf_password.text;
+                    user.username = tf_username.text
+                    user.password = tf_password.text
+                    user.registration();
                 }
             }
 

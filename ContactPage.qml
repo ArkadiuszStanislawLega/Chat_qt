@@ -11,7 +11,7 @@ Page {
 
     header: ChatToolBar {
         Label {
-            text: user.username
+            text: user.username ? user.username : user.dbId
             font.pixelSize: 20
             anchors.centerIn: parent
         }
