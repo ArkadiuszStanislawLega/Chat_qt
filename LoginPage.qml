@@ -45,6 +45,8 @@ Page {
                     bottom: 1
                     top: 2000000
                 }
+                Keys.onReturnPressed: if(b_login.enabled) b_login.activate();
+
             }
 
             Label{
@@ -61,6 +63,8 @@ Page {
                 Layout.fillWidth: true
                 height: 20
                 echoMode: TextInput.Password
+                Keys.onReturnPressed: if(b_login.enabled) b_login.activate();
+
             }
         }
 
@@ -73,11 +77,13 @@ Page {
                 id: b_login
                 text: qsTr("Login")
                 enabled: tf_id.length > 0 && tf_password.length > 0
-                onClicked:{
-                    user.password = tf_password.text
-                    user.dbId = tf_id.text
+
+                function activate(){
+                    user.password = tf_password.text;
+                    user.dbId = tf_id.text;
                     user.isUserLogin();
                 }
+                onClicked: b_login.activate()
             }
 
             RoundButton{
