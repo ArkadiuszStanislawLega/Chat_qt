@@ -25,7 +25,6 @@ QString User::getPassword(){
 
 QString User::getUsername(){
     return this->_username;
-
 }
 
 QString User::getDbId(){
@@ -58,9 +57,9 @@ void User::isUserLogin(){
 
 void User::addUserToDb(){
     //TODO: Move this to server.
-
-    QSqlQuery query;
     //TODO: Change insert into to update - after create server.
+    QSqlQuery query;
+
     query.prepare("INSERT INTO " + *USERS_TABLE_NAME + " VALUES(:id,:username,:password);");
     query.bindValue(":id", this->_id);
     query.bindValue(":username", this->_username);
@@ -79,6 +78,7 @@ bool User::auteticateUser(){
     QSqlQuery query;
     query.prepare("SELECT * FROM "+ *USERS_TABLE_NAME +" WHERE id = :id;");
     query.bindValue(":id", this->_id);
+
     if(query.exec()){
         while(query.next()){
             int password_column {}, username_column {};
@@ -92,6 +92,6 @@ bool User::auteticateUser(){
             } else
                 return false;
         }
-    }
+    } else qDebug() << query.lastQuery() << query.lastError();
     return false;
 }

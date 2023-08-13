@@ -11,11 +11,12 @@ Page {
     User{
         id: user
         onLoginInFail: {
-            //TODO: Make information about bad login.
+            info_background.visible = true;
+            info.text = "Wrong login or password.";
         }
 
         onIsLoginIn: {
-            root.StackView.view.push("ContactPage.qml", {user: user})
+            root.StackView.view.push("ContactPage.qml", {user: user});
         }
     }
 
@@ -88,5 +89,23 @@ Page {
             }
         }
 
+    }
+    Rectangle{
+        id: info_background
+        anchors{
+            bottom: parent.bottom
+            bottomMargin: 10
+            horizontalCenter: parent.horizontalCenter
+        }
+        height: 20
+        width: parent.width
+        visible: false
+        color: "red"
+
+        Label{
+            id: info
+            color: "white"
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
     }
 }
