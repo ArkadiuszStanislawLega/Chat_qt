@@ -61,7 +61,11 @@ void User::addUserToDb(){
 
     QSqlQuery query;
     //TODO: Change insert into to update - after create server.
-    query.prepare("INSERT INTO " + *USERS_TABLE_NAME + " values('" + this->_id + "', '" + this->_username + "','" + this->_password + "');");
+    query.prepare("INSERT INTO " + *USERS_TABLE_NAME + " VALUES(:id,:username,:password);");
+    query.bindValue(":id", this->_id);
+    query.bindValue(":username", this->_username);
+    query.bindValue(":password", this->_password);
+
     if(query.exec()){
         emit this->createdConfirmed();
     } else {
@@ -73,7 +77,8 @@ void User::addUserToDb(){
 bool User::auteticateUser(){
     //TODO: Move this to server.
     QSqlQuery query;
-    query.prepare(*SELECT_ALL + " " + *USERS_TABLE_NAME + " WHERE "+ *ID_COLUMN_NAME + " = '" + this->_id + "';");
+    query.prepare("SELECT * FROM "+ *USERS_TABLE_NAME +" WHERE id = :id;");
+    query.bindValue(":id", this->_id);
     if(query.exec()){
         while(query.next()){
             int password_column {}, username_column {};
