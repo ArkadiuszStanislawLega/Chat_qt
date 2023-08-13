@@ -11,8 +11,8 @@ Page {
     User{
         id: user
         onLoginInFail: {
-            info_background.visible = true;
-            info.text = "Wrong login or password.";
+            info.text = "Wrong id or password.";
+            show_info_animation.start();
         }
 
         onIsLoginIn: {
@@ -99,13 +99,32 @@ Page {
         }
         height: 20
         width: parent.width
-        visible: false
         color: "red"
+        opacity: 0
 
         Label{
             id: info
             color: "white"
             anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        OpacityAnimator {
+            id: show_info_animation
+            running: false
+            target: info_background
+            from: 0
+            to: 1
+            duration: 1000
+            onFinished: hide_info_animation.start()
+        }
+
+        OpacityAnimator {
+            id: hide_info_animation
+            running: false
+            target: info_background
+            from: 1
+            to: 0
+            duration: 5000
         }
     }
 }
