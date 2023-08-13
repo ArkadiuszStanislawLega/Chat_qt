@@ -46,7 +46,6 @@ Page {
                     top: 2000000
                 }
                 Keys.onReturnPressed: if(b_login.enabled) b_login.activate();
-
             }
 
             Label{
@@ -54,7 +53,6 @@ Page {
                     pixelSize: 20
                     bold: true
                 }
-
                 text: qsTr("Password:")
             }
 
@@ -64,7 +62,6 @@ Page {
                 height: 20
                 echoMode: TextInput.Password
                 Keys.onReturnPressed: if(b_login.enabled) b_login.activate();
-
             }
         }
 

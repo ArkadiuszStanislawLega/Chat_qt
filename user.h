@@ -8,6 +8,9 @@
 #include <QSqlRecord>
 
 #include "dbmanager.h"
+#include "sqluser.h"
+
+class SqlUser;
 
 class User : public QObject
 {
@@ -27,6 +30,7 @@ public:
     void setPassword(QString password);
     void setUsername(QString username);
     void setDbId(QString id);
+    void sqlUserToUserConverter(SqlUser &user);
 
 signals:
     void createdConfirmed();
