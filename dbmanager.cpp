@@ -15,7 +15,7 @@ DbManager::DbManager(QObject *parent) : QObject(parent) {
 void DbManager::CreateTables(){
     this->CreateContactsTable();
     this->CreateConversationTable();
-    this->CreateUsersTable();
+    SqlUser::createTable();
 }
 
 void DbManager::CreateContactsTable(){
@@ -38,18 +38,6 @@ void DbManager::CreateConversationTable(){
                                                                                                     "FOREIGN KEY('" + *RECIPIENT_COLUMN + "') REFERENCES " +  *CONTACTS_TABLE_NAME + "(" + *NAME_COLUMN + ")"
                                                                                                        ")");
     if(!query.exec()) {
-        qFatal("Failed to query database: %s", qPrintable(query.lastError().text()));
-    }
-}
-
-void DbManager::CreateUsersTable(){
-    QSqlQuery query;
-    query.prepare( *CREATE_TABLE + " '" + *USERS_TABLE_NAME + "' ("
-                                  "'" + *ID_COLUMN_NAME + "' " + *TEXT_NO_NULL + " UNIQUE, "
-                                    "'" + *USERNAME_COLUMN_NAME + "' TEXT" + ", "
-                    "'" + *PASSWORD_COLUMN_NAME + "' " + *TEXT_NO_NULL + "); "
-                  );
-    if(!query.exec()){
         qFatal("Failed to query database: %s", qPrintable(query.lastError().text()));
     }
 }

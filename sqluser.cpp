@@ -5,7 +5,15 @@ SqlUser::SqlUser(QObject *parent)
 }
 
 void SqlUser::createTable(){
-
+    QSqlQuery query;
+    query.prepare( *CREATE_TABLE + " '" + *USERS_TABLE_NAME + "' ("
+                   "'" + *ID_COLUMN_NAME + "' " + *TEXT_NO_NULL + " UNIQUE, "
+                   "'" + *USERNAME_COLUMN_NAME + "' TEXT" + ", "
+                   "'" + *PASSWORD_COLUMN_NAME + "' " + *TEXT_NO_NULL + "); "
+                  );
+    if(!query.exec()){
+        qFatal("Failed to query database: %s", qPrintable(query.lastError().text()));
+    }
 }
 
 QString SqlUser::getNextId(){
@@ -42,8 +50,6 @@ bool SqlUser::readUser(){
     QSqlQuery query;
     query.prepare("SELECT * FROM "+ *USERS_TABLE_NAME +" WHERE id = :id;");
     query.bindValue(":id", this->_id);
-
-    qDebug() << query.lastQuery();
 
     if(query.exec()){
         while(query.next()){
