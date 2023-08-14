@@ -7,7 +7,7 @@ SqlUser::SqlUser(QObject *parent)
 void SqlUser::createTable(){
     QSqlQuery query;
     query.prepare( *CREATE_TABLE + " '" + *USERS_TABLE_NAME + "' ("
-                   "'" + *ID_COLUMN_NAME + "' " + *TEXT_NO_NULL + " UNIQUE, "
+                   "'" + *ID_COLUMN_NAME + "' INTEGER NOT NULL UNIQUE, "
                    "'" + *USERNAME_COLUMN_NAME + "' TEXT" + ", "
                    "'" + *PASSWORD_COLUMN_NAME + "' " + *TEXT_NO_NULL + "); "
                   );
@@ -23,19 +23,45 @@ QString SqlUser::getNextId(){
         while(query.next()){
             int db_next_id = query.value(0).toInt();
             db_next_id++;
+            qDebug() << "next " << db_next_id;
             return QString::number(db_next_id);
         }
     }
     return "-1";
 }
 
-bool SqlUser::createUser(){
-    QSqlQuery query;
+bool SqlUser::genericCreate(QString table, QVector<QPair<QString,QString>> args){
+    if(table.isEmpty()) return false;
+    if(args.size() == 0) return false;
 
-    query.prepare("INSERT INTO " + *USERS_TABLE_NAME + " VALUES(:id,:username,:password);");
-    query.bindValue(":id", this->_id);
-    query.bindValue(":username", this->_username);
-    query.bindValue(":password", this->_password);
+    QString     cmd = "INSERT INTO " + table,
+                properties {"("},
+                values {" VALUES("};
+
+    for(int i = 0; i < args.size(); i++){
+        properties += args[i].first;
+        values += ":" + args[i].first;
+
+        if(i < args.size()-1){
+            properties += ",";
+            values += ",";
+        } else {
+            properties += ")";
+            values += ")";
+        }
+    }
+
+    cmd += properties + values + ";";
+
+    QSqlQuery query;
+    query.prepare(cmd);
+
+    for(const QPair<QString, QString> &pair : args){
+        QString key = ":" + pair.first;
+        query.bindValue(key, pair.second);
+    }
+
+    qDebug() << query.lastQuery();
 
     if(query.exec()){
         return true;
@@ -43,7 +69,16 @@ bool SqlUser::createUser(){
         qDebug() << query.lastError().text();
         return false;
     }
-    return false;
+}
+
+bool SqlUser::createUser(){
+    QVector<QPair<QString, QString>> args =
+    {
+        {*ID_COLUMN_NAME, QString::number(this->_id)},
+        {*USERNAME_COLUMN_NAME, this->_username},
+        {*PASSWORD_COLUMN_NAME, this->_password}
+    };
+    return this->genericCreate(*USERS_TABLE_NAME, args);
 }
 
 bool SqlUser::readUser(){
@@ -76,11 +111,11 @@ bool SqlUser::deleteUser(){
     return false;
 }
 
-QString SqlUser::getId(){
+int SqlUser::getId(){
     return this->_id;
 }
 
-void SqlUser::setId(QString value){
+void SqlUser::setId(int value){
     this->_id = value;
 }
 
@@ -117,7 +152,7 @@ void SqlUser::setLastActivity(QDateTime value){
 }
 
 void SqlUser::userToSqlUserConverter(User &user){
-    this->_id = user.getDbId();
+    this->_id = user.getDbId().toInt();
     this->_username = user.getUsername();
     this->_password = user.getPassword();
 }

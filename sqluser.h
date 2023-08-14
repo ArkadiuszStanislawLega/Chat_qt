@@ -5,6 +5,8 @@
 #include <QDateTime>
 #include <QSqlDatabase>
 #include <QSqlRecord>
+#include <QVector>
+#include <QPair>
 
 #include "dbmanager.h"
 #include "user.h"
@@ -24,8 +26,8 @@ public:
     bool updateUser();
     bool deleteUser();
 
-    QString getId();
-    void setId(QString value);
+    int getId();
+    void setId(int value);
 
     QString getUsername();
     void setUsername(QString value);
@@ -41,8 +43,11 @@ public:
 
     void userToSqlUserConverter(User &user);
 
+    bool genericCreate(QString table, QVector<QPair<QString, QString>> args);
+
 private:
-    QString _id {} , _username {}, _password {};
+    QString  _username {}, _password {};
+    int _id {};
     QDateTime _occupied {}, _last_activity{};
 
     //TODO: Make field keeping avatar image.

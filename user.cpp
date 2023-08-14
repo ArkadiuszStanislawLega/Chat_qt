@@ -39,7 +39,7 @@ void User::setDbId(QString id){
 }
 
 void User::sqlUserToUserConverter(SqlUser& user){
-    this->_id = user.getId();
+    this->_id = QString::number(user.getId());
     this->_username = user.getUsername();
     this->_password = user.getPassword();
 }
