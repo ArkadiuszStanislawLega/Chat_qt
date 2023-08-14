@@ -18,10 +18,10 @@ class SqlUser : public QObject
     Q_OBJECT
 public:
     explicit SqlUser(QObject *parent = nullptr);
-    static void createTable();
     static QString getNextId();
 
     bool createUser();
+    bool isCredentialsCorrect();
     bool readUser();
     bool updateUser();
     bool deleteUser();
@@ -43,7 +43,7 @@ public:
 
     void userToSqlUserConverter(User &user);
 
-    bool genericCreate(QString table, QVector<QPair<QString, QString>> args);
+
 
 private:
     QString  _username {}, _password {};

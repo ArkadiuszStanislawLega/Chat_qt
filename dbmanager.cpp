@@ -15,29 +15,103 @@ DbManager::DbManager(QObject *parent) : QObject(parent) {
 void DbManager::CreateTables(){
     this->CreateContactsTable();
     this->CreateConversationTable();
-    SqlUser::createTable();
+    this->CreateUsersTable();
 }
 
 void DbManager::CreateContactsTable(){
     QSqlQuery query;
-    query.prepare( *CREATE_TABLE + " '" + *CONTACTS_TABLE_NAME +
-                  "' ('" + *NAME_COLUMN + "' " + *TEXT_NO_NULL + ", " + *PRIMARY_KEY + "(" + *NAME_COLUMN + "))" );
+    query.prepare("CREATE TABLE IF NOT EXISTS '" + *CONTACTS_TABLE_NAME + "' ("
+                    "'" + *NAME_COLUMN + "' TEXT NOT NULL, PRIMARY KEY(" + *NAME_COLUMN + "))" );
     if(!query.exec()) {
-        qFatal("Failed to query database: %s", qPrintable(query.lastError().text()));
+        qFatal("Failed to query 'create Contacts table' database: %s", qPrintable(query.lastError().text()));
     }
 }
 
 void DbManager::CreateConversationTable(){
     QSqlQuery query;
-    query.prepare( *CREATE_TABLE + " '" + *CONVERSATION_TABLE_NAME + "' ("
-                            "'" + *AUTHOR_COLUMN + "' " + *TEXT_NO_NULL + ", "
-                    "'" + *RECIPIENT_COLUMN + "' "+ *TEXT_NO_NULL + ", "
-                       "'" + *TIME_COLUMN + "' " + *TEXT_NO_NULL + ", "
-                  "'" + *MESSAGE_COLUMN + "' " + *TEXT_NO_NULL + ", "
-                     "FOREIGN KEY('" + *AUTHOR_COLUMN + "') REFERENCES " + *CONTACTS_TABLE_NAME+ "(" + *NAME_COLUMN + "),"
-                                                                                                    "FOREIGN KEY('" + *RECIPIENT_COLUMN + "') REFERENCES " +  *CONTACTS_TABLE_NAME + "(" + *NAME_COLUMN + ")"
-                                                                                                       ")");
+
+    query.prepare("CREATE TABLE IF NOT EXISTS '" + *CONVERSATION_TABLE_NAME + "' ("
+                    "'" + *AUTHOR_COLUMN + "' TEXT NOT NULL, "
+                    "'" + *RECIPIENT_COLUMN + "' TEXT NOT NULL, "
+                    "'" + *TIME_COLUMN + "' TEXT NOT NULL, "
+                    "'" + *MESSAGE_COLUMN + "' TEXT NOT NULL, "
+                    "FOREIGN KEY('" + *AUTHOR_COLUMN + "') REFERENCES " + *CONTACTS_TABLE_NAME+ "(" + *NAME_COLUMN + "),"
+                    "FOREIGN KEY('" + *RECIPIENT_COLUMN + "') REFERENCES " + *CONTACTS_TABLE_NAME + "(" + *NAME_COLUMN + "));"
+                  );
     if(!query.exec()) {
-        qFatal("Failed to query database: %s", qPrintable(query.lastError().text()));
+        qFatal("Failed to query 'create converstation table'database: %s", qPrintable(query.lastError().text()));
     }
+}
+
+void DbManager::CreateUsersTable(){
+    QSqlQuery query;
+    query.prepare( "CREATE TABLE IF NOT EXISTS '" + *USERS_TABLE_NAME + "' ("
+                   "'" + *ID_COLUMN_NAME + "' INTEGER NOT NULL UNIQUE, "
+                   "'" + *USERNAME_COLUMN_NAME + "' TEXT, "
+                   "'" + *PASSWORD_COLUMN_NAME + "' TEXT NOT NULL); "
+                  );
+    if(!query.exec()){
+        qFatal("Failed to query 'create users table' database: %s", qPrintable(query.lastError().text()));
+    }
+}
+
+bool DbManager::create(QString table, QVector<QPair<QString, QString> > args){
+    if(table.isEmpty()) return false;
+    if(args.isEmpty()) return false;
+
+    QString     cmd = "INSERT INTO " + table,
+        properties {"("},
+        values {" VALUES("};
+
+    for(int i = 0; i < args.size(); i++){
+        properties += args[i].first;
+        values += ":" + args[i].first;
+
+        if(i < args.size()-1){
+            properties += ",";
+            values += ",";
+        } else {
+            properties += ")";
+            values += ")";
+        }
+    }
+
+    cmd += properties + values + ";";
+
+    QSqlQuery query;
+    query.prepare(cmd);
+
+    for(const QPair<QString, QString> &pair : args){
+        QString key = ":" + pair.first;
+        query.bindValue(key, pair.second);
+    }
+
+    if(query.exec()){
+        return true;
+    } else {
+        qDebug() << query.lastError().text();
+        return false;
+    }
+}
+bool DbManager::read(QString table, QVector<QPair<QString, QString*> > args){
+    if(table.isEmpty()) return false;
+    if(args.empty()) return false;
+
+    QSqlQuery query;
+    query.prepare("SELECT * FROM "+ table +" WHERE id = :id;");
+    query.bindValue(":id", *args.at(0).second);
+
+    if(query.exec()){
+        while(query.next()){
+            QVector<int> columns (args.size());
+
+            for(int i = 0; i < args.size(); i++){
+                columns[i] = query.record().indexOf(args[i].first);
+                *args[i].second = query.value(columns[i]).toString();
+            }
+
+        }
+        return true;
+    } else qDebug() << query.lastQuery() << query.lastError();
+    return false;
 }

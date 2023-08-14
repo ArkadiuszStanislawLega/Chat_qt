@@ -22,6 +22,7 @@ class User : public QObject
 
 public:
     explicit User(QObject *parent = nullptr);
+    User(QString id, QString username, QString password, QObject *parent = nullptr);
 
     QString getPassword();
     QString getUsername();

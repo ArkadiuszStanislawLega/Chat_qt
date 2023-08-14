@@ -11,6 +11,12 @@ User::User(QObject *parent)
     this->_id = SqlUser::getNextId();
 }
 
+User::User(QString id, QString username, QString password, QObject *parent): QObject {parent}{
+    this->_id = id;
+    this->_username = username;
+    this->_password = password;
+}
+
 QString User::getPassword(){
     return this->_password;
 }
@@ -66,9 +72,11 @@ bool User::auteticateUser(){
     //TODO: Move this to server.
     SqlUser sql;
     sql.userToSqlUserConverter(*this);
+    if(!sql.isCredentialsCorrect()) return false;
     if(sql.readUser()){
         this->sqlUserToUserConverter(sql);
         return true;
     }
+
     return false;
 }
