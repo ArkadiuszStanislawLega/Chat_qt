@@ -7,6 +7,8 @@ import io.qt.chat.user
 Page {
     id: root
     padding: 20
+    Keys.onReturnPressed: if(b_register.enabled) b_register.activate();
+    Keys.onEscapePressed: root.StackView.view.pop();
 
     User{
         id: user
@@ -103,22 +105,28 @@ Page {
             spacing: 10
 
             RoundButton{
-                id: register_button
+                id: b_register
                 text: qsTr("Register")
                 enabled: tf_password.length > 0 && tf_password.text === tf_repassword.text
-                onClicked: {
+
+                function activate(){
                     user.username = tf_username.text;
                     user.password = tf_password.text;
                     user.registerUser();
                 }
+
+                onClicked: b_register.activate()
             }
 
             RoundButton{
-                id: cancel_button
+                id: b_cancel
                 text: qsTr("Back")
-                onClicked: {
+
+                function activate(){
                     root.StackView.view.pop();
                 }
+
+                onClicked: b_cancel.activate()
             }
         }
     }
