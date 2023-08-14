@@ -7,6 +7,7 @@ import io.qt.chat.user
 Page {
     id: root
     padding: 20
+    Keys.onReturnPressed: if(b_login.enabled) b_login.activate();
 
     User{
         id: user
@@ -45,7 +46,6 @@ Page {
                     bottom: 1
                     top: 2000000
                 }
-                Keys.onReturnPressed: if(b_login.enabled) b_login.activate();
             }
 
             Label{
@@ -61,7 +61,6 @@ Page {
                 Layout.fillWidth: true
                 height: 20
                 echoMode: TextInput.Password
-                Keys.onReturnPressed: if(b_login.enabled) b_login.activate();
             }
         }
 
@@ -80,6 +79,7 @@ Page {
                     user.dbId = tf_id.text;
                     user.isUserLogin();
                 }
+
                 onClicked: b_login.activate()
             }
 
