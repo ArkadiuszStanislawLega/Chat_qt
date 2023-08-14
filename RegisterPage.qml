@@ -11,20 +11,25 @@ Page {
     User{
         id: user
         onCreatedConfirmed: {
-            info_backgroud.visible = true
-            info.text = qsTr("Created");
+            info_background.visible = true
+            info_background.color = "transparent";
+            info.text = qsTr("Account created!");
             info.color = "white";
-            info_backgroud.color = "transparent";
+
             l_id_from_db.text = user.dbId;
             tf_username.text = "";
             tf_password.text = "";
             tf_repassword.text = "";
+
+            show_info_animation.start();
         }
         onCreatedError: {
-            info_backgroud.visible = true;
+            info_background.visible = true;
+            info_background.color = "red";
             info.text = qsTr("Error");
             info.color = "white";
-            info_backgroud.color = "red";
+
+            show_info_animation.start();
         }
     }
 
@@ -118,17 +123,36 @@ Page {
         }
     }
     Rectangle{
-        id: info_backgroud
+        id: info_background
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
         anchors.horizontalCenter: parent.horizontalCenter
         height: 20
         width: parent.width
-        visible: false
+        opacity: 0
 
         Label{
             id: info
             anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        OpacityAnimator {
+            id: show_info_animation
+            running: false
+            target: info_background
+            from: 0
+            to: 1
+            duration: 1000
+            onFinished: hide_info_animation.start()
+        }
+
+        OpacityAnimator {
+            id: hide_info_animation
+            running: false
+            target: info_background
+            from: 1
+            to: 0
+            duration: 5000
         }
     }
 }
