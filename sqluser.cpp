@@ -19,10 +19,10 @@ QString SqlUser::getNextId(){
 
 bool SqlUser::createUser(){
     QVector<QPair<QString, QString>> args = {
-            {*ID_COLUMN_NAME, QString::number(this->_id)},
-            {*USERNAME_COLUMN_NAME, this->_username},
-            {*PASSWORD_COLUMN_NAME, this->_password}
-        };
+        {*ID_COLUMN_NAME, QString::number(this->_id)},
+        {*USERNAME_COLUMN_NAME, this->_username},
+        {*PASSWORD_COLUMN_NAME, this->_password}
+    };
     return DbManager::create(*USERS_TABLE_NAME, args);
 }
 
@@ -47,11 +47,10 @@ bool SqlUser::isCredentialsCorrect(){
 bool SqlUser::readUser(){
     QString id = QString::number(this->_id),
                 password {};
-    QVector<QPair<QString, QString*>> args =
-        {
-                {*ID_COLUMN_NAME, &id},
-                {*USERNAME_COLUMN_NAME, &this->_username},
-                {*PASSWORD_COLUMN_NAME, &password},
+    QVector<QPair<QString, QString*>> args = {
+        {*ID_COLUMN_NAME, &id},
+        {*USERNAME_COLUMN_NAME, &this->_username},
+        {*PASSWORD_COLUMN_NAME, &password},
     };
 
     this->_id = id.toInt();

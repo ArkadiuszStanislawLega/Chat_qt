@@ -60,8 +60,8 @@ bool DbManager::create(QString table, QVector<QPair<QString, QString> > args){
     if(args.isEmpty()) return false;
 
     QString     cmd = "INSERT INTO " + table,
-        properties {"("},
-        values {" VALUES("};
+                properties {"("},
+                values {" VALUES("};
 
     for(int i = 0; i < args.size(); i++){
         properties += args[i].first;
@@ -81,18 +81,21 @@ bool DbManager::create(QString table, QVector<QPair<QString, QString> > args){
     QSqlQuery query;
     query.prepare(cmd);
 
-    for(const QPair<QString, QString> &pair : args){
-        QString key = ":" + pair.first;
-        query.bindValue(key, pair.second);
-    }
+    for(const QPair<QString, QString> &pair : args)
+        query.bindValue(":"+pair.first, pair.second);
 
-    if(query.exec()){
-        return true;
-    } else {
+    if(query.exec()) return true;
+    else {
         qDebug() << query.lastError().text();
         return false;
     }
 }
+/*!
+ * \brief DbManager::read Retrieves the given values in args from the table named in the function argument.
+ * \param table name of table in Database
+ * \param args first arg must be id
+ * \return true if id is correct and values are readed from Dtabase
+ */
 bool DbManager::read(QString table, QVector<QPair<QString, QString*> > args){
     if(table.isEmpty()) return false;
     if(args.empty()) return false;

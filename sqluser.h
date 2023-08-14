@@ -43,8 +43,6 @@ public:
 
     void userToSqlUserConverter(User &user);
 
-
-
 private:
     QString  _username {}, _password {};
     int _id {};
