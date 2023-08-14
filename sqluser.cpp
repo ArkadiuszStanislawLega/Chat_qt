@@ -45,12 +45,12 @@ bool SqlUser::isCredentialsCorrect(){
 }
 
 bool SqlUser::readUser(){
-    QString id = QString::number(this->_id),
-                password {};
+    QString id = QString::number(this->_id);
+
     QVector<QPair<QString, QString*>> args = {
         {*ID_COLUMN_NAME, &id},
         {*USERNAME_COLUMN_NAME, &this->_username},
-        {*PASSWORD_COLUMN_NAME, &password},
+        {*PASSWORD_COLUMN_NAME, &this->_password},
     };
 
     this->_id = id.toInt();
