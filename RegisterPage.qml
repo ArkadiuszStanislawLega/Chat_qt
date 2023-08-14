@@ -12,15 +12,19 @@ Page {
         id: user
         onCreatedConfirmed: {
             info_backgroud.visible = true
-            info.text = qsTr("Created")
-            info.color = "black"
-            info_backgroud.color = "transparent"
+            info.text = qsTr("Created");
+            info.color = "white";
+            info_backgroud.color = "transparent";
+            l_id_from_db.text = user.dbId;
+            tf_username.text = "";
+            tf_password.text = "";
+            tf_repassword.text = "";
         }
         onCreatedError: {
-            info_backgroud.visible = true
+            info_backgroud.visible = true;
             info.text = qsTr("Error");
-            info.color = "white"
-            info_backgroud.color = "red"
+            info.color = "white";
+            info_backgroud.color = "red";
         }
     }
 
@@ -86,7 +90,6 @@ Page {
                 height: 30
                 echoMode: TextInput.Password
             }
-
         }
 
         Row{

@@ -54,7 +54,13 @@ void DbManager::CreateUsersTable(){
         qFatal("Failed to query 'create users table' database: %s", qPrintable(query.lastError().text()));
     }
 }
-
+/*!
+ * \brief DbManager::create Creates the values given in args in the database in the table
+ *  with the name given in the function argument.
+ * \param table name of the table in database
+ * \param args First of pair should be the name of column name in database, second is value.
+ * \return True if the table name and values are properly inserted into the database.
+ */
 bool DbManager::create(QString table, QVector<QPair<QString, QString> > args){
     if(table.isEmpty()) return false;
     if(args.isEmpty()) return false;
@@ -90,10 +96,11 @@ bool DbManager::create(QString table, QVector<QPair<QString, QString> > args){
         return false;
     }
 }
+
 /*!
  * \brief DbManager::read Retrieves the given values in args from the table named in the function argument.
  * \param table name of table in Database
- * \param args first arg must be id
+ * \param args First arg must be id. First of pair should be the name of column name in database, second is value.
  * \return true if id is correct and values are readed from Dtabase
  */
 bool DbManager::read(QString table, QVector<QPair<QString, QString*> > args){

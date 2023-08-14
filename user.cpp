@@ -64,7 +64,13 @@ void User::addUserToDb(){
     //TODO: Change insert into to update - after create server.
     SqlUser sql;
     sql.userToSqlUserConverter(*this);
-    if (sql.createUser()) emit this->createdConfirmed();
+    if (sql.createUser()){
+        this->_id = SqlUser::getNextId();
+        this->_username = "";
+        this->_password = "";
+
+        emit this->createdConfirmed();
+    }
     else emit this->createdError();
 }
 
