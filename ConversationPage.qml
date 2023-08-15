@@ -2,21 +2,21 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import io.qt.chat.conversation_model
+import com.iam_code.chat.conversation_model
 
 Page {
     id: root
     property string inConversationWith
 
-    header: ChatToolBar{
-        ToolButton{
+    header: ChatToolBar {
+        ToolButton {
             text: qsTr("Back")
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             onClicked: root.StackView.view.pop()
         }
-        Label{
+        Label {
             id: page_title
             text: inConversationWith
             font.pixelSize: 20
@@ -24,11 +24,10 @@ Page {
         }
     }
 
-
-    ColumnLayout{
+    ColumnLayout {
         anchors.fill: parent
 
-        ListView{
+        ListView {
             id: list_view
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -37,7 +36,7 @@ Page {
             displayMarginEnd: 40
             verticalLayoutDirection: ListView.BottomToTop
             spacing: 12
-            model: SqlConversationModel{
+            model: SqlConversationModel {
                 recipient: inConversationWith
             }
             delegate: Column {
@@ -46,22 +45,25 @@ Page {
 
                 readonly property bool sent_by_me: model.recipient !== "Me"
 
-                Row{
-                    id:message_row
+                Row {
+                    id: message_row
                     spacing: 6
                     anchors.right: sent_by_me ? parent.right : undefined
 
-                    Image{
+                    Image {
                         id: avatar
-                        source: !sent_by_me ? "images/" + model.author.replace(" ", "_") + ".png": ""
+                        source: !sent_by_me ? "images/" + model.author.replace(
+                                                  " ", "_") + ".png" : ""
                     }
-                    Rectangle{
-                        width: Math.min(message_text.implicitWidth + 24,
-                                        list_view.width - (!sent_by_me ? avatar.width + message_row.spacing : 0))
+                    Rectangle {
+                        width: Math.min(
+                                   message_text.implicitWidth + 24,
+                                   list_view.width
+                                   - (!sent_by_me ? avatar.width + message_row.spacing : 0))
                         height: message_text.implicitHeight + 24
                         color: sent_by_me ? "lightgrey" : "steelblue"
 
-                        Label{
+                        Label {
                             id: message_text
                             text: model.message
                             color: sent_by_me ? "black" : "white"
@@ -79,17 +81,17 @@ Page {
                     anchors.right: sent_by_me ? parent.right : undefined
                 }
             }
-            ScrollBar.vertical: ScrollBar{}
+            ScrollBar.vertical: ScrollBar {}
         }
 
-        Pane{
+        Pane {
             id: pane
             Layout.fillWidth: true
 
-            RowLayout{
+            RowLayout {
                 width: parent.width
 
-                TextArea{
+                TextArea {
                     id: message_field
                     Layout.fillWidth: true
                     placeholderText: qsTr("Compose message")
@@ -99,14 +101,14 @@ Page {
                 RoundButton {
                     id: send_button
                     text: qsTr("Send")
-                    enabled:  message_field.length > 0
+                    enabled: message_field.length > 0
                     onClicked: {
-                        list_view.model.send_message(inConversationWith, message_field.text);
-                        message_field.text = "";
+                        list_view.model.send_message(inConversationWith,
+                                                     message_field.text)
+                        message_field.text = ""
                     }
                 }
             }
         }
     }
-
 }

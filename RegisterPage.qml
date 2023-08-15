@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import io.qt.chat.user
+import com.iam_code.chat.user
 
 Page {
     id: root

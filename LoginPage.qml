@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import io.qt.chat.user
+import com.iam_code.chat.user
 
 Page {
     id: root
@@ -46,6 +46,7 @@ Page {
             font {
                 pixelSize: 40
                 bold: true
+                family: "TimesNewRoman"
             }
             color: "#70a1ee"
             Layout.alignment: Qt.AlignHCenter
