@@ -133,7 +133,6 @@ bool DbManager::read(QString table, QVector<QPair<QString, QString *>> args) {
   query.prepare("SELECT * FROM " + table + " WHERE id = :id;");
   query.bindValue(":id", *args.at(0).second);
 
-  qDebug() << query.lastQuery();
   if (query.exec()) {
     while (query.next()) {
       QVector<int> columns(args.size());
@@ -141,7 +140,6 @@ bool DbManager::read(QString table, QVector<QPair<QString, QString *>> args) {
       for (int i = 0; i < args.size(); i++) {
         columns[i] = query.record().indexOf(args[i].first);
         *args[i].second = query.value(columns[i]).toString();
-        qDebug() << args[i].first << *args[i].second;
       }
 
     }
