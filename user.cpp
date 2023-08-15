@@ -60,12 +60,16 @@ bool User::auteticateUser() {
   // TODO: Move this to server.
   SqlUser sql;
   sql.userToSqlUserConverter(*this);
-  if (!sql.isCredentialsCorrect())
+  if (!sql.isCredentialsCorrect()) {
     return false;
+  }
+
   if (sql.readUser()) {
     this->sqlUserToUserConverter(sql);
+         qDebug() << "ok";
     return true;
   }
+  qDebug() << "not ok";
 
   return false;
 }

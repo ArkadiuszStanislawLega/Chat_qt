@@ -3,14 +3,14 @@
 
 #include <QDebug>
 #include <QObject>
+#include <QPair>
 #include <QSqlDatabase>
+#include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
-#include <QSqlError>
 #include <QVector>
-#include <QPair>
 
-//#include "sqluser.h"
+// #include "sqluser.h"
 
 Q_GLOBAL_STATIC(QString, DATABASE_NAME, "chat.db");
 Q_GLOBAL_STATIC(QString, CONTACTS_TABLE_NAME, "Contacts");
@@ -25,20 +25,19 @@ Q_GLOBAL_STATIC(QString, RECIPIENT_COLUMN, "recipient");
 Q_GLOBAL_STATIC(QString, TIME_COLUMN, "timestamp");
 Q_GLOBAL_STATIC(QString, MESSAGE_COLUMN, "message");
 
-class DbManager : public QObject
-{
-    Q_OBJECT
+class DbManager : public QObject {
+  Q_OBJECT
 private:
-    QSqlDatabase _database;
-    void CreateTables();
-    void CreateContactsTable();
-    void CreateConversationTable();
-    void CreateUsersTable();
+  QSqlDatabase _database;
+  void CreateTables();
+  void CreateContactsTable();
+  void CreateConversationTable();
+  void CreateUsersTable();
 
 public:
-    DbManager(QObject *parent = nullptr);
-    static bool create(QString table, QVector<QPair<QString, QString>> args);
-    static bool read(QString table, QVector<QPair<QString, QString*>> args);
+  DbManager(QObject *parent = nullptr);
+  static bool create(QString table, QVector<QPair<QString, QString>> args);
+  static bool read(QString table, QVector<QPair<QString, QString *>> args);
 };
 
 #endif // DBMANAGER_H

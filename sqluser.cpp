@@ -34,11 +34,7 @@ bool SqlUser::isCredentialsCorrect() {
 
   if (!DbManager::read(*USERS_TABLE_NAME, args))
     return false;
-
-  if (password == this->_password)
-    return true;
-
-  return false;
+  return password == this->_password;
 }
 
 bool SqlUser::readUser() {

@@ -1,16 +1,16 @@
 #ifndef SQLCONTACTMODEL_H
 #define SQLCONTACTMODEL_H
 
-#include <QSqlQueryModel>
+#include "dbmanager.h"
 #include <QDebug>
 #include <QSqlError>
 #include <QSqlQuery>
-#include "dbmanager.h"
+#include <QSqlQueryModel>
 
-class SqlContactModel : public QSqlQueryModel{
+class SqlContactModel : public QSqlQueryModel {
 public:
-    Q_OBJECT
+  Q_OBJECT
 public:
-    SqlContactModel(QObject *parent = nullptr);
+  SqlContactModel(QObject *parent = nullptr);
 };
 #endif // SQLCONTACTMODEL_H
