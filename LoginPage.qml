@@ -7,28 +7,32 @@ import io.qt.chat.user
 Page {
     id: root
     padding: 20
-    Keys.onReturnPressed: if(b_login.enabled) b_login.activate();
+    Keys.onReturnPressed: if(b_login.enabled) b_login.activate()
 
-    User{
-        id: user
-        onLoginInFail: {
-            info.text = "Wrong id or password.";
-            show_info_animation.start();
-        }
-
-        onIsLoginIn: {
-            root.StackView.view.push("ContactPage.qml", {user: user});
-        }
+    Rectangle{
+        anchors.fill: parent
+        color: "darkgrey"
+        anchors.centerIn: parent
     }
 
     ColumnLayout{
-        width: parent.width
+        id: cl
+        width: parent.width - 40
+        height: 250
         anchors.centerIn: parent
-        spacing: 10
+        spacing: 20
+
+        Rectangle{
+            anchors.fill: cl
+            color: "grey"
+            opacity: 0.6
+        }
 
         GridLayout{
             columns: 2
             rows: 3
+            width: cl.width - 20
+            anchors.centerIn: parent
 
             Label{
                 font{
