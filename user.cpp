@@ -7,15 +7,18 @@ User::User(QObject *parent) : QObject{parent} {
   // TODO: Move this to server. Get empty id from server.
   this->_id = SqlUser::getNextId();
 }
-User::User(QString id, QString username, QString password, QObject *parent)
+User::User(QString id, QString username, QString password, QVector<User> contacts, QObject *parent)
     : QObject{parent} {
   this->_id = id;
   this->_username = username;
   this->_password = password;
+  this->_contacts = contacts;
 }
 QString User::getPassword() { return this->_password; }
 QString User::getUsername() { return this->_username; }
 QString User::getDbId() { return this->_id; }
+QVector<User> User::getContacts() {return this->_contacts; }
+
 void User::setPassword(QString password) {
   this->_password = QString(
       QCryptographicHash::hash((password.toUtf8()), QCryptographicHash::Md5)
@@ -35,12 +38,24 @@ void User::sqlUserToUserConverter(SqlUser &user) {
   this->_username = user.getUsername();
   this->_password = user.getPassword();
 }
+
+void User::setContacts(QVector<User> contacts) { this->_contacts = contacts; }
 void User::registerUser() { this->addUserToDb(); }
 void User::isUserLogin() {
   if (this->auteticateUser())
     emit this->isLoginIn();
   else
     emit this->loginInFail();
+}
+
+void User::createContact(User user) {
+  // TODO: Make this
+  qDebug() << "not implemented.";
+}
+
+void User::removeContact(User user){
+  // TODO: Make this
+  qDebug() << "not implemented.";
 }
 void User::addUserToDb() {
   // TODO: Move this to server.
