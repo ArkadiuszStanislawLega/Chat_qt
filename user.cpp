@@ -7,7 +7,7 @@ User::User(QObject *parent) : QObject{parent} {
   // TODO: Move this to server. Get empty id from server.
   this->_id = SqlUser::getNextId();
 }
-User::User(QString id, QString username, QString password, QVector<User> contacts, QObject *parent)
+User::User(QString id, QString username, QString password, QVector<Contact> contacts, QObject *parent)
     : QObject{parent} {
   this->_id = id;
   this->_username = username;
@@ -17,7 +17,7 @@ User::User(QString id, QString username, QString password, QVector<User> contact
 QString User::getPassword() { return this->_password; }
 QString User::getUsername() { return this->_username; }
 QString User::getDbId() { return this->_id; }
-QVector<User> User::getContacts() {return this->_contacts; }
+QVector<Contact> User::getContacts() {return this->_contacts; }
 
 void User::setPassword(QString password) {
   this->_password = QString(
@@ -39,7 +39,7 @@ void User::sqlUserToUserConverter(SqlUser &user) {
   this->_password = user.getPassword();
 }
 
-void User::setContacts(QVector<User> contacts) { this->_contacts = contacts; }
+void User::setContacts(QVector<Contact> contacts) { this->_contacts = contacts; }
 void User::registerUser() { this->addUserToDb(); }
 void User::isUserLogin() {
   if (this->auteticateUser())
@@ -48,15 +48,6 @@ void User::isUserLogin() {
     emit this->loginInFail();
 }
 
-void User::createContact(User user) {
-  // TODO: Make this
-  qDebug() << "not implemented.";
-}
-
-void User::removeContact(User user){
-  // TODO: Make this
-  qDebug() << "not implemented.";
-}
 void User::addUserToDb() {
   // TODO: Move this to server.
   // TODO: Change insert into to update - after create server.
@@ -87,4 +78,13 @@ bool User::auteticateUser() {
   qDebug() << "not ok";
 
   return false;
+}
+
+bool User::addContact(User &user){
+
+}
+
+bool User::removeContact(User &user)
+{
+
 }
