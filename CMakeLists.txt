@@ -47,6 +47,7 @@ qt_add_qml_module(appChat_qt
            "images/Hans_Gude@4x.png"
            SOURCES sqluser.h sqluser.cpp
            SOURCES contact.h contact.cpp
+           SOURCES sqlcontact.h sqlcontact.cpp
 )
 
 set_target_properties(appChat_qt PROPERTIES
