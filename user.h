@@ -11,6 +11,7 @@
 #include "sqluser.h"
 #include "contact.h"
 
+class Contact;
 class SqlUser;
 class User : public QObject {
   Q_OBJECT

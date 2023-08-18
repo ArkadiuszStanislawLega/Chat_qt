@@ -13,35 +13,43 @@ Page {
 
     Contact {
         id: createContact
+        onSuccessfullyCreated: {
+            l_info.text = qsTr("Succesfully added contact.")
+            //TODO: Add refresh list.
+        }
+
+        onCreatingFail: {
+            l_info.text = qsTr("Fail to add contact.")
+        }
     }
 
-
     header: ChatToolBar {
+
         Label {
+            id: l_info
             text: user.username ? user.username : user.dbId
             font.pixelSize: 20
             anchors.centerIn: parent
         }
     }
 
-
-    ColumnLayout{
-        RowLayout{
+    ColumnLayout {
+        RowLayout {
             TextField {
                 id: tf_contact_id
                 Layout.fillWidth: true
                 height: 20
-                validator: IntValidator{
+                validator: IntValidator {
                     bottom: 1
                     top: 200000
                 }
             }
 
-            RoundButton{
+            RoundButton {
                 id: b_add_contact
                 onClicked: {
-
-
+                    createContact.ownerId = user.dbId
+                    createContact.create()
                 }
             }
         }
@@ -60,11 +68,14 @@ Page {
                 width: list_view.width - list_view.leftMargin - list_view.rightMargin
                 height: avatar.implicitHeight
                 leftPadding: avatar.implicitWidth + 32
-                onClicked: root.StackView.view.push("ConversationPage.qml", { inConversationWith: model.display })
+                onClicked: root.StackView.view.push("ConversationPage.qml", {
+                                                        "inConversationWith": model.display
+                                                    })
 
                 Image {
                     id: avatar
-                    source: model.display === "Me" ? "" : "images/" + model.display.replace(" ", "_") + ".png"
+                    source: model.display === "Me" ? "" : "images/" + model.display.replace(
+                                                         " ", "_") + ".png"
                 }
             }
         }

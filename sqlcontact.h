@@ -28,6 +28,8 @@ public:
   QDateTime getCreated();
   void setCreated(QDateTime value);
 
+  static QVector<SqlContact> getUserContacts(int id);
+
 signals:
 
 private:

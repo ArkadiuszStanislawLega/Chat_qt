@@ -17,7 +17,10 @@ User::User(QString id, QString username, QString password, QVector<Contact> cont
 QString User::getPassword() { return this->_password; }
 QString User::getUsername() { return this->_username; }
 QString User::getDbId() { return this->_id; }
-QVector<Contact> User::getContacts() {return this->_contacts; }
+QVector<Contact> User::getContacts() {
+  //TODO: Make function to connect with db.
+  return this->_contacts;
+}
 
 void User::setPassword(QString password) {
   this->_password = QString(
@@ -80,11 +83,11 @@ bool User::auteticateUser() {
   return false;
 }
 
-bool User::addContact(User &user){
+bool User::addContact(Contact &contact) {
+  if (contact.create()) {
+    this->getContacts();
+  }
 
+  emit this->contactsChanged();
 }
 
-bool User::removeContact(User &user)
-{
-
-}

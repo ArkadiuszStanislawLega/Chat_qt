@@ -29,7 +29,7 @@ public:
   void setContactId(QString value);
   QString getContactId();
 
-  void setOnwerId(QString value);
+  void setOwnerId(QString value);
   QString getOwnerId();
 
   void setUserId(QString value);
@@ -44,11 +44,16 @@ signals:
   void removed();
   void usernameChanged();
   void createdChanged();
+  void userIdChanged();
+  void ownerIdChanged();
+  void contactIdChanged();
   void idChanged();
+  void successfullyCreated();
+  void creatingFail();
 
 public slots:
   void remove();
-  void create();
+  bool create();
 
 private:
   QString _contact_id, _owner_id, _user_id, _username;

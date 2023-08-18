@@ -1,8 +1,10 @@
 #include "contact.h"
 
 Contact::Contact(QObject *parent) : QObject{parent} {
-  this->_username = {};
   this->_contact_id = {};
+  this->_owner_id = {};
+  this->_user_id = {};
+  this->_username = {};
   this->_created = QDateTime();
 }
 
@@ -15,23 +17,23 @@ Contact::Contact(QString contact_id, QString owner_id, QString user_id,
   this->_created = created;
 }
 
+QString Contact::getUsername() { return this->_username; }
 void Contact::setUsername(QString value) {
   this->_username = value;
   emit this->usernameChanged();
 }
-QString Contact::getUsername() { return this->_username; }
 
+QString Contact::getContactId() { return this->_contact_id; }
 void Contact::setContactId(QString value) {
   this->_contact_id = value;
   emit this->contactIdChanged();
 }
-QString Contact::getContactId() { return this->_contact_id; }
 
-void Contact::setOnwerId(QString value) {
+QString Contact::getOwnerId() { return this->_owner_id; }
+void Contact::setOwnerId(QString value) {
   this->_owner_id = value;
   emit this->ownerIdChanged();
 }
-QString Contact::getOwnerId() { return this->_owner_id; }
 
 QString Contact::getUserId() { return this->_user_id; }
 void Contact::setUserId(QString value) {
@@ -40,7 +42,6 @@ void Contact::setUserId(QString value) {
 }
 
 QDateTime Contact::getCreated() { return this->_created; }
-
 void Contact::setCreated(QDateTime value) {
   this->_created = value;
   emit this->created();
@@ -51,4 +52,19 @@ void Contact::remove() {
   emit this->removed();
 }
 
-void Contact::create() { SqlUser *user; }
+bool Contact::create() {
+  // TODO: this is going to server;
+  SqlContact *contact = new SqlContact(this);
+  contact->setUserId(this->_user_id.toInt());
+  contact->setOwnerId(this->_owner_id.toInt());
+  contact->setUsername(this->_username);
+  contact->setCreated(QDateTime::currentDateTime());
+
+  if (!contact->createContact()) {
+    emit this->creatingFail();
+    return false;
+  }
+
+  emit this->successfullyCreated();
+  return true;
+};
