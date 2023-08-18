@@ -113,7 +113,8 @@ Page {
 
                 function activate() {
                     user.username = tf_username.text
-                    user.registerUser(tf_password.text)
+                    user.password = tf_password.text
+                    user.registerUser()
                 }
 
                 onClicked: b_register.activate()

@@ -16,8 +16,7 @@ QString SqlUser::getNextId() {
   return "-1";
 }
 
-bool SqlUser::createUser(QString *password) {
-  this->setPassword(*password);
+bool SqlUser::createUser() {
   QVector<QPair<QString, QString>> args = {
       {*ID_COLUMN_NAME, QString::number(this->_id)},
       {*USERNAME_COLUMN_NAME, this->_username},
@@ -25,17 +24,17 @@ bool SqlUser::createUser(QString *password) {
   return DbManager::create(*USERS_TABLE_NAME, args);
 }
 
-bool SqlUser::isCredentialsCorrect(QString *password) {
-  QString id = QString::number(this->_id);
+bool SqlUser::isCredentialsCorrect() {
+  QString id = QString::number(this->_id), password {};
 
   QVector<QPair<QString, QString *>> args = {
       {*ID_COLUMN_NAME, &id},
-      {*PASSWORD_COLUMN_NAME, password},
+      {*PASSWORD_COLUMN_NAME, &password},
   };
 
   if (!DbManager::read(*USERS_TABLE_NAME, args))
     return false;
-  return *password == this->_password;
+  return password == this->_password;
 }
 
 bool SqlUser::readUser() {
@@ -74,4 +73,33 @@ void SqlUser::userToSqlUserConverter(User &user) {
   this->_id = user.getDbId().toInt();
   this->_username = user.getUsername();
   this->_password = "";
+}
+
+bool SqlUser::createContact(int *contact_id) {
+
+  QSqlQuery query;
+  query.prepare(
+      "INSERT INTO " + *CONTACTS_TABLE_NAME + "('" + *ID_OWNER_ID_COLUMN_NAME +
+      "','" + *ID_USER_ID_COLUMN_NAME + "'," + *CREATED_DATE_COLUMN_NAME +
+      "')" + " VALUES (:" + *ID_OWNER_ID_COLUMN_NAME +
+      ",:" + *ID_USER_ID_COLUMN_NAME + ",:" + *CREATED_DATE_COLUMN_NAME + ");");
+  query.bindValue(*ID_OWNER_ID_COLUMN_NAME, this->_id);
+  query.bindValue(*ID_USER_ID_COLUMN_NAME, *contact_id);
+  query.bindValue(*CREATED_DATE_COLUMN_NAME, QDateTime::currentDateTime());
+
+  if (query.exec())
+    return true;
+
+  qDebug() << query.lastError();
+  return false;
+}
+
+bool SqlUser::removeContact(int *contact) {}
+
+QVector<Contact> SqlUser::getContacts() {
+  QVector<Contact> contacts;
+  QSqlQuery query;
+  //query.prepare("SELECT * FROM ")
+
+
 }

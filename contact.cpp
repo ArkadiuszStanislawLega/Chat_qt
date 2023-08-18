@@ -11,13 +11,13 @@ Contact::Contact(int ownerId, User *contact, QDateTime created, QObject *parent)
   this->_created = created;
 }
 
-int Contact::getOnwerId() { return this->_owner_id; }
+int Contact::getOwnerId() { return this->_owner_id; }
 
-void Contact::setOnwerId(int value) { this->_owner_id = value; }
+void Contact::setOwnerId(int value) { this->_owner_id = value; }
 
 User *Contact::getContact() { return this->_contact; }
 
-void Contact::setContact(User *value) { this->_user = value; }
+void Contact::setContact(User *value) { this->_contact = value; }
 
 QDateTime Contact::getCreated() { return this->_created; }
 

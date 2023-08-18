@@ -18,8 +18,8 @@ class Contact : public QObject {
   Q_PROPERTY(User *contact READ getContact WRITE setContact)
   Q_PROPERTY(QDateTime created READ getCreated WRITE setCreated)
 
-  int getOnwerId();
-  void setOnwerId(int value);
+  int getOwnerId();
+  void setOwnerId(int value);
 
   User *getContact();
   void setContact(User *value);

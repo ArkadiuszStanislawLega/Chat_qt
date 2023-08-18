@@ -10,17 +10,18 @@
 
 #include "dbmanager.h"
 #include "user.h"
+#include "contact.h"
 
 class User;
-
+class Contact;
 class SqlUser : public QObject {
   Q_OBJECT
 public:
   explicit SqlUser(QObject *parent = nullptr);
   static QString getNextId();
 
-  bool createUser(QString *password);
-  bool isCredentialsCorrect(QString *password);
+  bool createUser();
+  bool isCredentialsCorrect();
   bool readUser();
   bool updateUser();
   bool deleteUser();
@@ -41,6 +42,10 @@ public:
   void setLastActivity(QDateTime value);
 
   void userToSqlUserConverter(User &user);
+
+  bool createContact(int *contact_id);
+  bool removeContact(int *contact);
+  QVector<Contact> getContacts();
 
 private:
   QString _username{}, _password{};
