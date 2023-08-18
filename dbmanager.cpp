@@ -150,9 +150,3 @@ bool DbManager::read(QString table, QVector<QPair<QString, QString *>> args) {
 
   return false;
 }
-
-template<typename T>
-QList<T> DbManager::readAllWhere(QString table, QString were, QVector<QPair<QString, QString> > args)
-{
-
-}

@@ -5,7 +5,11 @@
 #include <QDateTime>
 
 #include "dbmanager.h"
+#include "contact.h"
+#include "user.h"
 
+class Contact;
+class User;
 class SqlContact : public QObject
 {
   Q_OBJECT
@@ -17,6 +21,9 @@ public:
   bool updateContact();
   bool deleteContact();
 
+  static QVector<Contact> get_all();
+  static QVector<Contact> get_user_contacts(int userId);
+
   int getContactId();
   void setContactId(int value);
   int getOwnerId();
@@ -27,8 +34,6 @@ public:
   void setUsername(QString value);
   QDateTime getCreated();
   void setCreated(QDateTime value);
-
-  static QVector<SqlContact> getUserContacts(int id);
 
 signals:
 

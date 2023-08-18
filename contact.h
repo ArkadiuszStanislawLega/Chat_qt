@@ -12,9 +12,8 @@ class Contact : public QObject
   Q_OBJECT
 public:
   explicit Contact(QObject *parent = nullptr);
-  Contact(QString contact_id, QString owner_id, QString user_id, QString username, QDateTime created, QObject *parent = nullptr);
+  Contact(QString owner_id, QString user_id, QString username, QDateTime created, QObject *parent = nullptr);
 
-  Q_PROPERTY(QString contactId READ getContactId WRITE setContactId NOTIFY contactIdChanged FINAL)
   Q_PROPERTY(QString userId READ getUserId WRITE setUserId NOTIFY userIdChanged FINAL)
   Q_PROPERTY(QString ownerId READ getOwnerId WRITE setOwnerId NOTIFY ownerIdChanged FINAL)
   Q_PROPERTY(QString username READ getUsername WRITE setUsername NOTIFY
@@ -25,9 +24,6 @@ public:
   // TODO: avatar property
   void setUsername(QString value);
   QString getUsername();
-
-  void setContactId(QString value);
-  QString getContactId();
 
   void setOwnerId(QString value);
   QString getOwnerId();
@@ -46,7 +42,6 @@ signals:
   void createdChanged();
   void userIdChanged();
   void ownerIdChanged();
-  void contactIdChanged();
   void idChanged();
   void successfullyCreated();
   void creatingFail();
@@ -56,7 +51,7 @@ public slots:
   bool create();
 
 private:
-  QString _contact_id, _owner_id, _user_id, _username;
+  QString _owner_id, _user_id, _username;
   QDateTime _created;
 };
 

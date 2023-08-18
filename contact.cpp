@@ -1,16 +1,15 @@
 #include "contact.h"
 
 Contact::Contact(QObject *parent) : QObject{parent} {
-  this->_contact_id = {};
   this->_owner_id = {};
   this->_user_id = {};
   this->_username = {};
   this->_created = QDateTime();
 }
 
-Contact::Contact(QString contact_id, QString owner_id, QString user_id,
-                 QString username, QDateTime created, QObject *parent) {
-  this->_contact_id = contact_id;
+Contact::Contact(QString owner_id, QString user_id, QString username,
+                 QDateTime created, QObject *parent)
+    : Contact{parent} {
   this->_user_id = user_id;
   this->_owner_id = owner_id;
   this->_username = username;
@@ -21,12 +20,6 @@ QString Contact::getUsername() { return this->_username; }
 void Contact::setUsername(QString value) {
   this->_username = value;
   emit this->usernameChanged();
-}
-
-QString Contact::getContactId() { return this->_contact_id; }
-void Contact::setContactId(QString value) {
-  this->_contact_id = value;
-  emit this->contactIdChanged();
 }
 
 QString Contact::getOwnerId() { return this->_owner_id; }
