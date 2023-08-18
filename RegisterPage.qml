@@ -7,51 +7,52 @@ import com.iam_code.chat.user
 Page {
     id: root
     padding: 20
-    Keys.onReturnPressed: if(b_register.enabled) b_register.activate();
-    Keys.onEscapePressed: root.StackView.view.pop();
+    Keys.onReturnPressed: if (b_register.enabled)
+                              b_register.activate()
+    Keys.onEscapePressed: root.StackView.view.pop()
 
-    User{
+    User {
         id: user
         onCreatedConfirmed: {
             info_background.visible = true
-            info_background.color = "transparent";
-            info.text = qsTr("Account created!");
-            info.color = "white";
+            info_background.color = "transparent"
+            info.text = qsTr("Account created!")
+            info.color = "white"
 
-            l_id_from_db.text = user.dbId;
-            tf_username.text = "";
-            tf_password.text = "";
-            tf_repassword.text = "";
+            l_id_from_db.text = user.dbId
+            tf_username.text = ""
+            tf_password.text = ""
+            tf_repassword.text = ""
 
-            show_info_animation.start();
+            show_info_animation.start()
         }
         onCreatedError: {
-            info_background.visible = true;
-            info_background.color = "red";
-            info.text = qsTr("Error");
-            info.color = "white";
+            info_background.visible = true
+            info_background.color = "red"
+            info.text = qsTr("Error")
+            info.color = "white"
 
-            show_info_animation.start();
+            show_info_animation.start()
         }
     }
 
-    ColumnLayout{
+    ColumnLayout {
         id: cl_content
         width: parent.width
         anchors.centerIn: parent
         spacing: 10
 
-        GridLayout{
+        GridLayout {
             columns: 2
             rows: 4
 
-            Label{
+            Label {
                 id: l_id_info
                 font.pixelSize: 20
                 text: qsTr("Account id:")
             }
 
-            Label{
+            Label {
                 id: l_id_from_db
                 font {
                     pixelSize: 20
@@ -60,38 +61,38 @@ Page {
                 text: user.dbId
             }
 
-            Label{
+            Label {
                 id: l_username
                 font.pixelSize: 20
                 text: qsTr("Username (optional):")
             }
 
-            TextField{
+            TextField {
                 id: tf_username
                 height: 30
                 Layout.fillWidth: true
             }
 
-            Label{
+            Label {
                 id: l_password
                 font.pixelSize: 20
                 text: qsTr("Password:")
             }
 
-            TextField{
+            TextField {
                 id: tf_password
                 height: 30
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
             }
 
-            Label{
+            Label {
                 id: l_repassword
                 font.pixelSize: 20
                 text: qsTr("Retype password:")
             }
 
-            TextField{
+            TextField {
                 id: tf_repassword
                 Layout.fillWidth: true
                 height: 30
@@ -99,38 +100,38 @@ Page {
             }
         }
 
-        Row{
+        Row {
             id: buttons_row
             Layout.alignment: Qt.AlignHCenter | Qt.AlignHCenter
             spacing: 10
 
-            RoundButton{
+            RoundButton {
                 id: b_register
                 text: qsTr("Register")
-                enabled: tf_password.length > 0 && tf_password.text === tf_repassword.text
+                enabled: tf_password.length > 0
+                         && tf_password.text === tf_repassword.text
 
-                function activate(){
-                    user.username = tf_username.text;
-                    user.password = tf_password.text;
-                    user.registerUser();
+                function activate() {
+                    user.username = tf_username.text
+                    user.registerUser(tf_password.text)
                 }
 
                 onClicked: b_register.activate()
             }
 
-            RoundButton{
+            RoundButton {
                 id: b_cancel
                 text: qsTr("Back")
 
-                function activate(){
-                    root.StackView.view.pop();
+                function activate() {
+                    root.StackView.view.pop()
                 }
 
                 onClicked: b_cancel.activate()
             }
         }
     }
-    Rectangle{
+    Rectangle {
         id: info_background
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
@@ -139,7 +140,7 @@ Page {
         width: parent.width
         opacity: 0
 
-        Label{
+        Label {
             id: info
             anchors.horizontalCenter: parent.horizontalCenter
         }

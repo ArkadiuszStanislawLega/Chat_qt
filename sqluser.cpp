@@ -73,5 +73,5 @@ void SqlUser::setLastActivity(QDateTime value) { this->_last_activity = value; }
 void SqlUser::userToSqlUserConverter(User &user) {
   this->_id = user.getDbId().toInt();
   this->_username = user.getUsername();
-  this->_password = user.getPassword();
+  this->_password = "";
 }

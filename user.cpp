@@ -43,12 +43,12 @@ void User::isUserLogin(QString *password) {
     emit this->loginInFail();
 }
 
-void User::addUserToDb() {
+void User::addUserToDb(QString *password) {
   // TODO: Move this to server.
   // TODO: Change insert into to update - after create server.
   SqlUser sql;
   sql.userToSqlUserConverter(*this);
-  if (sql.createUser()) {
+  if (sql.createUser(password)) {
     this->_id = SqlUser::getNextId();
     this->_username = "";
 
