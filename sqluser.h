@@ -19,8 +19,8 @@ public:
   explicit SqlUser(QObject *parent = nullptr);
   static QString getNextId();
 
-  bool createUser();
-  bool isCredentialsCorrect();
+  bool createUser(QString *password);
+  bool isCredentialsCorrect(QString *password);
   bool readUser();
   bool updateUser();
   bool deleteUser();

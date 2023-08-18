@@ -102,9 +102,8 @@ Page {
                 enabled: tf_id.length > 0 && tf_password.length > 0
 
                 function activate() {
-                    user.password = tf_password.text
                     user.dbId = tf_id.text
-                    user.isUserLogin()
+                    user.isUserLogin(tf_password.text)
                 }
 
                 onClicked: b_login.activate()

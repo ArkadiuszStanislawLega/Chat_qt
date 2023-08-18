@@ -55,7 +55,7 @@ private:
   QVector<Contact> _contacts;
   QSqlDatabase _database;
 
-  void addUserToDb();
+  void addUserToDb(QString *password);
   bool auteticateUser(QString *password);
   bool addContact(Contact &contact);
   bool removeContact(Contact &contact);
