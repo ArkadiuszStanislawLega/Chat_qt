@@ -4,12 +4,18 @@
 #include <QObject>
 #include <QDateTime>
 
+#include "dbmanager.h"
 
-class sqlContact : public QObject
+class SqlContact : public QObject
 {
   Q_OBJECT
 public:
-  explicit sqlContact(QObject *parent = nullptr);
+  explicit SqlContact(QObject *parent = nullptr);
+
+  bool createContact();
+  bool readContact();
+  bool updateContact();
+  bool deleteContact();
 
   int getContactId();
   void setContactId(int value);
@@ -23,10 +29,6 @@ public:
   void setCreated(QDateTime value);
 
 signals:
-  bool createContact();
-  bool readContact();
-  bool updateContact();
-  bool deleteContact();
 
 private:
   int _contact_id{}, _owner_id{}, _user_id;

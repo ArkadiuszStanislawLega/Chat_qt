@@ -17,11 +17,20 @@ void DbManager::CreateTables() {
 }
 void DbManager::CreateContactsTable() {
   QSqlQuery query;
-  query.prepare("CREATE TABLE IF NOT EXISTS '" + *CONTACTS_TABLE_NAME +
-                "' ("
-                "'" +
-                *NAME_COLUMN + "' TEXT NOT NULL, PRIMARY KEY(" + *NAME_COLUMN +
-                "))");
+
+  query.prepare("CREATE TABLE IF NOT EXISTS '" + *CONTACTS_TABLE_NAME + "' ('" +
+                *ID_COLUMN_NAME + "' INTEGER NOT NULL UNIQUE, " + "'" +
+                *ID_OWNER_ID_COLUMN_NAME + "' INTEGER NOT NULL, " + "'" +
+                *ID_USER_ID_COLUMN_NAME + "' INTEGER NOT NULL, " + "'" +
+                *CREATED_DATE_COLUMN_NAME + "' TEXT NOT NULL, " +
+                "FOREIGN KEY ('" + *ID_OWNER_ID_COLUMN_NAME + "') REFERENCES " +
+                *USERS_TABLE_NAME + " ('" + *ID_COLUMN_NAME + "'), " +
+                "FOREIGN KEY ('" + *ID_USER_ID_COLUMN_NAME + "') REFERENCES " +
+                *USERS_TABLE_NAME + " ('" + *ID_COLUMN_NAME + "')"
+                                                              ");"
+                );
+
+  qDebug() << query.lastQuery();
   if (!query.exec()) {
     qFatal("Failed to query 'create Contacts table' database: %s",
            qPrintable(query.lastError().text()));
@@ -31,44 +40,36 @@ void DbManager::CreateConversationTable() {
   QSqlQuery query;
 
   query.prepare("CREATE TABLE IF NOT EXISTS '" + *CONVERSATION_TABLE_NAME +
-                "'(" + "'" + *AUTHOR_COLUMN +
-                "' TEXT NOT NULL, "
-                "'" +
-                *RECIPIENT_COLUMN +
-                "' TEXT NOT NULL, "
-                "'" +
-                *TIME_COLUMN +
-                "' TEXT NOT NULL, "
-                "'" +
-                *MESSAGE_COLUMN +
-                "' TEXT NOT NULL, "
-                "FOREIGN KEY('" +
-                *AUTHOR_COLUMN + "') REFERENCES " + *CONTACTS_TABLE_NAME + "(" +
-                *NAME_COLUMN +
-                "),"
-                "FOREIGN KEY('" +
-                *RECIPIENT_COLUMN + "') REFERENCES " + *CONTACTS_TABLE_NAME +
-                "(" + *NAME_COLUMN + "));");
+                "'(" + "'" + *AUTHOR_COLUMN + "' TEXT NOT NULL, "
+                "'" + *RECIPIENT_COLUMN + "' TEXT NOT NULL, "
+                "'" + *TIME_COLUMN + "' TEXT NOT NULL, "
+                "'" + *MESSAGE_COLUMN + "' TEXT NOT NULL, "
+                "FOREIGN KEY('" + *AUTHOR_COLUMN + "') REFERENCES " + *CONTACTS_TABLE_NAME + "(" + *NAME_COLUMN + "),"
+                "FOREIGN KEY('" + *RECIPIENT_COLUMN + "') REFERENCES " + *CONTACTS_TABLE_NAME + "(" + *NAME_COLUMN + "));");
   if (!query.exec()) {
     qFatal("Failed to query 'create converstation table'database: %s",
            qPrintable(query.lastError().text()));
   }
 }
+
+/*  query.prepare("CREATE TABLE IF NOT EXISTS '" + *USERS_TABLE_NAME + "' (" +
+                "'" + *ID_COLUMN_NAME + "' INTEGER NOT NULL UNIQUE, "
+                "'" + *USERNAME_COLUMN_NAME + "' TEXT, "
+                "'" + *PASSWORD_COLUMN_NAME + "' TEXT NOT NULL); "
+                ); */
 void DbManager::CreateUsersTable() {
   QSqlQuery query;
   query.prepare("CREATE TABLE IF NOT EXISTS '" + *USERS_TABLE_NAME + "' (" +
-                "'" + *ID_COLUMN_NAME +
-                "' INTEGER NOT NULL UNIQUE, "
-                "'" +
-                *USERNAME_COLUMN_NAME +
-                "' TEXT, "
-                "'" +
-                *PASSWORD_COLUMN_NAME + "' TEXT NOT NULL); ");
+                "'" + *ID_COLUMN_NAME + "' INTEGER NOT NULL UNIQUE, "
+                "'" + *USERNAME_COLUMN_NAME + "' TEXT, "
+                "'" + *PASSWORD_COLUMN_NAME + "' TEXT NOT NULL); "
+                );
   if (!query.exec()) {
     qFatal("Failed to query 'create users table' database: %s",
            qPrintable(query.lastError().text()));
   }
 }
+
 
 /*!
  * \brief DbManager::create Creates the values given in args in the database in
