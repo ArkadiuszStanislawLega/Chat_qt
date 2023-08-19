@@ -10,26 +10,10 @@ User::User(QString id, QString username, QVector<Contact> contacts,
   this->_username = username;
   this->_contacts = contacts;
 }
-QString User::getUsername() { return this->_username; }
-void User::setUsername(QString username) { this->_username = username; }
-
-QString User::getDbId() { return this->_id; }
-void User::setDbId(QString id) {
-  this->_id = id;
-  emit this->idChanged();
-}
-
-QVector<Contact> User::getContacts() {
-  // TODO: Make function to connect with db.
-  return this->_contacts;
-}
-void User::setContacts(QVector<Contact> contacts) {
-  this->_contacts = contacts;
-}
 
 /*!
  * \brief User::sqlUserToUserConverter converting SqlUser to user - user doesn't have password.
- * \param user Dwonlowaded user properties from database.
+ * \param user Dwonloaded user properties from database.
  */
 void User::sqlUserToUserConverter(SqlUser &user) {
   this->_id = QString::number(user.getId());
@@ -64,7 +48,6 @@ bool User::addContact(Contact &contact) {
 
   return false;
 }
-
 
 void User::isUserLogin(QString password) {
   password =
@@ -105,4 +88,21 @@ bool User::auteticateUser(QString password) {
   }
 
   return false;
+}
+
+QString User::getUsername() { return this->_username; }
+void User::setUsername(QString username) { this->_username = username; }
+
+QString User::getDbId() { return this->_id; }
+void User::setDbId(QString id) {
+  this->_id = id;
+  emit this->idChanged();
+}
+
+QVector<Contact> User::getContacts() {
+  // TODO: Make function to connect with db.
+  return this->_contacts;
+}
+void User::setContacts(QVector<Contact> contacts) {
+  this->_contacts = contacts;
 }

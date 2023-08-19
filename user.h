@@ -30,6 +30,12 @@ private:
   bool addContact(Contact &contact);
   bool removeContact(Contact &contact);
 
+public slots:
+  void addUserToDb(QString);
+  void isUserLogin(QString);
+  void createContact(QString);
+  bool auteticateUser(QString);
+
 public:
   explicit User(QObject *parent = nullptr);
   User(QString id, QString username, QVector<Contact> contacts,
@@ -55,10 +61,5 @@ signals:
   void loginInFail();
   void contactsChanged();
 
-public slots:
-  void addUserToDb(QString);
-  void isUserLogin(QString);
-  void createContact(QString);
-  bool auteticateUser(QString);
 };
 #endif // USER_H
