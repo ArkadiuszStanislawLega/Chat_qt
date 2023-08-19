@@ -17,11 +17,24 @@ QString SqlUser::getNextId() {
 }
 
 bool SqlUser::createUser() {
-  QVector<QPair<QString, QString>> args = {
-      {*ID_COLUMN_NAME, QString::number(this->_id)},
-      {*USERNAME_COLUMN_NAME, this->_username},
-      {*PASSWORD_COLUMN_NAME, this->_password}};
-  return DbManager::create(*USERS_TABLE_NAME, args);
+  QSqlQuery query;
+  QString cmd = "INSERT INTO " + *USERS_TABLE_NAME + "('" + *ID_COLUMN_NAME +
+                "','" + *USERNAME_COLUMN_NAME + "','" + *PASSWORD_COLUMN_NAME +
+                "')"
+                " VALUES(:" +
+                *ID_COLUMN_NAME + ",:" + *USERNAME_COLUMN_NAME +
+                ",:" + *PASSWORD_COLUMN_NAME + ");";
+
+  query.prepare(cmd);
+  query.bindValue(":"+*ID_COLUMN_NAME, this->_id);
+  query.bindValue(":"+*USERNAME_COLUMN_NAME, this->_username);
+  query.bindValue(":"+*PASSWORD_COLUMN_NAME, this->_password);
+
+  if (!query.exec()) {
+    qDebug() << query.lastQuery() << query.lastError();
+    return false;
+  }
+  return true;
 }
 
 bool SqlUser::isCredentialsCorrect(int id, QString password) {
