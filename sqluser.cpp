@@ -31,7 +31,7 @@ bool SqlUser::createUser() {
   query.bindValue(":"+*PASSWORD_COLUMN_NAME, this->_password);
 
   if (!query.exec()) {
-    qDebug() << query.lastQuery() << query.lastError();
+    qDebug() << query.lastError() << query.lastQuery();
     return false;
   }
   return true;

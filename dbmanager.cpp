@@ -30,7 +30,6 @@ void DbManager::CreateContactsTable() {
                                                               ");"
                 );
 
-  qDebug() << query.lastQuery();
   if (!query.exec()) {
     qFatal("Failed to query 'create Contacts table' database: %s",
            qPrintable(query.lastError().text()));
