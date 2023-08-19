@@ -19,12 +19,16 @@ class SqlUser : public QObject {
 public:
   explicit SqlUser(QObject *parent = nullptr);
   static QString getNextId();
+  static SqlUser *getUserByPasswordAndUsername(QString username, QString password);
 
   bool createUser();
+  bool isAddingUserComplieted();
   bool isCredentialsCorrect(int id, QString password);
   bool readUser();
   bool updateUser();
   bool deleteUser();
+
+
 
   int getId();
   void setId(int value);

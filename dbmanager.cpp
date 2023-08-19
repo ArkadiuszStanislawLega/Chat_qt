@@ -19,7 +19,7 @@ void DbManager::CreateContactsTable() {
   QSqlQuery query;
 
   query.prepare("CREATE TABLE IF NOT EXISTS '" + *CONTACTS_TABLE_NAME + "' ('" +
-                *ID_COLUMN_NAME + "' INTEGER NOT NULL UNIQUE, " + "'" +
+                *ID_COLUMN_NAME + "' INTEGER PRIMARY KEY AUTOINCREMENT, " + "'" +
                 *ID_OWNER_ID_COLUMN_NAME + "' INTEGER NOT NULL, " + "'" +
                 *ID_USER_ID_COLUMN_NAME + "' INTEGER NOT NULL, " + "'" +
                 *CREATED_DATE_COLUMN_NAME + "' TEXT NOT NULL, " +
@@ -59,13 +59,13 @@ void DbManager::CreateConversationTable() {
 void DbManager::CreateUsersTable() {
   QSqlQuery query;
   query.prepare("CREATE TABLE IF NOT EXISTS '" + *USERS_TABLE_NAME + "' (" +
-                "'" + *ID_COLUMN_NAME + "' INTEGER NOT NULL UNIQUE, "
-                "'" + *USERNAME_COLUMN_NAME + "' TEXT, "
+                "'" + *ID_COLUMN_NAME + "' INTEGER PRIMARY KEY AUTOINCREMENT, "
+                "'" + *USERNAME_COLUMN_NAME + "' TEXT UNIQUE, "
                 "'" + *PASSWORD_COLUMN_NAME + "' TEXT NOT NULL); "
                 );
   if (!query.exec()) {
-    qFatal("Failed to query 'create users table' database: %s",
-           qPrintable(query.lastError().text()));
+    qFatal("Failed to query 'create users table' database: %s, %s",
+           qPrintable(query.lastError().text()), qPrintable(query.lastQuery()));
   }
 }
 

@@ -2,9 +2,6 @@
 User::User(QObject *parent) : QObject{parent} {
   this->_id = "1";
   this->_username = "";
-
-  // TODO: Move this to server. Get empty id from server.
-  this->_id = SqlUser::getNextId();
 }
 User::User(QString id, QString username, QVector<Contact> contacts,
            QObject *parent)
@@ -65,7 +62,6 @@ void User::addUserToDb(QString password) {
   sql.userToSqlUserConverter(*this);
   sql.setPassword(password);
   if (sql.createUser()) {
-    this->_id = SqlUser::getNextId();
     this->_username = "";
 
     emit this->createdConfirmed();

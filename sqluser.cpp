@@ -2,39 +2,78 @@
 
 SqlUser::SqlUser(QObject *parent) : QObject{parent} {}
 
-QString SqlUser::getNextId() {
+SqlUser *SqlUser::getUserByPasswordAndUsername(QString username,
+                                               QString password) {
   QSqlQuery query;
-  query.prepare("SELECT MAX(" + *ID_COLUMN_NAME + ") from " +
-                *USERS_TABLE_NAME + ";");
-  if (query.exec()) {
-    while (query.next()) {
-      int db_next_id = query.value(0).toInt();
-      db_next_id++;
-      return QString::number(db_next_id);
-    }
+  QString cmd = "SELECT * FROM " + *USERS_TABLE_NAME + " WHERE " +
+                *USERNAME_COLUMN_NAME + " = :" + *USERNAME_COLUMN_NAME +
+                " AND " + *PASSWORD_COLUMN_NAME + " = :" +
+                *PASSWORD_COLUMN_NAME + " LIMIT 1;";
+
+  query.prepare(cmd);
+  query.bindValue(":" + *USERNAME_COLUMN_NAME, username);
+  query.bindValue(":" + *PASSWORD_COLUMN_NAME, password);
+  if (!query.exec()) {
+    qDebug() << query.lastError() << query.lastQuery();
+
+    return nullptr;
   }
-  return "-1";
+
+  while (query.next()) {
+    int id, id_column, username_column, password_column;
+    QString username, password;
+
+    id_column = query.record().indexOf(*ID_COLUMN_NAME);
+    username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
+    password_column = query.record().indexOf(*PASSWORD_COLUMN_NAME);
+
+    id = query.value(id_column).toInt();
+    username = query.value(username_column).toString();
+    password = query.value(password_column).toString();
+
+    SqlUser *user = new SqlUser();
+    user->setId(id);
+    user->setUsername(username);
+    user->setPassword(password);
+
+    qDebug() << id << username << password;
+
+    return user;
+  }
+  return nullptr;
 }
 
 bool SqlUser::createUser() {
   QSqlQuery query;
-  QString cmd = "INSERT INTO " + *USERS_TABLE_NAME + "('" + *ID_COLUMN_NAME +
-                "','" + *USERNAME_COLUMN_NAME + "','" + *PASSWORD_COLUMN_NAME +
+  QString cmd = "INSERT INTO " + *USERS_TABLE_NAME + "('" +
+                *USERNAME_COLUMN_NAME + "','" + *PASSWORD_COLUMN_NAME +
                 "')"
                 " VALUES(:" +
-                *ID_COLUMN_NAME + ",:" + *USERNAME_COLUMN_NAME +
-                ",:" + *PASSWORD_COLUMN_NAME + ");";
+                *USERNAME_COLUMN_NAME + ",:" + *PASSWORD_COLUMN_NAME + ");";
 
   query.prepare(cmd);
-  query.bindValue(":"+*ID_COLUMN_NAME, this->_id);
-  query.bindValue(":"+*USERNAME_COLUMN_NAME, this->_username);
-  query.bindValue(":"+*PASSWORD_COLUMN_NAME, this->_password);
+  query.bindValue(":" + *USERNAME_COLUMN_NAME, this->_username);
+  query.bindValue(":" + *PASSWORD_COLUMN_NAME, this->_password);
 
   if (!query.exec()) {
     qDebug() << query.lastError() << query.lastQuery();
     return false;
   }
-  return true;
+
+  return this->isAddingUserComplieted();
+}
+
+bool SqlUser::isAddingUserComplieted() {
+  SqlUser *user =
+      SqlUser::getUserByPasswordAndUsername(this->_username, this->_password);
+  if (user->getUsername() == this->_username &&
+      user->getPassword() == this->_password) {
+    this->_id = user->getId();
+    delete (user);
+    return true;
+  }
+delete (user);
+  return false;
 }
 
 bool SqlUser::isCredentialsCorrect(int id, QString password) {
@@ -43,11 +82,11 @@ bool SqlUser::isCredentialsCorrect(int id, QString password) {
   if (id <= 0)
     return false;
 
-  QString mid = QString::number(id), mpassword {};
+  QString mid = QString::number(id), mpassword{};
   QVector<QPair<QString, QString *>> args = {
-      {*ID_COLUMN_NAME, &mid},
-      {*PASSWORD_COLUMN_NAME, &mpassword},
-  };
+                                             {*ID_COLUMN_NAME, &mid},
+                                             {*PASSWORD_COLUMN_NAME, &mpassword},
+                                             };
 
   if (!DbManager::read(*USERS_TABLE_NAME, args))
     return false;
@@ -60,10 +99,10 @@ bool SqlUser::readUser() {
   QString id = QString::number(this->_id);
 
   QVector<QPair<QString, QString *>> args = {
-      {*ID_COLUMN_NAME, &id},
-      {*USERNAME_COLUMN_NAME, &this->_username},
-      {*PASSWORD_COLUMN_NAME, &this->_password},
-  };
+                                             {*ID_COLUMN_NAME, &id},
+                                             {*USERNAME_COLUMN_NAME, &this->_username},
+                                             {*PASSWORD_COLUMN_NAME, &this->_password},
+                                             };
 
   this->_id = id.toInt();
 
