@@ -17,7 +17,6 @@ class User : public QObject {
   Q_OBJECT
   Q_PROPERTY(QString username READ getUsername WRITE setUsername NOTIFY
                  usernameChanged FINAL)
-  Q_PROPERTY(QString password READ getPassword WRITE setPassword NOTIFY passwordChanged FINAL)
   Q_PROPERTY(QString dbId READ getDbId WRITE setDbId NOTIFY idChanged FINAL)
   Q_PROPERTY(QVector<Contact> contacts READ getContacts WRITE setContacts NOTIFY
                  contactsChanged FINAL)
@@ -29,11 +28,9 @@ public:
 
   QString getUsername();
   QString getDbId();
-  QString getPassword();
   QVector<Contact> getContacts();
 
   void setUsername(QString username);
-  void setPassword(QString password);
   void setDbId(QString id);
   void setContacts(QVector<Contact> contacts);
   void sqlUserToUserConverter(SqlUser &user);
@@ -42,24 +39,24 @@ signals:
   void createdConfirmed();
   void createdError();
   void usernameChanged();
-  void passwordChanged();
   void idChanged();
   void isLoginIn();
   void loginInFail();
   void contactsChanged();
 
 public slots:
-  void registerUser();
-  void isUserLogin();
+  void registerUser(QString);
+  void isUserLogin(QString);
+  void createContact(QString);
+  bool auteticateUser(QString);
 
 private:
   QString _id;
-  QString _username, _password;
+  QString _username;
   QVector<Contact> _contacts;
   QSqlDatabase _database;
 
-  void addUserToDb();
-  bool auteticateUser();
+  void addUserToDb(QString);
   bool addContact(Contact &contact);
   bool removeContact(Contact &contact);
 };

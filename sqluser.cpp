@@ -24,17 +24,23 @@ bool SqlUser::createUser() {
   return DbManager::create(*USERS_TABLE_NAME, args);
 }
 
-bool SqlUser::isCredentialsCorrect() {
-  QString id = QString::number(this->_id), password {};
+bool SqlUser::isCredentialsCorrect(int id, QString password) {
+  if (password.isEmpty())
+    return false;
+  if (id <= 0)
+    return false;
 
+  QString mid = QString::number(id), mpassword {};
   QVector<QPair<QString, QString *>> args = {
-      {*ID_COLUMN_NAME, &id},
-      {*PASSWORD_COLUMN_NAME, &password},
+      {*ID_COLUMN_NAME, &mid},
+      {*PASSWORD_COLUMN_NAME, &mpassword},
   };
 
   if (!DbManager::read(*USERS_TABLE_NAME, args))
     return false;
-  return password == this->_password;
+  bool isPasswordsSame = password == mpassword;
+
+  return isPasswordsSame;
 }
 
 bool SqlUser::readUser() {
@@ -94,12 +100,12 @@ bool SqlUser::createContact(int *contact_id) {
   return false;
 }
 
-bool SqlUser::removeContact(int *contact) {}
+bool SqlUser::removeContact(int *contact) { return false; }
 
 QVector<Contact> SqlUser::getContacts() {
   QVector<Contact> contacts;
   QSqlQuery query;
-  //query.prepare("SELECT * FROM ")
+  // query.prepare("SELECT * FROM ")
 
-
+  return contacts;
 }

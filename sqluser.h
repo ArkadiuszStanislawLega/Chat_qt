@@ -21,7 +21,7 @@ public:
   static QString getNextId();
 
   bool createUser();
-  bool isCredentialsCorrect();
+  bool isCredentialsCorrect(int id, QString password);
   bool readUser();
   bool updateUser();
   bool deleteUser();

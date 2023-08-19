@@ -12,15 +12,7 @@ Page {
     property User user
 
     Contact {
-        id: createContact
-        onSuccessfullyCreated: {
-            l_info.text = qsTr("Succesfully added contact.")
-            //TODO: Add refresh list.
-        }
-
-        onCreatingFail: {
-            l_info.text = qsTr("Fail to add contact.")
-        }
+        id: createdContact
     }
 
     header: ChatToolBar {
@@ -32,28 +24,31 @@ Page {
             anchors.centerIn: parent
         }
     }
-
-    ColumnLayout {
-        RowLayout {
-            TextField {
-                id: tf_contact_id
-                Layout.fillWidth: true
-                height: 20
-                validator: IntValidator {
-                    bottom: 1
-                    top: 200000
-                }
-            }
-
-            RoundButton {
-                id: b_add_contact
-                onClicked: {
-                    createContact.ownerId = user.dbId
-                    createContact.create()
-                }
+    RowLayout {
+        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignHCenter
+        TextField {
+            id: tf_contact_id
+            Layout.fillWidth: true
+            height: 20
+            validator: IntValidator {
+                bottom: 1
+                top: 200000
             }
         }
 
+        RoundButton {
+            id: b_add_contact
+            text: qsTr("Add")
+            enabled: true
+            onClicked: {
+                createdContact.ownerId = user.dbId
+                user.createContact()
+            }
+        }
+    }
+
+    ColumnLayout {
         ListView {
             id: list_view
             anchors.fill: parent

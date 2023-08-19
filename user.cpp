@@ -16,27 +16,13 @@ User::User(QString id, QString username, QVector<Contact> contacts,
 QString User::getUsername() { return this->_username; }
 QString User::getDbId() { return this->_id; }
 
-QString User::getPassword() { return this->_password; }
-void User::setPassword(QString password) {
-  this->_password = QString(
-      QCryptographicHash::hash((password.toUtf8()), QCryptographicHash::Md5)
-          .toHex());
-
-  qDebug() << this->_password;
-}
 QVector<Contact> User::getContacts() {
   // TODO: Make function to connect with db.
   return this->_contacts;
 }
 
-void User::setUsername(QString username) {
-  this->_username = username;
-  qDebug() << "setUsername:" << username;
-}
-void User::setDbId(QString id) {
-  this->_id = id;
-  qDebug() << "setId:" << id;
-}
+void User::setUsername(QString username) { this->_username = username; }
+void User::setDbId(QString id) { this->_id = id; }
 void User::sqlUserToUserConverter(SqlUser &user) {
   this->_id = QString::number(user.getId());
   this->_username = user.getUsername();
@@ -45,19 +31,39 @@ void User::sqlUserToUserConverter(SqlUser &user) {
 void User::setContacts(QVector<Contact> contacts) {
   this->_contacts = contacts;
 }
-void User::registerUser() { this->addUserToDb(); }
-void User::isUserLogin() {
-  if (this->auteticateUser())
+void User::registerUser(QString password) {
+  password =
+      QCryptographicHash::hash((password.toUtf8()), QCryptographicHash::Md5)
+          .toHex();
+  this->addUserToDb(password);
+}
+void User::isUserLogin(QString password) {
+  password =
+      QCryptographicHash::hash((password.toUtf8()), QCryptographicHash::Md5)
+          .toHex();
+
+  if (this->auteticateUser(password))
     emit this->isLoginIn();
   else
     emit this->loginInFail();
 }
 
-void User::addUserToDb() {
+void User::createContact(QString val) {
+  Contact *c;
+  User *cu;
+  cu->setDbId(val);
+  c->setContact(cu);
+  // TODO: jak to zrobić?
+  qDebug() << c->getOwnerId();
+  emit this->contactsChanged();
+}
+
+void User::addUserToDb(QString password) {
   // TODO: Move this to server.
   // TODO: Change insert into to update - after create server.
   SqlUser sql;
   sql.userToSqlUserConverter(*this);
+  sql.setPassword(password);
   if (sql.createUser()) {
     this->_id = SqlUser::getNextId();
     this->_username = "";
@@ -66,11 +72,14 @@ void User::addUserToDb() {
   } else
     emit this->createdError();
 }
-bool User::auteticateUser() {
+bool User::auteticateUser(QString password) {
+  if (password.isEmpty())
+    return false;
+
   // TODO: Move this to server.
   SqlUser sql;
   sql.userToSqlUserConverter(*this);
-  if (!sql.isCredentialsCorrect()) {
+  if (!sql.isCredentialsCorrect(this->_id.toInt(), password)) {
     return false;
   }
 
