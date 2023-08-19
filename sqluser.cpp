@@ -7,8 +7,8 @@ SqlUser *SqlUser::getUserByPasswordAndUsername(QString username,
   QSqlQuery query;
   QString cmd = "SELECT * FROM " + *USERS_TABLE_NAME + " WHERE " +
                 *USERNAME_COLUMN_NAME + " = :" + *USERNAME_COLUMN_NAME +
-                " AND " + *PASSWORD_COLUMN_NAME + " = :" +
-                *PASSWORD_COLUMN_NAME + " LIMIT 1;";
+                " AND " + *PASSWORD_COLUMN_NAME +
+                " = :" + *PASSWORD_COLUMN_NAME + " LIMIT 1;";
 
   query.prepare(cmd);
   query.bindValue(":" + *USERNAME_COLUMN_NAME, username);
@@ -35,8 +35,6 @@ SqlUser *SqlUser::getUserByPasswordAndUsername(QString username,
     user->setId(id);
     user->setUsername(username);
     user->setPassword(password);
-
-    qDebug() << id << username << password;
 
     return user;
   }
@@ -68,11 +66,12 @@ bool SqlUser::isAddingUserComplieted() {
       SqlUser::getUserByPasswordAndUsername(this->_username, this->_password);
   if (user->getUsername() == this->_username &&
       user->getPassword() == this->_password) {
+
     this->_id = user->getId();
     delete (user);
     return true;
   }
-delete (user);
+  delete (user);
   return false;
 }
 
@@ -82,31 +81,63 @@ bool SqlUser::isCredentialsCorrect(int id, QString password) {
   if (id <= 0)
     return false;
 
-  QString mid = QString::number(id), mpassword{};
-  QVector<QPair<QString, QString *>> args = {
-                                             {*ID_COLUMN_NAME, &mid},
-                                             {*PASSWORD_COLUMN_NAME, &mpassword},
-                                             };
+  QSqlQuery query;
+  QString cmd = "SELECT " + *ID_COLUMN_NAME + ", " + *PASSWORD_COLUMN_NAME +
+                " FROM " + *USERS_TABLE_NAME + " WHERE " + *ID_COLUMN_NAME +
+                " = :" + *ID_COLUMN_NAME + ";";
 
-  if (!DbManager::read(*USERS_TABLE_NAME, args))
+  query.prepare(cmd);
+  query.bindValue(":" + *ID_COLUMN_NAME, this->_id);
+
+  if (!query.exec()) {
+    qDebug() << query.lastError() << query.lastQuery();
     return false;
-  bool isPasswordsSame = password == mpassword;
+  }
 
-  return isPasswordsSame;
+  while (query.next()) {
+    int id_column{}, password_column{};
+
+    id_column = query.record().indexOf(*ID_COLUMN_NAME);
+    password_column = query.record().indexOf(*PASSWORD_COLUMN_NAME);
+
+    this->_id = query.value(id_column).toInt();
+    this->_password = query.value(password_column).toString();
+  }
+
+  bool isOk = password == this->_password;
+  qDebug() << password << this->_password << isOk;
+  return password == this->_password;
 }
 
 bool SqlUser::readUser() {
-  QString id = QString::number(this->_id);
 
-  QVector<QPair<QString, QString *>> args = {
-                                             {*ID_COLUMN_NAME, &id},
-                                             {*USERNAME_COLUMN_NAME, &this->_username},
-                                             {*PASSWORD_COLUMN_NAME, &this->_password},
-                                             };
+  QSqlQuery query;
+  QString cmd = "SELECT * FROM " + *USERS_TABLE_NAME + " WHERE " +
+                *ID_COLUMN_NAME + " = :" + *ID_COLUMN_NAME + ";";
 
-  this->_id = id.toInt();
+  query.prepare(cmd);
+  query.bindValue(":" + *USERNAME_COLUMN_NAME, this->_id);
+  if (!query.exec()) {
+    qDebug() << query.lastError() << query.lastQuery();
+    return false;
+  }
 
-  return DbManager::read(*USERS_TABLE_NAME, args);
+  while (query.next()) {
+    int id_column{}, username_column{}, password_column{};
+
+    id_column = query.record().indexOf(*ID_COLUMN_NAME);
+    username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
+    password_column = query.record().indexOf(*PASSWORD_COLUMN_NAME);
+
+    this->_id = query.value(id_column).toInt();
+    this->_username = query.value(username_column).toString();
+    this->_password = query.value(password_column).toString();
+
+    qDebug() << this->_id << this->_password << this->_username;
+
+     return true;
+  }
+  return false;
 }
 
 bool SqlUser::updateUser() { return false; }

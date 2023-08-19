@@ -28,8 +28,6 @@ public:
   bool updateUser();
   bool deleteUser();
 
-
-
   int getId();
   void setId(int value);
 
