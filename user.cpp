@@ -75,9 +75,11 @@ bool User::auteticateUser(QString password) {
   // TODO: Move this to server.
   SqlUser sql;
   sql.userToSqlUserConverter(*this);
+
   if (!sql.isCredentialsCorrect(this->_id.toInt(), password)) {
     return false;
   }
+  qDebug() <<"user: " << sql.getId() << sql.getUsername() << sql.getPassword() << password;
 
   if (sql.readUser()) {
     this->sqlUserToUserConverter(sql);

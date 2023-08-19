@@ -116,7 +116,7 @@ bool SqlUser::readUser() {
                 *ID_COLUMN_NAME + " = :" + *ID_COLUMN_NAME + ";";
 
   query.prepare(cmd);
-  query.bindValue(":" + *USERNAME_COLUMN_NAME, this->_id);
+  query.bindValue(":" + *ID_COLUMN_NAME, this->_id);
   if (!query.exec()) {
     qDebug() << query.lastError() << query.lastQuery();
     return false;
