@@ -11,29 +11,61 @@ User::User(QString id, QString username, QVector<Contact> contacts,
   this->_contacts = contacts;
 }
 QString User::getUsername() { return this->_username; }
+void User::setUsername(QString username) { this->_username = username; }
+
 QString User::getDbId() { return this->_id; }
+void User::setDbId(QString id) {
+  this->_id = id;
+  emit this->idChanged();
+}
 
 QVector<Contact> User::getContacts() {
   // TODO: Make function to connect with db.
   return this->_contacts;
 }
+void User::setContacts(QVector<Contact> contacts) {
+  this->_contacts = contacts;
+}
 
-void User::setUsername(QString username) { this->_username = username; }
-void User::setDbId(QString id) { this->_id = id; }
+/*!
+ * \brief User::sqlUserToUserConverter converting SqlUser to user - user doesn't have password.
+ * \param user Dwonlowaded user properties from database.
+ */
 void User::sqlUserToUserConverter(SqlUser &user) {
   this->_id = QString::number(user.getId());
   this->_username = user.getUsername();
 }
 
-void User::setContacts(QVector<Contact> contacts) {
-  this->_contacts = contacts;
-}
-void User::registerUser(QString password) {
+void User::addUserToDb(QString password) {
+  // TODO: Move this to server.
+  // TODO: Change insert into to update - after create server.
+
   password =
       QCryptographicHash::hash((password.toUtf8()), QCryptographicHash::Md5)
           .toHex();
-  this->addUserToDb(password);
+  SqlUser sql;
+  sql.userToSqlUserConverter(*this);
+  sql.setPassword(password);
+
+  if (sql.createUser()) {
+    this->setDbId(QString::number(sql.getId()));
+    emit this->createdConfirmed();
+  } else
+    emit this->createdError();
 }
+
+bool User::addContact(Contact &contact) {
+  // TODO: Not fully functionall.
+  // if (contact.create()) {
+  //  this->getContacts();
+  //  emit this->contactsChanged();
+  //  return true;
+  //}
+
+  return false;
+}
+
+
 void User::isUserLogin(QString password) {
   password =
       QCryptographicHash::hash((password.toUtf8()), QCryptographicHash::Md5)
@@ -55,19 +87,6 @@ void User::createContact(QString val) {
   emit this->contactsChanged();
 }
 
-void User::addUserToDb(QString password) {
-  // TODO: Move this to server.
-  // TODO: Change insert into to update - after create server.
-  SqlUser sql;
-  sql.userToSqlUserConverter(*this);
-  sql.setPassword(password);
-  if (sql.createUser()) {
-    this->_username = "";
-
-    emit this->createdConfirmed();
-  } else
-    emit this->createdError();
-}
 bool User::auteticateUser(QString password) {
   if (password.isEmpty())
     return false;
@@ -79,23 +98,11 @@ bool User::auteticateUser(QString password) {
   if (!sql.isCredentialsCorrect(this->_id.toInt(), password)) {
     return false;
   }
-  qDebug() <<"user: " << sql.getId() << sql.getUsername() << sql.getPassword() << password;
 
   if (sql.readUser()) {
     this->sqlUserToUserConverter(sql);
     return true;
   }
-
-  return false;
-}
-
-bool User::addContact(Contact &contact) {
-  // TODO: Not fully functionall.
-  // if (contact.create()) {
-  //  this->getContacts();
-  //  emit this->contactsChanged();
-  //  return true;
-  //}
 
   return false;
 }

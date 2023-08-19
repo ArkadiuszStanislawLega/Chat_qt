@@ -21,18 +21,29 @@ class User : public QObject {
   Q_PROPERTY(QVector<Contact> contacts READ getContacts WRITE setContacts NOTIFY
                  contactsChanged FINAL)
 
+private:
+  QString _id;
+  QString _username;
+  QVector<Contact> _contacts;
+  QSqlDatabase _database;
+
+  bool addContact(Contact &contact);
+  bool removeContact(Contact &contact);
+
 public:
   explicit User(QObject *parent = nullptr);
   User(QString id, QString username, QVector<Contact> contacts,
        QObject *parent = nullptr);
 
   QString getUsername();
-  QString getDbId();
-  QVector<Contact> getContacts();
-
   void setUsername(QString username);
+
+  QString getDbId();
   void setDbId(QString id);
+
+  QVector<Contact> getContacts();
   void setContacts(QVector<Contact> contacts);
+
   void sqlUserToUserConverter(SqlUser &user);
 
 signals:
@@ -45,19 +56,9 @@ signals:
   void contactsChanged();
 
 public slots:
-  void registerUser(QString);
+  void addUserToDb(QString);
   void isUserLogin(QString);
   void createContact(QString);
   bool auteticateUser(QString);
-
-private:
-  QString _id;
-  QString _username;
-  QVector<Contact> _contacts;
-  QSqlDatabase _database;
-
-  void addUserToDb(QString);
-  bool addContact(Contact &contact);
-  bool removeContact(Contact &contact);
 };
 #endif // USER_H

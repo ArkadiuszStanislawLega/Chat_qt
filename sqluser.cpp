@@ -104,8 +104,6 @@ bool SqlUser::isCredentialsCorrect(int id, QString password) {
     this->_password = query.value(password_column).toString();
   }
 
-  bool isOk = password == this->_password;
-  qDebug() << password << this->_password << isOk;
   return password == this->_password;
 }
 
@@ -133,9 +131,7 @@ bool SqlUser::readUser() {
     this->_username = query.value(username_column).toString();
     this->_password = query.value(password_column).toString();
 
-    qDebug() << this->_id << this->_password << this->_username;
-
-     return true;
+    return true;
   }
   return false;
 }

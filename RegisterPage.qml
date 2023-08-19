@@ -34,6 +34,9 @@ Page {
 
             show_info_animation.start()
         }
+        onIdChanged: {
+            l_id_from_db.text = user.dbId
+        }
     }
 
     ColumnLayout {
@@ -113,7 +116,7 @@ Page {
 
                 function activate() {
                     user.username = tf_username.text
-                    user.registerUser(tf_password.text)
+                    user.addUserToDb(tf_password.text)
                 }
 
                 onClicked: b_register.activate()
