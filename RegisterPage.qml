@@ -25,6 +25,8 @@ Page {
             tf_repassword.text = ""
 
             show_info_animation.start()
+            show_label_id.start()
+            show_db_id.start()
         }
         onCreatedError: {
             info_background.visible = true
@@ -52,22 +54,43 @@ Page {
             Label {
                 id: l_id_info
                 font.pixelSize: 20
-                text: qsTr("Account id:")
+                text: qsTr("Your Account id:")
+                opacity: 0
             }
 
             Label {
                 id: l_id_from_db
                 font {
-                    pixelSize: 20
+                    pixelSize: 25
                     italic: true
+                    bold: true
                 }
                 text: user.dbId
+                opacity: 0
+            }
+
+            OpacityAnimator {
+                id: show_label_id
+                running: false
+                target: l_id_info
+                from: 0
+                to: 1
+                duration: 1000
+            }
+
+            OpacityAnimator {
+                id: show_db_id
+                running: false
+                target: l_id_from_db
+                from: 0
+                to: 1
+                duration: 1000
             }
 
             Label {
                 id: l_username
                 font.pixelSize: 20
-                text: qsTr("Username (optional):")
+                text: qsTr("Username:")
             }
 
             TextField {
@@ -113,6 +136,7 @@ Page {
                 text: qsTr("Register")
                 enabled: tf_password.length > 0
                          && tf_password.text === tf_repassword.text
+                         && tf_username.length > 0
 
                 function activate() {
                     user.username = tf_username.text
