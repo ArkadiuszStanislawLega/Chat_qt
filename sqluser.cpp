@@ -160,18 +160,17 @@ void SqlUser::userToSqlUserConverter(User &user) {
   this->_password = "";
 }
 
-bool SqlUser::createContact(int contact_id) {
-
+bool SqlUser::createContact(int contact_id)
+{
   QSqlQuery query;
-  query.prepare(
-      "INSERT INTO " + *CONTACTS_TABLE_NAME + "('" + *ID_OWNER_COLUMN_NAME +
-      "','" + *ID_USER_COLUMN_NAME + "','" + *CREATED_DATE_COLUMN_NAME +
-      "')" + " VALUES (:" + *ID_OWNER_COLUMN_NAME +
-      ",:" + *ID_USER_COLUMN_NAME + ",:" + *CREATED_DATE_COLUMN_NAME + ");");
+  query.prepare("INSERT INTO " + *CONTACTS_TABLE_NAME + "('" + *ID_OWNER_COLUMN_NAME + "','"
+                + *ID_USER_COLUMN_NAME + "','" + *CREATED_DATE_COLUMN_NAME + "')"
+                + " VALUES (:" + *ID_OWNER_COLUMN_NAME + ",:" + *ID_USER_COLUMN_NAME
+                + ",:" + *CREATED_DATE_COLUMN_NAME + ");");
 
-  query.bindValue(":"+*ID_OWNER_COLUMN_NAME, this->_id);
-  query.bindValue(":"+*ID_USER_COLUMN_NAME, contact_id);
-  query.bindValue(":"+*CREATED_DATE_COLUMN_NAME, QDateTime::currentDateTime());
+  query.bindValue(":" + *ID_OWNER_COLUMN_NAME, this->_id);
+  query.bindValue(":" + *ID_USER_COLUMN_NAME, contact_id);
+  query.bindValue(":" + *CREATED_DATE_COLUMN_NAME, QDateTime::currentDateTime());
   if (query.exec())
     return true;
 
@@ -179,12 +178,45 @@ bool SqlUser::createContact(int contact_id) {
   return false;
 }
 
-bool SqlUser::removeContact(int contact) { return false; }
+bool SqlUser::removeContact(int contact)
+{
+  return false;
+}
 
-QVector<Contact> SqlUser::getContacts() {
-  QVector<Contact> contacts;
+QVector<Contact *> SqlUser::getContacts()
+{
   QSqlQuery query;
-  // query.prepare("SELECT * FROM ")
+  //SELECT Contacts.id, owner_id, user_id, created_date, username
+  //FROM Contacts INNER JOIN Users ON Users.id = Contacts.owner_id
+  //                                                where owner_id = 1 ;
+  query.prepare("SELECT " + *ID_USER_COLUMN_NAME + ", " + *CREATED_DATE_COLUMN_NAME + ", "
+                + *USERNAME_COLUMN_NAME + " FROM " + *CONTACTS_TABLE_NAME + " INNER JOIN "
+                + *USERS_TABLE_NAME + " ON " + *USERS_TABLE_NAME + "." + *ID_COLUMN_NAME + " = "
+                + *CONTACTS_TABLE_NAME + "." + *ID_USER_COLUMN_NAME + " WHERE "
+                + *ID_OWNER_COLUMN_NAME + " = :" + *ID_OWNER_COLUMN_NAME + ";");
+
+  query.bindValue(":" + *ID_OWNER_COLUMN_NAME, this->_id);
+  if (!query.exec()) {
+    qDebug() << query.lastError() << query.lastQuery();
+    return {};
+  }
+
+  QVector<Contact *> contacts;
+  while (query.next()) {
+    int id_user_column{}, created_date_column{}, username_column{};
+    id_user_column = query.record().indexOf(*ID_USER_COLUMN_NAME);
+    created_date_column = query.record().indexOf(*CREATED_DATE_COLUMN_NAME);
+    username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
+
+    QDateTime date = query.value(created_date_column).toDateTime();
+    User *user = new User(this);
+    user->setDbId(query.value(id_user_column).toString());
+    user->setUsername(query.value(username_column).toString());
+
+    qDebug() << user->getDbId() << user->getUsername();
+
+    contacts.push_back(new Contact(this->_id, user, date));
+  }
 
   return contacts;
 }

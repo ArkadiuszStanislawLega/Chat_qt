@@ -47,9 +47,9 @@ public:
 
   bool createContact(int contact_id);
   bool removeContact(int contact);
-  QVector<Contact> getContacts();
+  QVector<Contact *> getContacts();
 
-private:
+  private:
   QString _username{}, _password{};
   int _id{};
   QDateTime _occupied{}, _last_activity{};

@@ -38,17 +38,6 @@ void User::addUserToDb(QString password) {
     emit this->createdError();
 }
 
-bool User::addContact(Contact &contact) {
-  // TODO: Not fully functionall.
-  // if (contact.create()) {
-  //  this->getContacts();
-  //  emit this->contactsChanged();
-  //  return true;
-  //}
-
-  return false;
-}
-
 void User::isUserLogin(QString password) {
   password =
       QCryptographicHash::hash((password.toUtf8()), QCryptographicHash::Md5)
@@ -64,7 +53,10 @@ void User::createContact(QString val) {
   SqlUser *sql = new SqlUser(this);
   sql->setId(this->_id.toInt());
   qDebug() << sql->getId();
-  if(sql->createContact(val.toInt())) emit this->contactCreated();
+  if(sql->createContact(val.toInt())) {
+    emit this->contactCreated();
+    emit this->contactsChanged();
+  }
   else emit this->failToCreateContact();
   delete(sql);
 }
@@ -100,6 +92,8 @@ void User::setDbId(QString id) {
 
 QVector<Contact> User::getContacts() {
   // TODO: Make function to connect with db.
+  //QSqlQuery query;
+  //query.prepare("SELECT * FROM " + *CONTACTS_TABLE_NAME + " WHERE " + *ID_OWNER_COLUMN_NAME + " = " + );
   return this->_contacts;
 }
 void User::setContacts(QVector<Contact> contacts) {

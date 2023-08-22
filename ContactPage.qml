@@ -21,6 +21,10 @@ Page {
             anchors.centerIn: parent
         }
     }
+    ColumnLayout{
+        anchors.fill: parent
+
+
     RowLayout {
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter
@@ -44,7 +48,6 @@ Page {
         }
     }
 
-    ColumnLayout {
         ListView {
             id: list_view
             Layout.fillHeight: true
@@ -63,6 +66,10 @@ Page {
                 onClicked: root.StackView.view.push("ConversationPage.qml", {
                                                         "inConversationWith": model.display
                                                     })
+
+                Label{
+                    text: model.username
+                }
 
                 Image {
                     id: avatar
