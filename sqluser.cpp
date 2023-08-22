@@ -171,7 +171,7 @@ bool SqlUser::createContact(int contact_id) {
 
   query.bindValue(":"+*ID_OWNER_COLUMN_NAME, this->_id);
   query.bindValue(":"+*ID_USER_COLUMN_NAME, contact_id);
-  query.bindValue(":"+*CREATED_DATE_COLUMN_NAME, QDateTime::currentDateTime().toString());
+  query.bindValue(":"+*CREATED_DATE_COLUMN_NAME, QDateTime::currentDateTime());
   if (query.exec())
     return true;
 

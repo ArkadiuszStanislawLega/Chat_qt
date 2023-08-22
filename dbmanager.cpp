@@ -22,7 +22,7 @@ void DbManager::CreateContactsTable() {
                 *ID_COLUMN_NAME + "' INTEGER PRIMARY KEY AUTOINCREMENT, " + "'" +
                 *ID_OWNER_COLUMN_NAME + "' INTEGER NOT NULL, " + "'" +
                 *ID_USER_COLUMN_NAME + "' INTEGER NOT NULL, " + "'" +
-                *CREATED_DATE_COLUMN_NAME + "' TEXT NOT NULL, " +
+                *CREATED_DATE_COLUMN_NAME + "' DATETIME NOT NULL, " +
                 "FOREIGN KEY ('" + *ID_OWNER_COLUMN_NAME + "') REFERENCES " +
                 *USERS_TABLE_NAME + " ('" + *ID_COLUMN_NAME + "'), " +
                 "FOREIGN KEY ('" + *ID_USER_COLUMN_NAME + "') REFERENCES " +
