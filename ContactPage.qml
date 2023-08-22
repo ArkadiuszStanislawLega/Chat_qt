@@ -51,7 +51,8 @@ Page {
     ColumnLayout {
         ListView {
             id: list_view
-            anchors.fill: parent
+            Layout.fillHeight: true
+            Layout.fillWidth: true
             topMargin: 48
             leftMargin: 48
             bottomMargin: 48
