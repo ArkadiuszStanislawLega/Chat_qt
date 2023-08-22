@@ -11,9 +11,6 @@ Page {
     id: root
     property User user
 
-    Contact {
-        id: createdContact
-    }
 
     header: ChatToolBar {
 
@@ -42,8 +39,7 @@ Page {
             text: qsTr("Add")
             enabled: true
             onClicked: {
-                createdContact.ownerId = user.dbId
-                user.createContact()
+                user.createContact(tf_contact_id.text);
             }
         }
     }

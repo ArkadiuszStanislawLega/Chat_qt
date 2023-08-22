@@ -160,26 +160,26 @@ void SqlUser::userToSqlUserConverter(User &user) {
   this->_password = "";
 }
 
-bool SqlUser::createContact(int *contact_id) {
+bool SqlUser::createContact(int contact_id) {
 
   QSqlQuery query;
   query.prepare(
-      "INSERT INTO " + *CONTACTS_TABLE_NAME + "('" + *ID_OWNER_ID_COLUMN_NAME +
-      "','" + *ID_USER_ID_COLUMN_NAME + "'," + *CREATED_DATE_COLUMN_NAME +
-      "')" + " VALUES (:" + *ID_OWNER_ID_COLUMN_NAME +
-      ",:" + *ID_USER_ID_COLUMN_NAME + ",:" + *CREATED_DATE_COLUMN_NAME + ");");
-  query.bindValue(*ID_OWNER_ID_COLUMN_NAME, this->_id);
-  query.bindValue(*ID_USER_ID_COLUMN_NAME, *contact_id);
-  query.bindValue(*CREATED_DATE_COLUMN_NAME, QDateTime::currentDateTime());
+      "INSERT INTO " + *CONTACTS_TABLE_NAME + "('" + *ID_OWNER_COLUMN_NAME +
+      "','" + *ID_USER_COLUMN_NAME + "','" + *CREATED_DATE_COLUMN_NAME +
+      "')" + " VALUES (:" + *ID_OWNER_COLUMN_NAME +
+      ",:" + *ID_USER_COLUMN_NAME + ",:" + *CREATED_DATE_COLUMN_NAME + ");");
 
+  query.bindValue(":"+*ID_OWNER_COLUMN_NAME, this->_id);
+  query.bindValue(":"+*ID_USER_COLUMN_NAME, contact_id);
+  query.bindValue(":"+*CREATED_DATE_COLUMN_NAME, QDateTime::currentDateTime().toString());
   if (query.exec())
     return true;
 
-  qDebug() << query.lastError();
+  qDebug() << query.lastError() << query.lastQuery();
   return false;
 }
 
-bool SqlUser::removeContact(int *contact) { return false; }
+bool SqlUser::removeContact(int contact) { return false; }
 
 QVector<Contact> SqlUser::getContacts() {
   QVector<Contact> contacts;

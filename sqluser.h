@@ -45,8 +45,8 @@ public:
 
   void userToSqlUserConverter(User &user);
 
-  bool createContact(int *contact_id);
-  bool removeContact(int *contact);
+  bool createContact(int contact_id);
+  bool removeContact(int contact);
   QVector<Contact> getContacts();
 
 private:

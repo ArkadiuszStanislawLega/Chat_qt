@@ -11,8 +11,8 @@ SqlContact::SqlContact(QObject *parent) : QObject{parent} {
 bool SqlContact::createContact() {
   QVector<QPair<QString, QString>> args = {
       {*ID_COLUMN_NAME, QString::number(this->_contact_id)},
-      {*ID_OWNER_ID_COLUMN_NAME, QString::number(this->_owner_id)},
-      {*ID_USER_ID_COLUMN_NAME, QString::number(this->_user_id)},
+      {*ID_OWNER_COLUMN_NAME, QString::number(this->_owner_id)},
+      {*ID_USER_COLUMN_NAME, QString::number(this->_user_id)},
       {*USERNAME_COLUMN_NAME, this->_username},
       {*CREATED_DATE_COLUMN_NAME, this->_created.toString()},
   };
@@ -23,8 +23,8 @@ bool SqlContact::readContact() {
   QString username, id_contact, id_owner, id_user, created;
   QVector<QPair<QString, QString *>> args = {
       {*ID_COLUMN_NAME, &id_contact},
-      {*ID_OWNER_ID_COLUMN_NAME, &id_owner},
-      {*ID_USER_ID_COLUMN_NAME, &id_user},
+      {*ID_OWNER_COLUMN_NAME, &id_owner},
+      {*ID_USER_COLUMN_NAME, &id_user},
       {*USERNAME_COLUMN_NAME, &username},
       {*CREATED_DATE_COLUMN_NAME, &created}};
   if (DbManager::read(*CONTACTS_TABLE_NAME, args)) {

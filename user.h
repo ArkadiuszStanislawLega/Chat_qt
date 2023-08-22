@@ -60,6 +60,8 @@ signals:
   void isLoginIn();
   void loginInFail();
   void contactsChanged();
+  void contactCreated();
+  void failToCreateContact();
 
 };
 #endif // USER_H

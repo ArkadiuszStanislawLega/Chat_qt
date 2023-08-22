@@ -61,13 +61,12 @@ void User::isUserLogin(QString password) {
 }
 
 void User::createContact(QString val) {
-  Contact *c;
-  User *cu;
-  cu->setDbId(val);
-  c->setContact(cu);
-  // TODO: jak to zrobić?
-  qDebug() << c->getOwnerId();
-  emit this->contactsChanged();
+  SqlUser *sql = new SqlUser(this);
+  sql->setId(this->_id.toInt());
+  qDebug() << sql->getId();
+  if(sql->createContact(val.toInt())) emit this->contactCreated();
+  else emit this->failToCreateContact();
+  delete(sql);
 }
 
 bool User::auteticateUser(QString password) {
