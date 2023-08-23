@@ -59,24 +59,21 @@ Page {
             spacing: 20
             model: user.contacts
             delegate: ItemDelegate {
-                text: model.display
+                text: modelData.contact.username
                 width: list_view.width - list_view.leftMargin - list_view.rightMargin
-                height: avatar.implicitHeight
-                leftPadding: avatar.implicitWidth + 32
+                height: 20
+                leftPadding: 20
                 onClicked: root.StackView.view.push("ConversationPage.qml", {
                                                         "inConversationWith": model.display
                                                     })
 
-                Label{
-                    text: model.username
-                }
+            }
 
-                Image {
+                /*Image {
                     id: avatar
                     source: model.display === "Me" ? "" : "images/" + model.display.replace(
                                                          " ", "_") + ".png"
-                }
-            }
+                } */
         }
     }
 }

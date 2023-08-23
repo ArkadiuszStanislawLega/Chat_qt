@@ -18,13 +18,13 @@ class User : public QObject {
   Q_PROPERTY(QString username READ getUsername WRITE setUsername NOTIFY
                  usernameChanged FINAL)
   Q_PROPERTY(QString dbId READ getDbId WRITE setDbId NOTIFY idChanged FINAL)
-  Q_PROPERTY(QVector<Contact> contacts READ getContacts WRITE setContacts NOTIFY
-                 contactsChanged FINAL)
+  Q_PROPERTY(
+      QVector<Contact *> contacts READ getContacts WRITE setContacts NOTIFY contactsChanged FINAL)
 
-private:
+  private:
   QString _id;
   QString _username;
-  QVector<Contact> _contacts;
+  QVector<Contact *> _contacts;
   QSqlDatabase _database;
 
   bool addContact(Contact &contact);
@@ -38,8 +38,7 @@ public slots:
 
 public:
   explicit User(QObject *parent = nullptr);
-  User(QString id, QString username, QVector<Contact> contacts,
-       QObject *parent = nullptr);
+  User(QString id, QString username, QVector<Contact *> contacts, QObject *parent = nullptr);
 
   QString getUsername();
   void setUsername(QString username);
@@ -47,8 +46,8 @@ public:
   QString getDbId();
   void setDbId(QString id);
 
-  QVector<Contact> getContacts();
-  void setContacts(QVector<Contact> contacts);
+  QVector<Contact *> getContacts();
+  void setContacts(QVector<Contact *> contacts);
 
   void sqlUserToUserConverter(SqlUser &user);
 

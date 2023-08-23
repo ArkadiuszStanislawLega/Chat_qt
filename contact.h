@@ -14,9 +14,9 @@ class Contact : public QObject {
   Contact(int owner_id, User *contact, QDateTime created,
           QObject *parent = nullptr);
 
-  Q_PROPERTY(int ownerId READ getOwnerId WRITE setOwnerId)
-  Q_PROPERTY(User *contact READ getContact WRITE setContact)
-  Q_PROPERTY(QDateTime created READ getCreated WRITE setCreated)
+  Q_PROPERTY(int ownerId READ getOwnerId WRITE setOwnerId NOTIFY ownerIdChanged FINAL)
+  Q_PROPERTY(User *contact READ getContact WRITE setContact NOTIFY contactChanged FINAL)
+  Q_PROPERTY(QDateTime created READ getCreated WRITE setCreated NOTIFY createdChanged)
 
   int getOwnerId();
   void setOwnerId(int value);
@@ -27,9 +27,12 @@ class Contact : public QObject {
   void setCreated(QDateTime value);
   QDateTime getCreated();
 
-signals:
+  signals:
+  void ownerIdChanged();
+  void contactChanged();
+  void createdChanged();
 
-private:
+  private:
   int _owner_id;
   User *_contact;
   QDateTime _created;

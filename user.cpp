@@ -3,9 +3,9 @@ User::User(QObject *parent) : QObject{parent} {
   this->_id = "1";
   this->_username = "";
 }
-User::User(QString id, QString username, QVector<Contact> contacts,
-           QObject *parent)
-    : QObject{parent} {
+User::User(QString id, QString username, QVector<Contact *> contacts, QObject *parent)
+    : QObject{parent}
+{
   this->_id = id;
   this->_username = username;
   this->_contacts = contacts;
@@ -90,12 +90,18 @@ void User::setDbId(QString id) {
   emit this->idChanged();
 }
 
-QVector<Contact> User::getContacts() {
+QVector<Contact *> User::getContacts()
+{
   // TODO: Make function to connect with db.
   //QSqlQuery query;
   //query.prepare("SELECT * FROM " + *CONTACTS_TABLE_NAME + " WHERE " + *ID_OWNER_COLUMN_NAME + " = " + );
+  SqlUser *user = new SqlUser(this);
+  user->setId(this->_id.toInt());
+  user->setUsername(this->_username);
+  this->_contacts = user->getContacts();
   return this->_contacts;
 }
-void User::setContacts(QVector<Contact> contacts) {
+void User::setContacts(QVector<Contact *> contacts)
+{
   this->_contacts = contacts;
 }
