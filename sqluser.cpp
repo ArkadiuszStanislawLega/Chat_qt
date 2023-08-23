@@ -213,9 +213,7 @@ QVector<Contact *> SqlUser::getContacts()
     user->setDbId(query.value(id_user_column).toString());
     user->setUsername(query.value(username_column).toString());
 
-    qDebug() << user->getDbId() << user->getUsername();
-
-    contacts.push_back(new Contact(this->_id, user, date));
+    contacts.push_back(new Contact(this->_id, user, date, this));
   }
 
   return contacts;
