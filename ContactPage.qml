@@ -25,46 +25,46 @@ Page {
         anchors.fill: parent
 
 
-    RowLayout {
-        Layout.fillWidth: true
-        Layout.alignment: Qt.AlignHCenter
-        TextField {
-            id: tf_contact_id
+        RowLayout {
             Layout.fillWidth: true
-            height: 20
-            validator: IntValidator {
-                bottom: 1
-                top: 200000
+            Layout.alignment: Qt.AlignHCenter
+            TextField {
+                id: tf_contact_id
+                Layout.fillWidth: true
+                height: 20
+                validator: IntValidator {
+                    bottom: 1
+                    top: 200000
+                }
             }
-        }
 
-        RoundButton {
-            id: b_add_contact
-            text: qsTr("Add")
-            enabled: tf_contact_id.length > 0
-            onClicked: {
-                user.createContact(tf_contact_id.text);
-                tf_contact_id.text = "";
+            RoundButton {
+                id: b_add_contact
+                text: qsTr("Add")
+                enabled: tf_contact_id.length > 0
+                onClicked: {
+                    user.createContact(tf_contact_id.text);
+                    tf_contact_id.text = "";
+                }
             }
-        }
-        TextField{
-            Layout.fillWidth: true
-            id: tf_remove_id
-            height: 20
-            validator: IntValidator{
-                bottom: 1
-                top: 2000000
+            TextField{
+                Layout.fillWidth: true
+                id: tf_remove_id
+                height: 20
+                validator: IntValidator{
+                    bottom: 1
+                    top: 2000000
+                }
             }
-        }
-        RoundButton{
-            id:b_remove_contact
-            text: qsTr("Delete")
-            enabled: tf_remove_id.length > 0
-            onClicked: {
+            RoundButton{
+                id:b_remove_contact
+                text: qsTr("Delete")
+                enabled: tf_remove_id.length > 0
+                onClicked: {
 
+                }
             }
         }
-    }
 
         ListView {
             id: list_view
@@ -87,7 +87,7 @@ Page {
 
             }
 
-                /*Image {
+            /*Image {
                     id: avatar
                     source: model.display === "Me" ? "" : "images/" + model.display.replace(
                                                          " ", "_") + ".png"

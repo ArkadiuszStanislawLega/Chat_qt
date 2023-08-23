@@ -93,8 +93,6 @@ void User::setDbId(QString id) {
 QVector<Contact *> User::getContacts()
 {
   // TODO: Make function to connect with db.
-  //QSqlQuery query;
-  //query.prepare("SELECT * FROM " + *CONTACTS_TABLE_NAME + " WHERE " + *ID_OWNER_COLUMN_NAME + " = " + );
   SqlUser *user = new SqlUser(this);
   user->setId(this->_id.toInt());
   user->setUsername(this->_username);

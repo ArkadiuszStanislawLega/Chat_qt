@@ -178,15 +178,21 @@ bool SqlUser::createContact(int contact_id)
   return false;
 }
 
-bool SqlUser::removeContact(int contact)
+bool SqlUser::removeContact(int user_id)
 {
-  return false;
+  if (user_id <= 0)
+    return false;
+
+  QSqlQuery query;
+  query.prepare("")
+
+      return false;
 }
 
 QVector<Contact *> SqlUser::getContacts()
 {
   QSqlQuery query;
-  //SELECT Contacts.id, owner_id, user_id, created_date, username
+  //SELECT user_id, created_date, username
   //FROM Contacts INNER JOIN Users ON Users.id = Contacts.owner_id
   //                                                where owner_id = 1 ;
   query.prepare("SELECT " + *ID_USER_COLUMN_NAME + ", " + *CREATED_DATE_COLUMN_NAME + ", "
