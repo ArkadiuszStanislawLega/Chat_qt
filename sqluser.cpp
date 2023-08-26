@@ -184,7 +184,7 @@ bool SqlUser::removeContact(int user_id)
     return false;
 
   QSqlQuery query;
-  query.prepare("")
+  query.prepare("");
 
       return false;
 }
