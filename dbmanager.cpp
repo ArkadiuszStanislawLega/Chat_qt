@@ -10,6 +10,17 @@ DbManager::DbManager(QObject *parent) : QObject(parent) {
     this->CreateTables();
   }
 }
+
+//TODO: Make Contacts new
+/*CREATE TABLE "Contacts" (
+        "id"			INTEGER  PRIMARY KEY AUTOINCREMENT,
+        "first_user"	INTEGER NOT NULL,
+        "second_user"	INTEGER NOT NULL,
+        "created_date"	datetime NOT NULL,
+        FOREIGN KEY(first_user) REFERENCES Users(id),
+        FOREIGN KEY(second_user) REFERENCES Users(id)
+);*/
+
 void DbManager::CreateTables() {
   this->CreateContactsTable();
   this->CreateConversationTable();
@@ -35,6 +46,18 @@ void DbManager::CreateContactsTable() {
            qPrintable(query.lastError().text()));
   }
 }
+
+//TODO: Change table conversation to messages.
+/*CREATE TABLE "Messages" (
+        "id" 			INTEGER PRIMARY KEY,
+        "contact_id"	INTEGER NOT NULL,
+        "author_id"		INTEGER NOT NULL,
+        "message"		TEXT NOT NULL,
+        "sended_time"	datetime NOT NULL,
+        FOREIGN KEY("author_id") REFERENCES "Users"("id") ON DELETE CASCADE,
+        FOREIGN KEY("contact_id") REFERENCES "Contacts"("id") ON DELETE CASCADE
+);*/
+
 void DbManager::CreateConversationTable() {
   QSqlQuery query;
 
