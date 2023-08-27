@@ -49,3 +49,23 @@ QDateTime SqlMessage::getSentTimestamp() { return this->_sentTimestamp; }
 void SqlMessage::setSentTimestamp(QDateTime value) {
   this->_sentTimestamp = value;
 }
+
+bool SqlMessage::createMessage()
+{
+
+}
+
+bool SqlMessage::readMessage()
+{
+
+}
+
+bool SqlMessage::updateMessage()
+{
+
+}
+
+bool SqlMessage::deleteMessage()
+{
+
+}
