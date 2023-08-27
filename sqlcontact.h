@@ -24,23 +24,25 @@ public:
   static QVector<Contact> get_all();
   static QVector<Contact> get_user_contacts(int userId);
 
-  int getContactId();
-  void setContactId(int value);
-  int getOwnerId();
-  void setOwnerId(int value);
-  int getUserId();
-  void setUserId(int value);
-  QString getUsername();
-  void setUsername(QString value);
-  QDateTime getCreated();
-  void setCreated(QDateTime value);
+  QDateTime getCreatedTimestamp();
+  void setCreatedTimestamp(QDateTime value);
+
+  int getFirstUserId();
+  void setFirstUserId(int);
+
+  int getSecondUserId() const;
+  void setSecondUserId(int);
+
+  int getContactId() const;
+  void setContactId(int);
 
 signals:
 
 private:
-  int _contact_id{}, _owner_id{}, _user_id;
-  QString _username{};
-  QDateTime _created{};
+  int _contact_id{}, _first_user_id{}, _second_user_id;
+  QDateTime _created_timestamp{};
+
+  bool isAddingContactComplited();
 };
 
 #endif // SQLCONTACT_H
