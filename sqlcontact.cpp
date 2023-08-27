@@ -72,22 +72,39 @@ bool SqlContact::isAddingContactComplited() {
 }
 
 bool SqlContact::readContact() {
-  /*
-  QString username, id_contact, id_owner, id_user, created;
-  QVector<QPair<QString, QString *>> args = {
-      {*ID_COLUMN_NAME, &id_contact},
-      {*ID_OWNER_COLUMN_NAME, &id_owner},
-      {*ID_USER_COLUMN_NAME, &id_user},
-      {*USERNAME_COLUMN_NAME, &username},
-      {*CREATED_DATE_COLUMN_NAME, &created}};
-  if (DbManager::read(*CONTACTS_TABLE_NAME, args)) {
-    this->setContactId(id_contact.toInt());
-    this->setOwnerId(id_owner.toInt());
-    this->setUserId(id_user.toInt());
-    this->setUsername(username);
-    this->setCreated(QDateTime::fromString(created));
+  QSqlQuery query;
+  query.prepare(
+      "SELECT * FROM " + *CONTACTS_TABLE_NAME + " WHERE " +
+      *CREATE_TIMESTAMP_COLUMN_NAME + " = :" + *CREATE_TIMESTAMP_COLUMN_NAME +
+      " AND " + *ID_FIRST_USER_COLUMN_NAME +
+      " = :" + *ID_FIRST_USER_COLUMN_NAME + " AND " +
+      *ID_SECOND_USER_COLUMN_NAME + " = :" + *ID_SECOND_USER_COLUMN_NAME + ";");
+
+  query.bindValue(":" + *CREATE_TIMESTAMP_COLUMN_NAME,
+                  this->_created_timestamp);
+  query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_first_user_id);
+  query.bindValue(":" + *ID_SECOND_USER_COLUMN_NAME, this->_second_user_id);
+
+  if (!query.exec()) {
+    qDebug() << query.lastError() << query.lastQuery();
+    return false;
+  }
+
+  while (query.next()) {
+    int create_timestamp_column, id_first_column, id_second_column;
+
+    create_timestamp_column =
+        query.record().indexOf(*CREATE_TIMESTAMP_COLUMN_NAME);
+    id_first_column = query.record().indexOf(*ID_FIRST_USER_COLUMN_NAME);
+    id_second_column = query.record().indexOf(*ID_SECOND_USER_COLUMN_NAME);
+
+    this->_first_user_id = query.value(id_first_column).toInt();
+    this->_second_user_id = query.value(id_second_column).toInt();
+    this->_created_timestamp =
+        query.value(create_timestamp_column).toDateTime();
     return true;
-  }*/
+  }
+
   return false;
 }
 

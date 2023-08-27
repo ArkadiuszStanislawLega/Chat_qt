@@ -11,9 +11,11 @@
 #include "dbmanager.h"
 #include "user.h"
 #include "contact.h"
+#include "sqlcontact.h"
 
 class User;
 class Contact;
+class SqlContact;
 class SqlUser : public QObject {
   Q_OBJECT
 public:

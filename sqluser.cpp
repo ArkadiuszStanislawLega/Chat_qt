@@ -160,45 +160,32 @@ void SqlUser::userToSqlUserConverter(User &user) {
   this->_password = "";
 }
 
-bool SqlUser::createContact(int contact_id)
-{
-  QSqlQuery query;
-  query.prepare("INSERT INTO " + *CONTACTS_TABLE_NAME + "('" +
-                *ID_FIRST_USER_COLUMN_NAME + "','" +
-                *ID_SECOND_USER_COLUMN_NAME + "','" +
-                *CREATE_TIMESTAMP_COLUMN_NAME + "')" +
-                " VALUES (:" + *ID_FIRST_USER_COLUMN_NAME +
-                ",:" + *ID_SECOND_USER_COLUMN_NAME +
-                ",:" + *CREATE_TIMESTAMP_COLUMN_NAME + ");");
+bool SqlUser::createContact(int contact_id) {
+  if (contact_id <= 0)
+    return false;
 
-  query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_id);
-  query.bindValue(":" + *ID_SECOND_USER_COLUMN_NAME, contact_id);
-  query.bindValue(":" + *CREATE_TIMESTAMP_COLUMN_NAME,
-                  QDateTime::currentDateTime());
-  if (query.exec())
-    return true;
-
-  qDebug() << query.lastError() << query.lastQuery();
-  return false;
+  SqlContact *contact = new SqlContact(this);
+  contact->setCreatedTimestamp(QDateTime::currentDateTime());
+  contact->setFirstUserId(this->_id);
+  contact->setSecondUserId(contact_id);
+  return contact->createContact();
 }
 
-bool SqlUser::removeContact(int user_id)
-{
+bool SqlUser::removeContact(int user_id) {
   if (user_id <= 0)
     return false;
 
   QSqlQuery query;
   query.prepare("");
 
-      return false;
+  return false;
 }
 
-QVector<Contact *> SqlUser::getContacts()
-{
+QVector<Contact *> SqlUser::getContacts() {
   QSqlQuery query;
-  //SELECT user_id, created_date, username
-  //FROM Contacts INNER JOIN Users ON Users.id = Contacts.owner_id
-  //                                                where owner_id = 1 ;
+  // SELECT user_id, created_date, username
+  // FROM Contacts INNER JOIN Users ON Users.id = Contacts.owner_id
+  //                                                 where owner_id = 1 ;
   query.prepare(
       "SELECT " + *ID_SECOND_USER_COLUMN_NAME + ", " +
       *CREATE_TIMESTAMP_COLUMN_NAME + ", " + *USERNAME_COLUMN_NAME + " FROM " +
