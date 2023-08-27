@@ -30,6 +30,8 @@ public:
   bool updateUser();
   bool deleteUser();
 
+  bool sendMessage();
+
   int getId();
   void setId(int value);
 

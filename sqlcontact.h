@@ -7,9 +7,11 @@
 #include "dbmanager.h"
 #include "contact.h"
 #include "user.h"
+#include "sqlmessage.h"
 
 class Contact;
 class User;
+class SqlMessage;
 class SqlContact : public QObject
 {
   Q_OBJECT
@@ -22,10 +24,10 @@ public:
   bool deleteContact();
   QVector<Contact *> get_user_contacts();
 
-  static QVector<Contact> get_all();
-
   QDateTime getCreatedTimestamp();
   void setCreatedTimestamp(QDateTime value);
+
+  bool sendMessage(QString);
 
   int getFirstUserId();
   void setFirstUserId(int);

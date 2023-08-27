@@ -114,3 +114,19 @@ void User::setContacts(QVector<Contact *> contacts)
 {
   this->_contacts = contacts;
 }
+
+bool User::sendMessage(int receiverId, QString message) {
+  SqlMessage *sql = new SqlMessage(this);
+  sql->setAuthorId(this->_id.toInt());
+  sql->setReceiverId(receiverId);
+  sql->setSentTimestamp(QDateTime::currentDateTime());
+  sql->setText(message);
+
+  if (sql->createMessage()) {
+    emit this->messageSended();
+    return true;
+  }
+
+  emit this->failToSendMessage();
+  return false;
+}

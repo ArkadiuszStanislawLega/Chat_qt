@@ -4,14 +4,18 @@
 #include <QObject>
 #include <QDateTime>
 
+#include "dbmanager.h"
+
 class SqlMessage : public QObject {
 
 
   Q_OBJECT
 private:
-  int _author_id, _receiver_id;
+  int _contact_id, _author_id, _receiver_id;
   QString _text, _author_username, _receiver_username;
   QDateTime _sentTimestamp;
+
+  bool executeQuery(QSqlQuery &);
 
 public:
   explicit SqlMessage(QObject *parent = nullptr);
@@ -38,6 +42,9 @@ public:
   bool readMessage();
   bool updateMessage();
   bool deleteMessage();
+
+  int getContactId() const;
+  void setContactId(int);
 
 signals:
 };

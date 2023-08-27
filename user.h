@@ -10,9 +10,11 @@
 #include "contact.h"
 #include "dbmanager.h"
 #include "sqluser.h"
+#include "sqlmessage.h"
 
 class Contact;
 class SqlUser;
+class SqlMessage;
 class User : public QObject {
   Q_OBJECT
   Q_PROPERTY(QString username READ getUsername WRITE setUsername NOTIFY
@@ -36,6 +38,7 @@ public slots:
   void createContact(QString);
   void deleteContact(QString);
   bool auteticateUser(QString);
+  bool sendMessage(int, QString);
 
 public:
   explicit User(QObject *parent = nullptr);
@@ -62,6 +65,9 @@ signals:
   void contactsChanged();
   void contactCreated();
   void failToCreateContact();
+
+  void messageSended();
+  void failToSendMessage();
 
 };
 #endif // USER_H
