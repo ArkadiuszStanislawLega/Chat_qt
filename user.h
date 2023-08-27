@@ -34,6 +34,7 @@ public slots:
   void addUserToDb(QString);
   void isUserLogin(QString);
   void createContact(QString);
+  void deleteContact(QString);
   bool auteticateUser(QString);
 
 public:

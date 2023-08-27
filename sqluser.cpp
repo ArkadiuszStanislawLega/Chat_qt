@@ -175,10 +175,17 @@ bool SqlUser::removeContact(int user_id) {
   if (user_id <= 0)
     return false;
 
-  QSqlQuery query;
-  query.prepare("");
+  SqlContact *contact = new SqlContact(this);
+  contact->setFirstUserId(this->_id);
+  contact->setSecondUserId(user_id);
 
-  return false;
+  if (!contact->deleteContact()) {
+    contact->setFirstUserId(user_id);
+    contact->setSecondUserId(this->_id);
+    return contact->deleteContact();
+  }
+
+  return true;
 }
 
 QVector<Contact *> SqlUser::getContacts() {

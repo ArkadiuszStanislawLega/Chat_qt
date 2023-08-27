@@ -1,14 +1,17 @@
 #include "sqlcontact.h"
 
 SqlContact::SqlContact(QObject *parent) : QObject{parent} {
+  this->_id = 0;
   this->_contact_id = 0;
   this->_first_user_id = 0;
   this->_second_user_id = 0;
-  QString _username = "";
-  QDateTime _created = QDateTime();
+  this->_created_timestamp = QDateTime();
 }
 
 bool SqlContact::createContact() {
+  if (this->readContact())
+    return false;
+
   QSqlQuery query;
   query.prepare("INSERT INTO " + *CONTACTS_TABLE_NAME + "(" +
                 *ID_FIRST_USER_COLUMN_NAME + ", " +
@@ -79,25 +82,26 @@ bool SqlContact::readContact() {
   QSqlQuery query;
   query.prepare(
       "SELECT * FROM " + *CONTACTS_TABLE_NAME + " WHERE " +
-      *CREATE_TIMESTAMP_COLUMN_NAME + " = :" + *CREATE_TIMESTAMP_COLUMN_NAME +
-      " AND " + *ID_FIRST_USER_COLUMN_NAME +
+      *ID_FIRST_USER_COLUMN_NAME +
       " = :" + *ID_FIRST_USER_COLUMN_NAME + " AND " +
       *ID_SECOND_USER_COLUMN_NAME + " = :" + *ID_SECOND_USER_COLUMN_NAME + ";");
 
-  query.bindValue(":" + *CREATE_TIMESTAMP_COLUMN_NAME,
-                  this->_created_timestamp);
   query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_first_user_id);
   query.bindValue(":" + *ID_SECOND_USER_COLUMN_NAME, this->_second_user_id);
 
+  qDebug() << query.lastQuery();
+
   if (this->executeQuery(query)) {
     while (query.next()) {
-      int create_timestamp_column, id_first_column, id_second_column;
+      int id_column, create_timestamp_column, id_first_column, id_second_column;
 
+      id_column = query.record().indexOf(*ID_COLUMN_NAME);
       create_timestamp_column =
           query.record().indexOf(*CREATE_TIMESTAMP_COLUMN_NAME);
       id_first_column = query.record().indexOf(*ID_FIRST_USER_COLUMN_NAME);
       id_second_column = query.record().indexOf(*ID_SECOND_USER_COLUMN_NAME);
 
+      this->_id = query.value(id_column).toInt();
       this->_first_user_id = query.value(id_first_column).toInt();
       this->_second_user_id = query.value(id_second_column).toInt();
       this->_created_timestamp =
@@ -110,7 +114,17 @@ bool SqlContact::readContact() {
 }
 
 bool SqlContact::updateContact() { return false; }
-bool SqlContact::deleteContact() { return false; }
+bool SqlContact::deleteContact() {
+  this->readContact();
+
+  QSqlQuery query;
+  query.prepare("DELETE FROM " + *CONTACTS_TABLE_NAME + " WHERE " +
+                *ID_COLUMN_NAME + " = :" + *ID_COLUMN_NAME + ";");
+
+  query.bindValue(":" + *ID_COLUMN_NAME, this->_id);
+  qDebug() << this->_id << query.lastQuery();
+  return this->executeQuery(query);
+}
 
 QDateTime SqlContact::getCreatedTimestamp() { return this->_created_timestamp; }
 void SqlContact::setCreatedTimestamp(QDateTime value) {
@@ -125,3 +139,7 @@ void SqlContact::setSecondUserId(int value) { this->_second_user_id = value; }
 
 int SqlContact::getContactId() const { return this->_contact_id; }
 void SqlContact::setContactId(int value) { this->_contact_id = value; }
+
+int SqlContact::getId() const { return _id; }
+
+void SqlContact::setId(int newId) { _id = newId; }

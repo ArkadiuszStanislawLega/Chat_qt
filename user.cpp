@@ -52,13 +52,24 @@ void User::isUserLogin(QString password) {
 void User::createContact(QString val) {
   SqlUser *sql = new SqlUser(this);
   sql->setId(this->_id.toInt());
-  qDebug() << sql->getId();
+
   if(sql->createContact(val.toInt())) {
     emit this->contactCreated();
     emit this->contactsChanged();
   }
   else emit this->failToCreateContact();
   delete(sql);
+}
+
+void User::deleteContact(QString userId) {
+  if (userId.isEmpty())
+    return;
+
+  SqlUser *sql = new SqlUser(this);
+  sql->setId(this->_id.toInt());
+  if (sql->removeContact(userId.toInt())) {
+    emit contactsChanged();
+  }
 }
 
 bool User::auteticateUser(QString password) {
