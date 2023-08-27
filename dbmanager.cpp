@@ -14,11 +14,11 @@ DbManager::DbManager(QObject *parent) : QObject(parent) {
 //TODO: Make Contacts new
 /*CREATE TABLE "Contacts" (
         "id"			INTEGER  PRIMARY KEY AUTOINCREMENT,
-        "first_user"	INTEGER NOT NULL,
-        "second_user"	INTEGER NOT NULL,
-        "created_date"	datetime NOT NULL,
-        FOREIGN KEY(first_user) REFERENCES Users(id),
-        FOREIGN KEY(second_user) REFERENCES Users(id)
+        "first_user"		INTEGER NOT NULL,
+        "second_user"		INTEGER NOT NULL,
+        "create_timestamp"	datetime NOT NULL,
+        FOREIGN KEY(first_user) REFERENCES Users(id) ON DELETE CASCADE,
+        FOREIGN KEY(second_user) REFERENCES Users(id) ON DELETE CASCADE
 );*/
 
 void DbManager::CreateTables() {
@@ -29,17 +29,17 @@ void DbManager::CreateTables() {
 void DbManager::CreateContactsTable() {
   QSqlQuery query;
 
-  query.prepare("CREATE TABLE IF NOT EXISTS '" + *CONTACTS_TABLE_NAME + "' ('" +
-                *ID_COLUMN_NAME + "' INTEGER PRIMARY KEY AUTOINCREMENT, " + "'" +
-                *ID_FIRST_USER_COLUMN_NAME + "' INTEGER NOT NULL, " + "'" +
-                *ID_SECOND_USER_COLUMN_NAME + "' INTEGER NOT NULL, " + "'" +
-                *CREATED_DATE_COLUMN_NAME + "' DATETIME NOT NULL, " +
-                "FOREIGN KEY ('" + *ID_FIRST_USER_COLUMN_NAME + "') REFERENCES " +
-                *USERS_TABLE_NAME + " ('" + *ID_COLUMN_NAME + "'), " +
-                "FOREIGN KEY ('" + *ID_SECOND_USER_COLUMN_NAME + "') REFERENCES " +
-                *USERS_TABLE_NAME + " ('" + *ID_COLUMN_NAME + "')"
-                                                              ");"
-                );
+  query.prepare(
+      "CREATE TABLE IF NOT EXISTS " + *CONTACTS_TABLE_NAME + " (" +
+      *ID_COLUMN_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+      *ID_FIRST_USER_COLUMN_NAME + " INTEGER NOT NULL, " +
+      *ID_SECOND_USER_COLUMN_NAME + " INTEGER NOT NULL, " +
+      *CREATE_TIMESTAMP_COLUMN_NAME + " DATETIME NOT NULL, " + "FOREIGN KEY(" +
+      *ID_FIRST_USER_COLUMN_NAME + ") REFERENCES " + *USERS_TABLE_NAME + "(" +
+      *ID_COLUMN_NAME + ") ON DELETE CASCADE, " + "FOREIGN KEY(" +
+      *ID_SECOND_USER_COLUMN_NAME + ") REFERENCES " + *USERS_TABLE_NAME + "(" +
+      *ID_COLUMN_NAME + ") ON DELETE CASCADE );"
+  );
 
   if (!query.exec()) {
     qFatal("Failed to query 'create Contacts table' database: %s",
@@ -50,10 +50,10 @@ void DbManager::CreateContactsTable() {
 //TODO: Change table conversation to messages.
 /*CREATE TABLE "Messages" (
         "id" 			INTEGER PRIMARY KEY,
-        "contact_id"	INTEGER NOT NULL,
+        "contact_id"		INTEGER NOT NULL,
         "author_id"		INTEGER NOT NULL,
-        "message"		TEXT NOT NULL,
-        "sended_time"	datetime NOT NULL,
+        "text"			TEXT NOT NULL,
+        "sent_timestamp"	datetime NOT NULL,
         FOREIGN KEY("author_id") REFERENCES "Users"("id") ON DELETE CASCADE,
         FOREIGN KEY("contact_id") REFERENCES "Contacts"("id") ON DELETE CASCADE
 );*/
