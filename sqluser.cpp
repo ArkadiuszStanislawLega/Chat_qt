@@ -163,13 +163,13 @@ void SqlUser::userToSqlUserConverter(User &user) {
 bool SqlUser::createContact(int contact_id)
 {
   QSqlQuery query;
-  query.prepare("INSERT INTO " + *CONTACTS_TABLE_NAME + "('" + *ID_OWNER_COLUMN_NAME + "','"
-                + *ID_USER_COLUMN_NAME + "','" + *CREATED_DATE_COLUMN_NAME + "')"
-                + " VALUES (:" + *ID_OWNER_COLUMN_NAME + ",:" + *ID_USER_COLUMN_NAME
+  query.prepare("INSERT INTO " + *CONTACTS_TABLE_NAME + "('" + *ID_FIRST_USER_COLUMN_NAME + "','"
+                + *ID_SECOND_USER_COLUMN_NAME + "','" + *CREATED_DATE_COLUMN_NAME + "')"
+                + " VALUES (:" + *ID_FIRST_USER_COLUMN_NAME + ",:" + *ID_SECOND_USER_COLUMN_NAME
                 + ",:" + *CREATED_DATE_COLUMN_NAME + ");");
 
-  query.bindValue(":" + *ID_OWNER_COLUMN_NAME, this->_id);
-  query.bindValue(":" + *ID_USER_COLUMN_NAME, contact_id);
+  query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_id);
+  query.bindValue(":" + *ID_SECOND_USER_COLUMN_NAME, contact_id);
   query.bindValue(":" + *CREATED_DATE_COLUMN_NAME, QDateTime::currentDateTime());
   if (query.exec())
     return true;
@@ -195,13 +195,13 @@ QVector<Contact *> SqlUser::getContacts()
   //SELECT user_id, created_date, username
   //FROM Contacts INNER JOIN Users ON Users.id = Contacts.owner_id
   //                                                where owner_id = 1 ;
-  query.prepare("SELECT " + *ID_USER_COLUMN_NAME + ", " + *CREATED_DATE_COLUMN_NAME + ", "
+  query.prepare("SELECT " + *ID_SECOND_USER_COLUMN_NAME + ", " + *CREATED_DATE_COLUMN_NAME + ", "
                 + *USERNAME_COLUMN_NAME + " FROM " + *CONTACTS_TABLE_NAME + " INNER JOIN "
                 + *USERS_TABLE_NAME + " ON " + *USERS_TABLE_NAME + "." + *ID_COLUMN_NAME + " = "
-                + *CONTACTS_TABLE_NAME + "." + *ID_USER_COLUMN_NAME + " WHERE "
-                + *ID_OWNER_COLUMN_NAME + " = :" + *ID_OWNER_COLUMN_NAME + ";");
+                + *CONTACTS_TABLE_NAME + "." + *ID_SECOND_USER_COLUMN_NAME + " WHERE "
+                + *ID_FIRST_USER_COLUMN_NAME + " = :" + *ID_FIRST_USER_COLUMN_NAME + ";");
 
-  query.bindValue(":" + *ID_OWNER_COLUMN_NAME, this->_id);
+  query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_id);
   if (!query.exec()) {
     qDebug() << query.lastError() << query.lastQuery();
     return {};
@@ -210,7 +210,7 @@ QVector<Contact *> SqlUser::getContacts()
   QVector<Contact *> contacts;
   while (query.next()) {
     int id_user_column{}, created_date_column{}, username_column{};
-    id_user_column = query.record().indexOf(*ID_USER_COLUMN_NAME);
+    id_user_column = query.record().indexOf(*ID_SECOND_USER_COLUMN_NAME);
     created_date_column = query.record().indexOf(*CREATED_DATE_COLUMN_NAME);
     username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
 
