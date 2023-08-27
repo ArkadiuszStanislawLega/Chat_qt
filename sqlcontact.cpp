@@ -80,16 +80,14 @@ bool SqlContact::executeQuery(QSqlQuery &query) {
 
 bool SqlContact::readContact() {
   QSqlQuery query;
-  query.prepare(
-      "SELECT * FROM " + *CONTACTS_TABLE_NAME + " WHERE " +
-      *ID_FIRST_USER_COLUMN_NAME +
-      " = :" + *ID_FIRST_USER_COLUMN_NAME + " AND " +
-      *ID_SECOND_USER_COLUMN_NAME + " = :" + *ID_SECOND_USER_COLUMN_NAME + ";");
+  query.prepare("SELECT * FROM " + *CONTACTS_TABLE_NAME + " WHERE " +
+                *ID_FIRST_USER_COLUMN_NAME +
+                " = :" + *ID_FIRST_USER_COLUMN_NAME + " AND " +
+                *ID_SECOND_USER_COLUMN_NAME +
+                " = :" + *ID_SECOND_USER_COLUMN_NAME + ";");
 
   query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_first_user_id);
   query.bindValue(":" + *ID_SECOND_USER_COLUMN_NAME, this->_second_user_id);
-
-  qDebug() << query.lastQuery();
 
   if (this->executeQuery(query)) {
     while (query.next()) {
@@ -122,8 +120,39 @@ bool SqlContact::deleteContact() {
                 *ID_COLUMN_NAME + " = :" + *ID_COLUMN_NAME + ";");
 
   query.bindValue(":" + *ID_COLUMN_NAME, this->_id);
-  qDebug() << this->_id << query.lastQuery();
   return this->executeQuery(query);
+}
+
+QVector<Contact *> SqlContact::get_user_contacts() {
+  QSqlQuery query;
+  query.prepare(
+      "SELECT " + *ID_SECOND_USER_COLUMN_NAME + ", " +
+      *CREATE_TIMESTAMP_COLUMN_NAME + ", " + *USERNAME_COLUMN_NAME + " FROM " +
+      *CONTACTS_TABLE_NAME + " INNER JOIN " + *USERS_TABLE_NAME + " ON " +
+      *USERS_TABLE_NAME + "." + *ID_COLUMN_NAME + " = " + *CONTACTS_TABLE_NAME +
+      "." + *ID_SECOND_USER_COLUMN_NAME + " WHERE " +
+      *ID_FIRST_USER_COLUMN_NAME + " = :" + *ID_FIRST_USER_COLUMN_NAME + ";");
+
+  query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_first_user_id);
+  if (this->executeQuery(query)) {
+    QVector<Contact *> contacts;
+    while (query.next()) {
+      int id_user_column{}, create_datestamp_column {}, username_column{};
+      id_user_column = query.record().indexOf(*ID_SECOND_USER_COLUMN_NAME);
+      create_datestamp_column =
+          query.record().indexOf(*CREATE_TIMESTAMP_COLUMN_NAME);
+      username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
+
+      QDateTime date = query.value(create_datestamp_column).toDateTime();
+      User *user = new User(this);
+      user->setDbId(query.value(id_user_column).toString());
+      user->setUsername(query.value(username_column).toString());
+
+      contacts.push_back(new Contact(this->_id, user, date, this));
+    }
+    return contacts;
+  }
+  return {};
 }
 
 QDateTime SqlContact::getCreatedTimestamp() { return this->_created_timestamp; }

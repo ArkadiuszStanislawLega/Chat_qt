@@ -20,9 +20,9 @@ public:
   bool readContact();
   bool updateContact();
   bool deleteContact();
+  QVector<Contact *> get_user_contacts();
 
   static QVector<Contact> get_all();
-  static QVector<Contact> get_user_contacts(int userId);
 
   QDateTime getCreatedTimestamp();
   void setCreatedTimestamp(QDateTime value);

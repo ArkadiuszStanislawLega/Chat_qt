@@ -189,38 +189,7 @@ bool SqlUser::removeContact(int user_id) {
 }
 
 QVector<Contact *> SqlUser::getContacts() {
-  QSqlQuery query;
-  // SELECT user_id, created_date, username
-  // FROM Contacts INNER JOIN Users ON Users.id = Contacts.owner_id
-  //                                                 where owner_id = 1 ;
-  query.prepare(
-      "SELECT " + *ID_SECOND_USER_COLUMN_NAME + ", " +
-      *CREATE_TIMESTAMP_COLUMN_NAME + ", " + *USERNAME_COLUMN_NAME + " FROM " +
-      *CONTACTS_TABLE_NAME + " INNER JOIN " + *USERS_TABLE_NAME + " ON " +
-      *USERS_TABLE_NAME + "." + *ID_COLUMN_NAME + " = " + *CONTACTS_TABLE_NAME +
-      "." + *ID_SECOND_USER_COLUMN_NAME + " WHERE " +
-      *ID_FIRST_USER_COLUMN_NAME + " = :" + *ID_FIRST_USER_COLUMN_NAME + ";");
-
-  query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_id);
-  if (!query.exec()) {
-    qDebug() << query.lastError() << query.lastQuery();
-    return {};
-  }
-
-  QVector<Contact *> contacts;
-  while (query.next()) {
-    int id_user_column{}, created_date_column{}, username_column{};
-    id_user_column = query.record().indexOf(*ID_SECOND_USER_COLUMN_NAME);
-    created_date_column = query.record().indexOf(*CREATE_TIMESTAMP_COLUMN_NAME);
-    username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
-
-    QDateTime date = query.value(created_date_column).toDateTime();
-    User *user = new User(this);
-    user->setDbId(query.value(id_user_column).toString());
-    user->setUsername(query.value(username_column).toString());
-
-    contacts.push_back(new Contact(this->_id, user, date, this));
-  }
-
-  return contacts;
+  SqlContact *contact = new SqlContact(this);
+  contact->setFirstUserId(this->_id);
+  return contact->get_user_contacts();
 }
