@@ -43,6 +43,7 @@ private:
   QDateTime _created_timestamp{};
 
   bool isAddingContactComplited();
+  bool executeQuery(QSqlQuery &);
 };
 
 #endif // SQLCONTACT_H

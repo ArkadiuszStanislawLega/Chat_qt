@@ -22,12 +22,10 @@ bool SqlContact::createContact() {
   query.bindValue(":" + *CREATE_TIMESTAMP_COLUMN_NAME,
                   this->_created_timestamp);
 
-  if (!query.exec()) {
-    qDebug() << query.lastError() << query.lastQuery();
-    return false;
-  }
+  if (this->executeQuery(query))
+    return isAddingContactComplited();
 
-  return isAddingContactComplited();
+  return false;
 }
 
 bool SqlContact::isAddingContactComplited() {
@@ -44,31 +42,37 @@ bool SqlContact::isAddingContactComplited() {
   query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_first_user_id);
   query.bindValue(":" + *ID_SECOND_USER_COLUMN_NAME, this->_second_user_id);
 
+  if (this->executeQuery(query)) {
+    while (query.next()) {
+      int create_timestamp_column, id_first_column, id_second_column;
+      int first_id, second_id;
+      QDateTime create_timestamp;
+
+      create_timestamp_column =
+          query.record().indexOf(*CREATE_TIMESTAMP_COLUMN_NAME);
+      id_first_column = query.record().indexOf(*ID_FIRST_USER_COLUMN_NAME);
+      id_second_column = query.record().indexOf(*ID_SECOND_USER_COLUMN_NAME);
+
+      first_id = query.value(id_first_column).toInt();
+      second_id = query.value(id_second_column).toInt();
+      create_timestamp = query.value(create_timestamp_column).toDateTime();
+
+      return first_id == this->_first_user_id &&
+             second_id == this->_second_user_id &&
+             create_timestamp == this->_created_timestamp;
+    }
+  }
+
+  return false;
+}
+
+bool SqlContact::executeQuery(QSqlQuery &query) {
   if (!query.exec()) {
     qDebug() << query.lastError() << query.lastQuery();
     return false;
   }
 
-  while (query.next()) {
-    int create_timestamp_column, id_first_column, id_second_column;
-    int first_id, second_id;
-    QDateTime create_timestamp;
-
-    create_timestamp_column =
-        query.record().indexOf(*CREATE_TIMESTAMP_COLUMN_NAME);
-    id_first_column = query.record().indexOf(*ID_FIRST_USER_COLUMN_NAME);
-    id_second_column = query.record().indexOf(*ID_SECOND_USER_COLUMN_NAME);
-
-    first_id = query.value(id_first_column).toInt();
-    second_id = query.value(id_second_column).toInt();
-    create_timestamp = query.value(create_timestamp_column).toDateTime();
-
-    return first_id == this->_first_user_id &&
-           second_id == this->_second_user_id &&
-           create_timestamp == this->_created_timestamp;
-  }
-
-  return false;
+  return true;
 }
 
 bool SqlContact::readContact() {
@@ -85,24 +89,21 @@ bool SqlContact::readContact() {
   query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_first_user_id);
   query.bindValue(":" + *ID_SECOND_USER_COLUMN_NAME, this->_second_user_id);
 
-  if (!query.exec()) {
-    qDebug() << query.lastError() << query.lastQuery();
-    return false;
-  }
+  if (this->executeQuery(query)) {
+    while (query.next()) {
+      int create_timestamp_column, id_first_column, id_second_column;
 
-  while (query.next()) {
-    int create_timestamp_column, id_first_column, id_second_column;
+      create_timestamp_column =
+          query.record().indexOf(*CREATE_TIMESTAMP_COLUMN_NAME);
+      id_first_column = query.record().indexOf(*ID_FIRST_USER_COLUMN_NAME);
+      id_second_column = query.record().indexOf(*ID_SECOND_USER_COLUMN_NAME);
 
-    create_timestamp_column =
-        query.record().indexOf(*CREATE_TIMESTAMP_COLUMN_NAME);
-    id_first_column = query.record().indexOf(*ID_FIRST_USER_COLUMN_NAME);
-    id_second_column = query.record().indexOf(*ID_SECOND_USER_COLUMN_NAME);
-
-    this->_first_user_id = query.value(id_first_column).toInt();
-    this->_second_user_id = query.value(id_second_column).toInt();
-    this->_created_timestamp =
-        query.value(create_timestamp_column).toDateTime();
-    return true;
+      this->_first_user_id = query.value(id_first_column).toInt();
+      this->_second_user_id = query.value(id_second_column).toInt();
+      this->_created_timestamp =
+          query.value(create_timestamp_column).toDateTime();
+      return true;
+    }
   }
 
   return false;
