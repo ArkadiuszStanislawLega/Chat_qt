@@ -9,6 +9,7 @@ SqlContact::SqlContact(QObject *parent) : QObject{parent} {
 }
 
 bool SqlContact::createContact() {
+  /*
   QVector<QPair<QString, QString>> args = {
       {*ID_COLUMN_NAME, QString::number(this->_contact_id)},
       {*ID_OWNER_COLUMN_NAME, QString::number(this->_owner_id)},
@@ -16,10 +17,12 @@ bool SqlContact::createContact() {
       {*USERNAME_COLUMN_NAME, this->_username},
       {*CREATED_DATE_COLUMN_NAME, this->_created.toString()},
   };
-  return DbManager::create(*CONTACTS_TABLE_NAME, args);
+  return DbManager::create(*CONTACTS_TABLE_NAME, args);*/
+  return false;
 }
 
 bool SqlContact::readContact() {
+  /*
   QString username, id_contact, id_owner, id_user, created;
   QVector<QPair<QString, QString *>> args = {
       {*ID_COLUMN_NAME, &id_contact},
@@ -34,7 +37,7 @@ bool SqlContact::readContact() {
     this->setUsername(username);
     this->setCreated(QDateTime::fromString(created));
     return true;
-  }
+  }*/
   return false;
 }
 

@@ -50,22 +50,7 @@ void SqlMessage::setSentTimestamp(QDateTime value) {
   this->_sentTimestamp = value;
 }
 
-bool SqlMessage::createMessage()
-{
-
-}
-
-bool SqlMessage::readMessage()
-{
-
-}
-
-bool SqlMessage::updateMessage()
-{
-
-}
-
-bool SqlMessage::deleteMessage()
-{
-
-}
+bool SqlMessage::createMessage() { return false; }
+bool SqlMessage::readMessage() { return false; }
+bool SqlMessage::updateMessage() { return false; }
+bool SqlMessage::deleteMessage() { return false; }

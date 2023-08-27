@@ -39,8 +39,6 @@ private:
 
 public:
   DbManager(QObject *parent = nullptr);
-  static bool create(QString table, QVector<QPair<QString, QString>> args);
-  static bool read(QString table, QVector<QPair<QString, QString *>> args);
 };
 
 #endif // DBMANAGER_H

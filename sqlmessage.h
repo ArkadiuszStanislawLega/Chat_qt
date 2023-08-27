@@ -34,6 +34,10 @@ public:
   QDateTime getSentTimestamp();
   void setSentTimestamp(QDateTime);
 
+  bool createMessage();
+  bool readMessage();
+  bool updateMessage();
+  bool deleteMessage();
 
 signals:
 };
