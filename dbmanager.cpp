@@ -23,7 +23,7 @@ DbManager::DbManager(QObject *parent) : QObject(parent) {
 
 void DbManager::CreateTables() {
   this->CreateContactsTable();
-  this->CreateConversationTable();
+  this->CreateMessagesTable();
   this->CreateUsersTable();
 }
 void DbManager::CreateContactsTable() {
@@ -58,16 +58,19 @@ void DbManager::CreateContactsTable() {
         FOREIGN KEY("contact_id") REFERENCES "Contacts"("id") ON DELETE CASCADE
 );*/
 
-void DbManager::CreateConversationTable() {
+void DbManager::CreateMessagesTable() {
   QSqlQuery query;
 
-  query.prepare("CREATE TABLE IF NOT EXISTS '" + *CONVERSATION_TABLE_NAME +
-                "'(" + "'" + *AUTHOR_COLUMN + "' TEXT NOT NULL, "
-                "'" + *RECIPIENT_COLUMN + "' TEXT NOT NULL, "
-                "'" + *TIME_COLUMN + "' TEXT NOT NULL, "
-                "'" + *MESSAGE_COLUMN + "' TEXT NOT NULL, "
-                "FOREIGN KEY('" + *AUTHOR_COLUMN + "') REFERENCES " + *CONTACTS_TABLE_NAME + "(" + *NAME_COLUMN + "),"
-                "FOREIGN KEY('" + *RECIPIENT_COLUMN + "') REFERENCES " + *CONTACTS_TABLE_NAME + "(" + *NAME_COLUMN + "));");
+  query.prepare("CREATE TABLE IF NOT EXISTS '" + *MESSAGES_TABLE_NAME + "' (" +
+                *ID_COLUMN_NAME + " INTEGER PRIMARY KEY," +
+                *CONTACT_ID_COLUMN_NAME + " INTEGER NOT NULL, " +
+                *AUTHOR_ID_COLUMN_NAME + " INTEGER NOT NULL, " +
+                *TEXT_COLUMN_NAME + " TEXT NOT NULL, " +
+                *SENT_TIMESTAMP_COLUMN_NAME + " DATETIME NOT NULL, " +
+                "FOREIGN KEY(" + *AUTHOR_ID_COLUMN_NAME + ") REFERENCES " + *USERS_TABLE_NAME + "(" + *ID_COLUMN_NAME + ") ON DELETE CASCADE, " +
+                "FOREIGN KEY(" + *CONTACT_ID_COLUMN_NAME + ") REFERENCES " + *CONTACTS_TABLE_NAME + "(" + *ID_COLUMN_NAME + ") ON DELETE CASCADE );"
+                );
+
   if (!query.exec()) {
     qFatal("Failed to query 'create converstation table'database: %s",
            qPrintable(query.lastError().text()));
