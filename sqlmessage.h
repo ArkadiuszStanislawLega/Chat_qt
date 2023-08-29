@@ -5,7 +5,9 @@
 #include <QDateTime>
 
 #include "dbmanager.h"
+#include "message.h"
 
+class Message;
 class SqlMessage : public QObject {
 
 
