@@ -28,6 +28,21 @@ int Contact::getId() const { return this->_id; }
 
 void Contact::setId(int value) { this->_id = value; }
 
+QList<Message *> Contact::getMessages() {
+  return this->_messages;
+}
+
+void Contact::setMessages(QList<Message *> values) {
+  if (values.isEmpty()) {
+    SqlContact *sqlContact = new SqlContact(this);
+    sqlContact->setContactId(this->_id);
+    this->_messages = sqlContact->getMessages();
+    emit this->messagesChanged();
+  } else {
+    this->_messages = values;
+  }
+}
+
 void Contact::setCreated(QDateTime value) { this->_created = value; }
 
 void Contact::sendMessage(){

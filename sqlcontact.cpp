@@ -173,3 +173,9 @@ void SqlContact::setContactId(int value) { this->_contact_id = value; }
 int SqlContact::getId() const { return _id; }
 
 void SqlContact::setId(int newId) { _id = newId; }
+
+QList<Message *> SqlContact::getMessages() {
+  SqlMessage *sql = new SqlMessage(this);
+  sql->setContactId(this->_contact_id);
+  return sql->readMessages();
+}

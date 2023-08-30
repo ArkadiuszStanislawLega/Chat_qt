@@ -6,8 +6,10 @@
 
 #include "user.h"
 #include "sqluser.h"
+#include "message.h"
 
 class User;
+class Message;
 class Contact : public QObject {
   Q_OBJECT
       public:
@@ -21,6 +23,7 @@ class Contact : public QObject {
                  contactChanged FINAL)
   Q_PROPERTY(
       QDateTime created READ getCreated WRITE setCreated NOTIFY createdChanged)
+  Q_PROPERTY(QList<Message *> messages READ getMessages WRITE setMessages NOTIFY messagesChanged FINAL)
 
   int getContactId();
   void setContactId(int);
@@ -37,19 +40,25 @@ class Contact : public QObject {
   int getId() const;
   void setId(int);
 
+  QList<Message *> getMessages();
+  void setMessages(QList<Message *>);
+
 signals:
   void contactIdChanged();
   void ownerIdChanged();
   void contactChanged();
   void createdChanged();
+  void messagesChanged();
 
 public slots:
   void sendMessage();
+
 
   private:
     int _id, _owner_id;
   User *_contact;
   QDateTime _created;
+  QList<Message *> _messages;
 };
 
 #endif // CONTACT_H

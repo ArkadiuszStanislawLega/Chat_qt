@@ -1,8 +1,9 @@
 #ifndef SQLMESSAGE_H
 #define SQLMESSAGE_H
 
-#include <QObject>
 #include <QDateTime>
+#include <QList>
+#include <QObject>
 
 #include "dbmanager.h"
 #include "message.h"
@@ -10,12 +11,15 @@
 class Message;
 class SqlMessage : public QObject {
 
-
   Q_OBJECT
 private:
   int _contact_id, _author_id, _receiver_id;
   QString _text, _author_username, _receiver_username;
   QDateTime _sentTimestamp;
+  const QString FIRST_USERNAME_COLUMN_NAME = "first_username";
+  const QString SECOND_USERNAME_COLUMN_NAME = "second_username";
+  const QString FIRST_ID_COLUMN_NAME = "first_id";
+  const QString SECOND_ID_COLUMN_NAME = "second_id";
 
   bool executeQuery(QSqlQuery &);
 
@@ -41,7 +45,7 @@ public:
   void setSentTimestamp(QDateTime);
 
   bool createMessage();
-  bool readMessage();
+  QList<Message *> readMessages();
   bool updateMessage();
   bool deleteMessage();
 

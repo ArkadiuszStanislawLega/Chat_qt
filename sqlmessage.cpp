@@ -75,7 +75,8 @@ INNER JOIN Users as reciver ON reciver.id = Contacts.second_user_id
 where Messages.author_id = 1 and reciver.id = 2
 ORDER BY Messages.sent_timestamp DESC;
 */
-bool SqlMessage::readMessage() {
+
+QList<Message *> SqlMessage::readMessages() {
   QSqlQuery query;
   query.prepare(
       "SELECT sender." + *ID_COLUMN_NAME + " AS first_id, " + "sender." +
@@ -101,15 +102,50 @@ bool SqlMessage::readMessage() {
   query.bindValue(":" + *ID_COLUMN_NAME, this->_receiver_id);
 
   if (!this->executeQuery(query))
-    return false;
+    return {};
 
   QVector<Message *> messages;
+  while (query.next()) {
+    int first_id_column, first_username_column, second_id_column,
+        second_username_column, author_id_column, text_column,
+        sent_timestamp_column;
 
+    first_id_column = query.record().indexOf(FIRST_ID_COLUMN_NAME);
+    second_id_column = query.record().indexOf(SECOND_ID_COLUMN_NAME);
+    first_username_column = query.record().indexOf(FIRST_ID_COLUMN_NAME);
+    second_username_column =
+        query.record().indexOf(SECOND_USERNAME_COLUMN_NAME);
+    author_id_column = query.record().indexOf(*AUTHOR_ID_COLUMN_NAME);
+    text_column = query.record().indexOf(*TEXT_COLUMN_NAME);
+    sent_timestamp_column = query.record().indexOf(*SENT_TIMESTAMP_COLUMN_NAME);
 
+    Message *message = new Message(this);
+    int firstId, secondId;
 
+    firstId = query.value(first_id_column).toInt();
+    secondId = query.value(second_id_column).toInt();
 
+    message->setAuthorId(query.value(author_id_column).toInt());
+    message->setMessage(query.value(text_column).toString());
+    message->setSentTimestamp(query.value(sent_timestamp_column).toDateTime());
 
-  return false;
+    if (message->getAuthorId() == firstId) {
+      message->setSenderId(firstId);
+      message->setReceiverId(secondId);
+      message->setSenderUsername(query.value(first_username_column).toString());
+      message->setReceiverUsername(
+          query.value(second_username_column).toString());
+    } else {
+      message->setSenderId(secondId);
+      message->setReceiverId(firstId);
+      message->setSenderUsername(
+          query.value(second_username_column).toString());
+      message->setReceiverUsername(
+          query.value(first_username_column).toString());
+    }
+    messages.push_back(message);
+  }
+  return messages;
 }
 bool SqlMessage::updateMessage() { return false; }
 bool SqlMessage::deleteMessage() { return false; }

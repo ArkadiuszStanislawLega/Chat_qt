@@ -3,15 +3,18 @@
 
 #include <QObject>
 #include <QDateTime>
+#include <QList>
 
 #include "dbmanager.h"
 #include "contact.h"
 #include "user.h"
 #include "sqlmessage.h"
+#include "message.h"
 
 class Contact;
 class User;
 class SqlMessage;
+class Message;
 class SqlContact : public QObject
 {
   Q_OBJECT
@@ -41,11 +44,15 @@ public:
   int getId() const;
   void setId(int newId);
 
+  QList<Message *> getMessages();
+  void setMessages(QList<Message *>);
+
 signals:
 
 private:
   int _id, _contact_id{}, _first_user_id{}, _second_user_id;
   QDateTime _created_timestamp{};
+  QList<Message *> _messages;
 
   bool isAddingContactComplited();
   bool executeQuery(QSqlQuery &);
