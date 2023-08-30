@@ -81,7 +81,8 @@ Page {
                 height: 20
                 leftPadding: 20
                 onClicked: root.StackView.view.push("ConversationPage.qml", {
-                                                        "contact": modelData
+                                                        "contact": modelData,
+                                                        "owner": user
                                                     })
             }
 

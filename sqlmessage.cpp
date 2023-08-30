@@ -17,7 +17,15 @@ bool SqlMessage::executeQuery(QSqlQuery &query) {
   return true;
 }
 
-SqlMessage::SqlMessage(QObject *parent) : QObject{parent} {}
+SqlMessage::SqlMessage(QObject *parent) : QObject{parent} {
+  this->_author_id = 0;
+  this->_contact_id = 0;
+  this->_receiver_id = 0;
+  this->_receiver_username = "";
+  this->_author_username = "";
+  this->_sentTimestamp = QDateTime::currentDateTime();
+  this->_text = "";
+}
 
 int SqlMessage::getAuthorId() { return this->_author_id; }
 void SqlMessage::setAuthorId(int value) { this->_author_id = value; }
@@ -101,6 +109,8 @@ QList<Message *> SqlMessage::readMessages() {
   query.bindValue(":" + *AUTHOR_ID_COLUMN_NAME, this->_author_id);
   query.bindValue(":" + *ID_COLUMN_NAME, this->_receiver_id);
 
+  qDebug() << this->_author_id << this->_receiver_id << query.lastQuery();
+
   if (!this->executeQuery(query))
     return {};
 
@@ -144,6 +154,7 @@ QList<Message *> SqlMessage::readMessages() {
           query.value(first_username_column).toString());
     }
     messages.push_back(message);
+    qDebug() << message->getMessage();
   }
   return messages;
 }

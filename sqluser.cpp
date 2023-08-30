@@ -192,7 +192,7 @@ bool SqlUser::removeContact(int user_id) {
 }
 
 QVector<Contact *> SqlUser::getContacts() {
-  SqlContact *contact = new SqlContact(this);
-  contact->setFirstUserId(this->_id);
-  return contact->get_user_contacts();
+  SqlContact *sql= new SqlContact(this);
+  sql->setFirstUserId(this->_id);
+  return sql->get_user_contacts();
 }

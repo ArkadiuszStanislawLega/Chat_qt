@@ -14,7 +14,7 @@ class Contact : public QObject {
   Q_OBJECT
       public:
                explicit Contact(QObject *parent = nullptr);
-  Contact(int owner_id, User *contact, QDateTime created,
+  Contact(int id, User *contact, QDateTime created, int ownerId,
           QObject *parent = nullptr);
 
   Q_PROPERTY(int contactId READ getContactId WRITE setContactId NOTIFY

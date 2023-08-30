@@ -4,9 +4,9 @@ Contact::Contact(QObject *parent) : QObject{parent} {
   this->_created = QDateTime();
 }
 
-Contact::Contact(int ownerId, User *contact, QDateTime created, QObject *parent)
+Contact::Contact(int id, User *contact, QDateTime created, int ownerId, QObject *parent)
     : Contact{parent} {
-  this->_id = 0;
+  this->_id = id;
   this->_owner_id = ownerId;
   this->_contact = contact;
   this->_created = created;
@@ -26,9 +26,24 @@ QDateTime Contact::getCreated() { return this->_created; }
 
 int Contact::getId() const { return this->_id; }
 
-void Contact::setId(int value) { this->_id = value; }
+void Contact::setId(int value) {
+  if (this->_id == value)
+    return;
+  this->_id = value;
+  emit this->contactIdChanged();
+
+  this->setMessages({});
+}
 
 QList<Message *> Contact::getMessages() {
+  qDebug() << this->_id << this->_owner_id;
+  SqlContact *sqlContact = new SqlContact(this);
+  sqlContact->setId(this->_id);
+  sqlContact->setFirstUserId(this->_owner_id);
+  sqlContact->setSecondUserId(this->_contact->getDbId().toInt());
+    this->_messages = sqlContact->getMessages();
+    qDebug() << "here I am!" << this->_messages.size();
+
   return this->_messages;
 }
 
@@ -36,6 +51,7 @@ void Contact::setMessages(QList<Message *> values) {
   if (values.isEmpty()) {
     SqlContact *sqlContact = new SqlContact(this);
     sqlContact->setContactId(this->_id);
+    sqlContact->setFirstUserId(this->_owner_id);
     this->_messages = sqlContact->getMessages();
     emit this->messagesChanged();
   } else {

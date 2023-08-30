@@ -125,7 +125,7 @@ bool SqlContact::deleteContact() {
 QVector<Contact *> SqlContact::get_user_contacts() {
   QSqlQuery query;
   query.prepare(
-      "SELECT " + *ID_SECOND_USER_COLUMN_NAME + ", " +
+      "SELECT " + *CONTACTS_TABLE_NAME + "." + *ID_COLUMN_NAME + ", " + *ID_SECOND_USER_COLUMN_NAME + ", " +
       *CREATE_TIMESTAMP_COLUMN_NAME + ", " + *USERNAME_COLUMN_NAME + " FROM " +
       *CONTACTS_TABLE_NAME + " INNER JOIN " + *USERS_TABLE_NAME + " ON " +
       *USERS_TABLE_NAME + "." + *ID_COLUMN_NAME + " = " + *CONTACTS_TABLE_NAME +
@@ -134,23 +134,31 @@ QVector<Contact *> SqlContact::get_user_contacts() {
 
   query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_first_user_id);
 
+
   if (!this->executeQuery(query))
     return {};
 
+  qDebug() << "Id kontaktu: " << this->_first_user_id;
+  qDebug() << query.lastQuery();
+
   QVector<Contact *> contacts;
   while (query.next()) {
-    int id_user_column{}, create_datestamp_column{}, username_column{};
+    int id_column{}, id_user_column{}, create_datestamp_column{},
+        username_column{};
+
+    id_column = query.record().indexOf(*ID_COLUMN_NAME);
     id_user_column = query.record().indexOf(*ID_SECOND_USER_COLUMN_NAME);
     create_datestamp_column =
         query.record().indexOf(*CREATE_TIMESTAMP_COLUMN_NAME);
     username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
 
+    int id = query.value(id_column).toInt();
     QDateTime date = query.value(create_datestamp_column).toDateTime();
     User *user = new User(this);
     user->setDbId(query.value(id_user_column).toString());
     user->setUsername(query.value(username_column).toString());
 
-    contacts.push_back(new Contact(this->_id, user, date, this));
+    contacts.push_back(new Contact(id, user, date, this->_first_user_id, this));
   }
   return contacts;
 }
@@ -176,6 +184,9 @@ void SqlContact::setId(int newId) { _id = newId; }
 
 QList<Message *> SqlContact::getMessages() {
   SqlMessage *sql = new SqlMessage(this);
-  sql->setContactId(this->_contact_id);
+  sql->setContactId(this->_id);
+
+  this->readContact();
+  qDebug() << this->_id;
   return sql->readMessages();
 }

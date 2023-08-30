@@ -5,11 +5,17 @@ import QtQuick.Controls
 import com.iam_code.chat.conversation_model
 import com.iam_code.chat.contact
 import com.iam_code.chat.message
+import com.iam_code.chat.user
 
 Page {
     id: root
     property string inConversationWith
     property Contact contact
+    property User owner
+
+    onStateChanged: {
+        contact.messages
+    }
 
     header: ChatToolBar {
         ToolButton {
@@ -21,7 +27,7 @@ Page {
         }
         Label {
             id: page_title
-            text: contact.contact.username
+            text: contact.contact.username + " " + contact.contactId + " " + contact.contact.dbId
             font.pixelSize: 20
             anchors.centerIn: parent
         }
@@ -39,11 +45,10 @@ Page {
             displayMarginEnd: 40
             verticalLayoutDirection: ListView.BottomToTop
             spacing: 12
-            model: SqlConversationModel {
-                recipient: inConversationWith
-            }
+            model: contact.messages
             delegate: Column {
-                anchors.right: sent_by_me ? list_view.contentItem.right : undefined
+                anchors.right: modelData.authorId
+                               === user.dbId ? list_view.contentItem.right : undefined
                 spacing: 6
 
                 readonly property bool sent_by_me: model.recipient !== "Me"
