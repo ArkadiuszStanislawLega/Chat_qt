@@ -2,7 +2,6 @@
 
 SqlContact::SqlContact(QObject *parent) : QObject{parent} {
   this->_id = 0;
-  this->_contact_id = 0;
   this->_first_user_id = 0;
   this->_second_user_id = 0;
   this->_created_timestamp = QDateTime();
@@ -138,9 +137,6 @@ QVector<Contact *> SqlContact::get_user_contacts() {
   if (!this->executeQuery(query))
     return {};
 
-  qDebug() << "Id kontaktu: " << this->_first_user_id;
-  qDebug() << query.lastQuery();
-
   QVector<Contact *> contacts;
   while (query.next()) {
     int id_column{}, id_user_column{}, create_datestamp_column{},
@@ -175,9 +171,6 @@ void SqlContact::setFirstUserId(int value) { this->_first_user_id = value; }
 int SqlContact::getSecondUserId() const { return _second_user_id; }
 void SqlContact::setSecondUserId(int value) { this->_second_user_id = value; }
 
-int SqlContact::getContactId() const { return this->_contact_id; }
-void SqlContact::setContactId(int value) { this->_contact_id = value; }
-
 int SqlContact::getId() const { return _id; }
 
 void SqlContact::setId(int newId) { _id = newId; }
@@ -185,8 +178,9 @@ void SqlContact::setId(int newId) { _id = newId; }
 QList<Message *> SqlContact::getMessages() {
   SqlMessage *sql = new SqlMessage(this);
   sql->setContactId(this->_id);
+  sql->setAuthorId(this->_first_user_id);
+  sql->setReceiverId(this->_second_user_id);
 
-  this->readContact();
-  qDebug() << this->_id;
+  qDebug() << "SqlContact::getMessages() id =" << this->_id;
   return sql->readMessages();
 }

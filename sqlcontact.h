@@ -38,9 +38,6 @@ public:
   int getSecondUserId() const;
   void setSecondUserId(int);
 
-  int getContactId() const;
-  void setContactId(int);
-
   int getId() const;
   void setId(int newId);
 
@@ -50,7 +47,7 @@ public:
 signals:
 
 private:
-  int _id, _contact_id{}, _first_user_id{}, _second_user_id;
+  int _id {}, _first_user_id{}, _second_user_id;
   QDateTime _created_timestamp{};
   QList<Message *> _messages;
 

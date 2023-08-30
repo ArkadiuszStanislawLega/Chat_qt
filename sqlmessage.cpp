@@ -5,9 +5,6 @@
  * insert into Messages (contact_id, author_id, message, sended_time)
 VALUES(1,1,"druga wiadomosc",  "2023-10-12T12:10:00");*/
 
-int SqlMessage::getContactId() const { return this->_contact_id; }
-
-void SqlMessage::setContactId(int value) { this->_contact_id = value; }
 
 bool SqlMessage::executeQuery(QSqlQuery &query) {
   if (!query.exec()) {
@@ -26,6 +23,9 @@ SqlMessage::SqlMessage(QObject *parent) : QObject{parent} {
   this->_sentTimestamp = QDateTime::currentDateTime();
   this->_text = "";
 }
+
+int SqlMessage::getContactId() const { return this->_contact_id; }
+void SqlMessage::setContactId(int value) { this->_contact_id = value; }
 
 int SqlMessage::getAuthorId() { return this->_author_id; }
 void SqlMessage::setAuthorId(int value) { this->_author_id = value; }

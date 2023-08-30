@@ -50,7 +50,7 @@ QList<Message *> Contact::getMessages() {
 void Contact::setMessages(QList<Message *> values) {
   if (values.isEmpty()) {
     SqlContact *sqlContact = new SqlContact(this);
-    sqlContact->setContactId(this->_id);
+    sqlContact->setId(this->_id);
     sqlContact->setFirstUserId(this->_owner_id);
     this->_messages = sqlContact->getMessages();
     emit this->messagesChanged();
