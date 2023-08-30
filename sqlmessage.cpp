@@ -109,8 +109,6 @@ QList<Message *> SqlMessage::readMessages() {
   query.bindValue(":" + *AUTHOR_ID_COLUMN_NAME, this->_author_id);
   query.bindValue(":" + *ID_COLUMN_NAME, this->_receiver_id);
 
-  qDebug() << this->_author_id << this->_receiver_id << query.lastQuery();
-
   if (!this->executeQuery(query))
     return {};
 
@@ -154,7 +152,6 @@ QList<Message *> SqlMessage::readMessages() {
           query.value(first_username_column).toString());
     }
     messages.push_back(message);
-    qDebug() << message->getMessage();
   }
   return messages;
 }

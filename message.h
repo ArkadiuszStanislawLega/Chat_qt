@@ -19,7 +19,7 @@ class Message : public QObject
                  authorIdChanged FINAL)
   Q_PROPERTY(QString message READ getMessage WRITE setMessage NOTIFY
                  messageChanged FINAL)
-  Q_PROPERTY(QDateTime setTimestamp READ getSentTimestamp WRITE setSentTimestamp
+  Q_PROPERTY(QDateTime sentTimestamp READ getSentTimestamp WRITE setSentTimestamp
                  NOTIFY sentTimestampChanged FINAL)
 private:
   int _senderId;

@@ -181,6 +181,5 @@ QList<Message *> SqlContact::getMessages() {
   sql->setAuthorId(this->_first_user_id);
   sql->setReceiverId(this->_second_user_id);
 
-  qDebug() << "SqlContact::getMessages() id =" << this->_id;
   return sql->readMessages();
 }

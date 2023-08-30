@@ -27,7 +27,7 @@ Page {
         }
         Label {
             id: page_title
-            text: contact.contact.username + " " + contact.contactId + " " + contact.contact.dbId
+            text: contact.contact.username
             font.pixelSize: 20
             anchors.centerIn: parent
         }
@@ -47,11 +47,10 @@ Page {
             spacing: 12
             model: contact.messages
             delegate: Column {
-                anchors.right: modelData.authorId
-                               === user.dbId ? list_view.contentItem.right : undefined
-                spacing: 6
+                readonly property bool sent_by_me: modelData.authorId === owner.dbId
 
-                readonly property bool sent_by_me: model.recipient !== "Me"
+                anchors.right: sent_by_me ? list_view.contentItem.right : undefined
+                spacing: 6
 
                 Row {
                     id: message_row
@@ -60,8 +59,7 @@ Page {
 
                     Image {
                         id: avatar
-                        source: !sent_by_me ? "images/" + model.author.replace(
-                                                  " ", "_") + ".png" : ""
+                        source: !sent_by_me ? "images/Albert_Einstein" + ".png" : ""
                     }
                     Rectangle {
                         width: Math.min(
@@ -73,7 +71,7 @@ Page {
 
                         Label {
                             id: message_text
-                            text: model.message
+                            text: modelData.message
                             color: sent_by_me ? "black" : "white"
                             anchors.fill: parent
                             anchors.margins: 12
@@ -84,7 +82,8 @@ Page {
 
                 Label {
                     id: timestamp_text
-                    text: Qt.formatDateTime(model.timestamp, "d MMM hh:mm")
+                    text: Qt.formatDateTime(modelData.sentTimestamp,
+                                            "d MMM hh:mm")
                     color: "lightgrey"
                     anchors.right: sent_by_me ? parent.right : undefined
                 }
