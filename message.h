@@ -9,16 +9,16 @@ class Message : public QObject
   Q_OBJECT
   Q_PROPERTY(int senderId READ getSenderId WRITE setSenderId NOTIFY
                  senderIdChanged FINAL)
-  Q_PROPERTY(int receiverId READ getReceiverId WRITE seReceiverId NOTIFY
+  Q_PROPERTY(int receiverId READ getReceiverId WRITE setReceiverId NOTIFY
                  receiverIdChanged FINAL)
   Q_PROPERTY(QString senderUsername READ getSenderUsername WRITE
                  setSenderUsername NOTIFY senderUsernameChanged FINAL)
   Q_PROPERTY(QString receiverUsername READ getReceiverUsername WRITE
                  setReceiverUsername NOTIFY receiverUsernameChanged FINAL)
   Q_PROPERTY(int authorId READ getAuthorId WRITE setAuthorId NOTIFY
-                 idAuthorIdChanged FINAL)
+                 authorIdChanged FINAL)
   Q_PROPERTY(QString message READ getMessage WRITE setMessage NOTIFY
-                 meesageChanged FINAL)
+                 messageChanged FINAL)
   Q_PROPERTY(QDateTime setTimestamp READ getSentTimestamp WRITE setSentTimestamp
                  NOTIFY sentTimestampChanged FINAL)
 private:

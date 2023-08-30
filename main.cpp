@@ -6,6 +6,7 @@
 #include "sqlconversationmodel.h"
 #include "dbmanager.h"
 #include "user.h"
+#include "message.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +16,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<SqlConversationModel>("com.iam_code.chat.conversation_model", 1, 0, "SqlConversationModel");
     qmlRegisterType<User>("com.iam_code.chat.user", 1, 0, "User");
     qmlRegisterType<Contact>("com.iam_code.chat.contact", 1, 0, "Contact");
+    qmlRegisterType<Message>("com.iam_code.chat.message", 1, 0, "Message");
 
     DbManager(nullptr);
 

@@ -3,10 +3,13 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import com.iam_code.chat.conversation_model
+import com.iam_code.chat.contact
+import com.iam_code.chat.message
 
 Page {
     id: root
     property string inConversationWith
+    property Contact contact
 
     header: ChatToolBar {
         ToolButton {
@@ -18,7 +21,7 @@ Page {
         }
         Label {
             id: page_title
-            text: inConversationWith
+            text: contact.contact.username
             font.pixelSize: 20
             anchors.centerIn: parent
         }

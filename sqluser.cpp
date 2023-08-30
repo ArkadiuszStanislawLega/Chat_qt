@@ -139,9 +139,7 @@ bool SqlUser::readUser() {
 bool SqlUser::updateUser() { return false; }
 bool SqlUser::deleteUser() { return false; }
 
-bool SqlUser::sendMessage()
-{
-
+bool SqlUser::sendMessage() { return false;
 }
 
 int SqlUser::getId() { return this->_id; }

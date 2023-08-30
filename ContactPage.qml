@@ -11,7 +11,6 @@ Page {
     id: root
     property User user
 
-
     header: ChatToolBar {
 
         Label {
@@ -21,9 +20,8 @@ Page {
             anchors.centerIn: parent
         }
     }
-    ColumnLayout{
+    ColumnLayout {
         anchors.fill: parent
-
 
         RowLayout {
             Layout.fillWidth: true
@@ -43,26 +41,26 @@ Page {
                 text: qsTr("Add")
                 enabled: tf_contact_id.length > 0
                 onClicked: {
-                    user.createContact(tf_contact_id.text);
-                    tf_contact_id.text = "";
+                    user.createContact(tf_contact_id.text)
+                    tf_contact_id.text = ""
                 }
             }
-            TextField{
+            TextField {
                 Layout.fillWidth: true
                 id: tf_remove_id
                 height: 20
-                validator: IntValidator{
+                validator: IntValidator {
                     bottom: 1
                     top: 2000000
                 }
             }
-            RoundButton{
-                id:b_remove_contact
+            RoundButton {
+                id: b_remove_contact
                 text: qsTr("Delete")
                 enabled: tf_remove_id.length > 0
                 onClicked: {
-                    user.deleteContact(tf_remove_id.text);
-                    tf_remove_id.text = "";
+                    user.deleteContact(tf_remove_id.text)
+                    tf_remove_id.text = ""
                 }
             }
         }
@@ -83,10 +81,10 @@ Page {
                 height: 20
                 leftPadding: 20
                 onClicked: root.StackView.view.push("ConversationPage.qml", {
-                                                        "inConversationWith": model.display
+                                                        "contact": modelData
                                                     })
-
             }
+
 
             /*Image {
                     id: avatar
