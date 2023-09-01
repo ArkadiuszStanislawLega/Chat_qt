@@ -80,7 +80,7 @@ select
 INNER JOIN Contacts ON Contacts.id = Messages.contact_id
 INNER JOIN Users as sender ON sender.id = Contacts.first_user_id
 INNER JOIN Users as reciver ON reciver.id = Contacts.second_user_id
-where Messages.author_id = 1 and reciver.id = 2
+where Contacts.id = 1
 ORDER BY Messages.sent_timestamp DESC;
 */
 
