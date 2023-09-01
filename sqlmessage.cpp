@@ -87,27 +87,23 @@ ORDER BY Messages.sent_timestamp DESC;
 QList<Message *> SqlMessage::readMessages() {
   QSqlQuery query;
   query.prepare(
-      "SELECT sender." + *ID_COLUMN_NAME + " AS first_id, " + "sender." +
-      *USERNAME_COLUMN_NAME + " AS first_username," + "receiver." +
-      *ID_COLUMN_NAME + " as second_id," + "receiver." + *USERNAME_COLUMN_NAME +
-      " as second_username," + *MESSAGES_TABLE_NAME + "." +
-      *AUTHOR_ID_COLUMN_NAME + ", " + *MESSAGES_TABLE_NAME + "." +
-      *TEXT_COLUMN_NAME + ", " + *MESSAGES_TABLE_NAME + "." +
-      *SENT_TIMESTAMP_COLUMN_NAME + " from " + *MESSAGES_TABLE_NAME +
-      " INNER JOIN " + *CONTACTS_TABLE_NAME + " ON " + *CONTACTS_TABLE_NAME +
-      "." + *ID_COLUMN_NAME + " = " + *MESSAGES_TABLE_NAME + "." +
-      *CONTACT_ID_COLUMN_NAME + " INNER JOIN " + *USERS_TABLE_NAME +
-      " AS sender ON sender." + *ID_COLUMN_NAME + " = " + *CONTACTS_TABLE_NAME +
-      "." + *ID_FIRST_USER_COLUMN_NAME + " INNER JOIN " + *USERS_TABLE_NAME +
-      " AS receiver ON receiver." + *ID_COLUMN_NAME + " = " +
-      *CONTACTS_TABLE_NAME + "." + *ID_SECOND_USER_COLUMN_NAME + " WHERE " +
-      *MESSAGES_TABLE_NAME + "." + *AUTHOR_ID_COLUMN_NAME +
-      " = :" + *AUTHOR_ID_COLUMN_NAME + " AND receiver." + *ID_COLUMN_NAME +
-      " = :" + *ID_COLUMN_NAME + " ORDER BY " + *MESSAGES_TABLE_NAME + "." +
-      *SENT_TIMESTAMP_COLUMN_NAME + " DESC;");
+      "SELECT sender." + *ID_COLUMN_NAME + " AS first_id, " + "sender." + *USERNAME_COLUMN_NAME
+      + " AS first_username," + "receiver." + *ID_COLUMN_NAME + " as second_id," + "receiver."
+      + *USERNAME_COLUMN_NAME + " as second_username," + *MESSAGES_TABLE_NAME + "."
+      + *AUTHOR_ID_COLUMN_NAME + ", " + *MESSAGES_TABLE_NAME + "." + *TEXT_COLUMN_NAME + ", "
+      + *MESSAGES_TABLE_NAME + "." + *SENT_TIMESTAMP_COLUMN_NAME + " from " + *MESSAGES_TABLE_NAME
+      + " INNER JOIN " + *CONTACTS_TABLE_NAME + " ON " + *CONTACTS_TABLE_NAME + "."
+      + *ID_COLUMN_NAME + " = " + *MESSAGES_TABLE_NAME + "." + *CONTACT_ID_COLUMN_NAME
+      + " INNER JOIN " + *USERS_TABLE_NAME + " AS sender ON sender." + *ID_COLUMN_NAME + " = "
+      + *CONTACTS_TABLE_NAME + "." + *ID_FIRST_USER_COLUMN_NAME + " INNER JOIN " + *USERS_TABLE_NAME
+      + " AS receiver ON receiver." + *ID_COLUMN_NAME + " = " + *CONTACTS_TABLE_NAME + "."
+      + *ID_SECOND_USER_COLUMN_NAME + " WHERE " + *CONTACTS_TABLE_NAME + "." + *ID_COLUMN_NAME
+      + " ORDER BY " + *MESSAGES_TABLE_NAME + "." + *SENT_TIMESTAMP_COLUMN_NAME + " DESC;");
 
   query.bindValue(":" + *AUTHOR_ID_COLUMN_NAME, this->_author_id);
   query.bindValue(":" + *ID_COLUMN_NAME, this->_receiver_id);
+
+  qDebug() << query.lastQuery();
 
   if (!this->executeQuery(query))
     return {};
