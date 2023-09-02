@@ -33,6 +33,7 @@ bool SqlContact::connectUsersWithContact(int first_contact,
   return true;
 }
 
+//TODO: DEBUG THIS!
 bool SqlContact::createContact(const QDateTime &timestamp) {
   if (timestamp.isNull())
     return false;
@@ -99,6 +100,17 @@ bool SqlContact::deleteContact() {
   query.bindValue(":" + *ID_COLUMN_NAME, this->_id);
   return this->executeQuery(query);
 }
+QVector<Contact *> SqlContact::get_user_contacts() {
+  QSqlQuery query;
+  query.prepare(this->selectContactsQuery());
+  query.bindValue(":" + *USER_ID_COLUMN_NAME, this->_user_id);
+
+  if (!this->executeQuery(query))
+    return {};
+
+  return getContactsFromQuery(query, {"contact_id"});
+}
+
 /*
 SELECT DISTINCT
         Contacts.id as conctact_id,
@@ -111,12 +123,12 @@ INNER JOIN Users ON Users_contacts.user_id = Users.id
 INNER JOIN (SELECT Users_contacts.contact_id, Users_contacts.user_id FROM
 Users_contacts WHERE user_id = 34) WHERE Users_contacts.user_id != 34;
 */
-QVector<Contact *> SqlContact::get_user_contacts() {
-  qDebug() << " ejasdfas ";
+QString SqlContact::selectContactsQuery() {
   QString aliasContactId{"contact_id"}, aliasUserContactId{"user_contact_id"},
       contacts_id, created_timestamp, users_contacts_id, users_contacts_user_id,
       users_username, ij_users_contacts_to_contacts, ij_users_to_users_contact,
-      second_select;
+      second_select, full_query;
+
 
   contacts_id =
       *CONTACTS_TABLE_NAME + "." + *ID_COLUMN_NAME + " AS " + aliasContactId;
@@ -141,27 +153,26 @@ QVector<Contact *> SqlContact::get_user_contacts() {
                   *USERS_CONTACT_TABLE_NAME + " WHERE " + *USER_ID_COLUMN_NAME +
                   " = :" + *USER_ID_COLUMN_NAME + ")";
 
-  QSqlQuery query;
-  query.prepare("SELECT DISTINCT " + contacts_id + ", " + created_timestamp +
-                ", " + users_contacts_id + ", " + users_contacts_user_id +
-                ", " + users_username + " FROM " + *CONTACTS_TABLE_NAME +
-                ij_users_contacts_to_contacts + ij_users_to_users_contact +
-                second_select + " WHERE " + *USERS_CONTACT_TABLE_NAME + "." +
-                *USER_ID_COLUMN_NAME + " != :" + *USER_ID_COLUMN_NAME + ";");
+  full_query = "SELECT DISTINCT " + contacts_id + ", " + created_timestamp +
+               ", " + users_contacts_id + ", " + users_contacts_user_id + ", " +
+               users_username + " FROM " + *CONTACTS_TABLE_NAME +
+               ij_users_contacts_to_contacts + ij_users_to_users_contact +
+               second_select + " WHERE " + *USERS_CONTACT_TABLE_NAME + "." +
+               *USER_ID_COLUMN_NAME + " != :" + *USER_ID_COLUMN_NAME + ";";
+  return full_query;
+}
 
-  query.bindValue(":" + *USER_ID_COLUMN_NAME, this->_user_id);
-
-  if (!this->executeQuery(query))
+QVector<Contact *> SqlContact::getContactsFromQuery(QSqlQuery &query,
+                                                    QList<QString> args) {
+  if (args.isEmpty())
     return {};
-
-  qDebug() << this->_user_id << query.lastError() << query.executedQuery() << query.ValuesAsRows;
 
   QVector<Contact *> contacts;
   while (query.next()) {
     int id_column{}, id_user_column{}, create_datestamp_column{},
         username_column{};
 
-    id_column = query.record().indexOf(aliasContactId);
+    id_column = query.record().indexOf(args[0]);
     id_user_column = query.record().indexOf(*USER_ID_COLUMN_NAME);
     create_datestamp_column =
         query.record().indexOf(*CREATE_TIMESTAMP_COLUMN_NAME);
@@ -174,7 +185,6 @@ QVector<Contact *> SqlContact::get_user_contacts() {
     user->setUsername(query.value(username_column).toString());
 
     contacts.push_back(new Contact(id, user, date, this));
-    qDebug() << id << user->getUsername() << date;
   }
   return contacts;
 }
@@ -188,13 +198,10 @@ int SqlContact::getUserId() { return _user_id; }
 void SqlContact::setUserId(int value) { this->_user_id = value; }
 
 int SqlContact::getId() const { return _id; }
-
 void SqlContact::setId(int newId) { _id = newId; }
 
 QList<Message *> SqlContact::getMessages() {
   SqlMessage *sql = new SqlMessage(this);
   sql->setContactId(this->_id);
-  sql->setAuthorId(this->_user_id);
-
   return sql->readMessages();
 }

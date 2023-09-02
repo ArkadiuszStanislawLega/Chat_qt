@@ -27,7 +27,7 @@ Page {
         }
         Label {
             id: page_title
-            text: contact.contact.username
+            text: contact.user.username
             font.pixelSize: 20
             anchors.centerIn: parent
         }

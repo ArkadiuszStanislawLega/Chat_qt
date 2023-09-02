@@ -50,7 +50,9 @@ private:
   QDateTime _created_timestamp{};
   QList<Message *> _messages;
 
+  QList<Contact *> getContactsFromQuery(QSqlQuery &, QList<QString>);
   bool executeQuery(QSqlQuery &);
+  QString selectContactsQuery();
 };
 
 #endif // SQLCONTACT_H
