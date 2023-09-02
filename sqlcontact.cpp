@@ -72,32 +72,39 @@ bool SqlContact::executeQuery(QSqlQuery &query) {
   return true;
 }
 
+/*
+SELECT DISTINCT
+        Contacts.id as conctact_id,
+        Contacts.created_timestamp,
+        Users_contacts.id as user_contact_id,
+        Users_contacts.user_id,
+        Users.username FROM Contacts
+INNER JOIN Users_contacts ON Users_contacts.contact_id = Contacts.id
+INNER JOIN Users ON Users_contacts.user_id = Users.id
+INNER JOIN (SELECT Users_contacts.contact_id, Users_contacts.user_id FROM Users_contacts WHERE user_id = 34)
+WHERE Users_contacts.user_id != 34;
+*/
 bool SqlContact::readContact() {
   QSqlQuery query;
-  query.prepare("SELECT * FROM " + *CONTACTS_TABLE_NAME + " WHERE " +
-                *ID_FIRST_USER_COLUMN_NAME +
-                " = :" + *ID_FIRST_USER_COLUMN_NAME + " AND " +
-                *ID_SECOND_USER_COLUMN_NAME +
-                " = :" + *ID_SECOND_USER_COLUMN_NAME + ";");
+  query.prepare("SELECT * FROM " + *USERS_CONTACT_TABLE_NAME + " WHERE " +
+                *CONTACT_ID_COLUMN_NAME + " = :" + *CONTACT_ID_COLUMN_NAME +
+                ");");
 
-  query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_first_user_id);
-  query.bindValue(":" + *ID_SECOND_USER_COLUMN_NAME, this->_second_user_id);
+  query.bindValue(":" + *CONTACT_ID_COLUMN_NAME, this->_id);
 
   if (!this->executeQuery(query))
     return false;
 
   while (query.next()) {
-    int id_column, create_timestamp_column, id_first_column, id_second_column;
+    int id_column, create_timestamp_column, id_first_column;
 
     id_column = query.record().indexOf(*ID_COLUMN_NAME);
     create_timestamp_column =
         query.record().indexOf(*CREATE_TIMESTAMP_COLUMN_NAME);
-    id_first_column = query.record().indexOf(*ID_FIRST_USER_COLUMN_NAME);
-    id_second_column = query.record().indexOf(*ID_SECOND_USER_COLUMN_NAME);
+    id_first_column = query.record().indexOf(*USER_ID_COLUMN_NAME);
 
     this->_id = query.value(id_column).toInt();
     this->_first_user_id = query.value(id_first_column).toInt();
-    this->_second_user_id = query.value(id_second_column).toInt();
     this->_created_timestamp =
         query.value(create_timestamp_column).toDateTime();
     return true;
@@ -119,6 +126,7 @@ bool SqlContact::deleteContact() {
 }
 
 QVector<Contact *> SqlContact::get_user_contacts() {
+  //TODO: NEED TO IMPLEMENT NEW MODEL.
   QSqlQuery query;
   query.prepare(
       "SELECT " + *CONTACTS_TABLE_NAME + "." + *ID_COLUMN_NAME + ", " +
