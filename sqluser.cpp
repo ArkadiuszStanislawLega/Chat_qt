@@ -171,7 +171,7 @@ bool SqlUser::createContact(int contact_id) {
   contact->setCreatedTimestamp(QDateTime::currentDateTime());
   contact->setFirstUserId(this->_id);
   contact->setSecondUserId(contact_id);
-  return contact->createContact();
+  return contact->createUserContact(this->_id);
 }
 
 bool SqlUser::removeContact(int user_id) {

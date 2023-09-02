@@ -21,7 +21,10 @@ class SqlContact : public QObject
 public:
   explicit SqlContact(QObject *parent = nullptr);
 
-  bool createContact();
+  bool connectUsersWithContact(int, int);
+  bool createContact(const QDateTime &);
+  bool getLastCreatedContactId(const QDateTime &);
+  bool createUserContact(int &);
   bool readContact();
   bool updateContact();
   bool deleteContact();
@@ -51,7 +54,6 @@ private:
   QDateTime _created_timestamp{};
   QList<Message *> _messages;
 
-  bool isAddingContactComplited();
   bool executeQuery(QSqlQuery &);
 };
 

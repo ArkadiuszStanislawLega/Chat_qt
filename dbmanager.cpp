@@ -28,19 +28,9 @@ void DbManager::CreateContactsTable() {
   query.prepare(
       "CREATE TABLE IF NOT EXISTS " + *CONTACTS_TABLE_NAME + " (" +
       *ID_COLUMN_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-      *ID_FIRST_USER_COLUMN_NAME + " INTEGER NOT NULL, " +
-      *ID_SECOND_USER_COLUMN_NAME + " INTEGER NOT NULL, " +
-      *CREATE_TIMESTAMP_COLUMN_NAME + " DATETIME NOT NULL, " + "FOREIGN KEY(" +
-      *ID_FIRST_USER_COLUMN_NAME + ") REFERENCES " + *USERS_TABLE_NAME + "(" +
-      *ID_COLUMN_NAME + ") ON DELETE CASCADE, " + "FOREIGN KEY(" +
-      *ID_SECOND_USER_COLUMN_NAME + ") REFERENCES " + *USERS_TABLE_NAME + "(" +
-      *ID_COLUMN_NAME + ") ON DELETE CASCADE );"
-  );
+      *CREATE_TIMESTAMP_COLUMN_NAME + " DATETIME NOT NULL);");
 
-  if (!query.exec()) {
-    qFatal("Failed to query 'create Contacts table' database: %s",
-           qPrintable(query.lastError().text()));
-  }
+  this->ExecuteQuery(query);
 }
 
 //TODO: Change table conversation to messages.
@@ -57,20 +47,17 @@ void DbManager::CreateContactsTable() {
 void DbManager::CreateMessagesTable() {
   QSqlQuery query;
 
-  query.prepare("CREATE TABLE IF NOT EXISTS '" + *MESSAGES_TABLE_NAME + "' (" +
-                *ID_COLUMN_NAME + " INTEGER PRIMARY KEY," +
-                *CONTACT_ID_COLUMN_NAME + " INTEGER NOT NULL, " +
-                *AUTHOR_ID_COLUMN_NAME + " INTEGER NOT NULL, " +
-                *TEXT_COLUMN_NAME + " TEXT NOT NULL, " +
-                *SENT_TIMESTAMP_COLUMN_NAME + " DATETIME NOT NULL, " +
-                "FOREIGN KEY(" + *AUTHOR_ID_COLUMN_NAME + ") REFERENCES " + *USERS_TABLE_NAME + "(" + *ID_COLUMN_NAME + ") ON DELETE CASCADE, " +
-                "FOREIGN KEY(" + *CONTACT_ID_COLUMN_NAME + ") REFERENCES " + *CONTACTS_TABLE_NAME + "(" + *ID_COLUMN_NAME + ") ON DELETE CASCADE );"
-                );
-
-  if (!query.exec()) {
-    qFatal("Failed to query 'create converstation table'database: %s",
-           qPrintable(query.lastError().text()));
-  }
+  query.prepare(
+      "CREATE TABLE IF NOT EXISTS '" + *MESSAGES_TABLE_NAME + "' (" +
+      *ID_COLUMN_NAME + " INTEGER PRIMARY KEY," + *CONTACT_ID_COLUMN_NAME +
+      " INTEGER NOT NULL, " + *AUTHOR_ID_COLUMN_NAME + " INTEGER NOT NULL, " +
+      *TEXT_COLUMN_NAME + " TEXT NOT NULL, " + *SENT_TIMESTAMP_COLUMN_NAME +
+      " DATETIME NOT NULL, " + "FOREIGN KEY(" + *AUTHOR_ID_COLUMN_NAME +
+      ") REFERENCES " + *USERS_TABLE_NAME + "(" + *ID_COLUMN_NAME +
+      ") ON DELETE CASCADE, " + "FOREIGN KEY(" + *CONTACT_ID_COLUMN_NAME +
+      ") REFERENCES " + *CONTACTS_TABLE_NAME + "(" + *ID_COLUMN_NAME +
+      ") ON DELETE CASCADE );");
+  this->ExecuteQuery(query);
 }
 
 /*  query.prepare("CREATE TABLE IF NOT EXISTS '" + *USERS_TABLE_NAME + "' (" +
@@ -81,14 +68,14 @@ void DbManager::CreateMessagesTable() {
 void DbManager::CreateUsersTable() {
   QSqlQuery query;
   query.prepare("CREATE TABLE IF NOT EXISTS '" + *USERS_TABLE_NAME + "' (" +
-                "'" + *ID_COLUMN_NAME + "' INTEGER PRIMARY KEY AUTOINCREMENT, "
-                "'" + *USERNAME_COLUMN_NAME + "' TEXT UNIQUE, "
-                "'" + *PASSWORD_COLUMN_NAME + "' TEXT NOT NULL); "
-                );
-  if (!query.exec()) {
-    qFatal("Failed to query 'create users table' database: %s, %s",
-           qPrintable(query.lastError().text()), qPrintable(query.lastQuery()));
-  }
+                "'" + *ID_COLUMN_NAME +
+                "' INTEGER PRIMARY KEY AUTOINCREMENT, "
+                "'" +
+                *USERNAME_COLUMN_NAME +
+                "' TEXT UNIQUE, "
+                "'" +
+                *PASSWORD_COLUMN_NAME + "' TEXT NOT NULL); ");
+  this->ExecuteQuery(query);
 }
 
 /*CREATE TABLE IF NOT EXISTS Users_contacts(
@@ -100,25 +87,24 @@ FOREIGN KEY(user_id) REFERENCES Users(id) ON DELETE CASCADE
 );*/
 void DbManager::CreateUsersContactTable() {
   QSqlQuery query;
-  query.prepare("CREATE TABLE IF NOT EXISTS " + *USERS_CONTACT_TABLE_NAME + "(" +
-                *ID_COLUMN_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+  query.prepare("CREATE TABLE IF NOT EXISTS " + *USERS_CONTACT_TABLE_NAME +
+                "(" + *ID_COLUMN_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 *CONTACT_ID_COLUMN_NAME + " INTEGER NOT NULL," +
-                *USER_ID_COLUMN_NAME + " INTEGER NOT NULL, " +
-                "FOREIGN KEY (" + *CONTACT_ID_COLUMN_NAME + ") REFERENCES " + *CONTACTS_TABLE_NAME + "(" + *ID_COLUMN_NAME + ") ON DELETE CASCADE, " +
-                "FOREIGN KEY (" + *USER_ID_COLUMN_NAME + ") REFERENCES " + *USERS_TABLE_NAME + "(" + *ID_COLUMN_NAME + ") ON DELETE CASCADE );"
-                );
-  if(!query.exec()){
-    qFatal("")
-  }
-
+                *USER_ID_COLUMN_NAME + " INTEGER NOT NULL, " + "FOREIGN KEY (" +
+                *CONTACT_ID_COLUMN_NAME + ") REFERENCES " +
+                *CONTACTS_TABLE_NAME + "(" + *ID_COLUMN_NAME +
+                ") ON DELETE CASCADE, " + "FOREIGN KEY (" +
+                *USER_ID_COLUMN_NAME + ") REFERENCES " + *USERS_TABLE_NAME +
+                "(" + *ID_COLUMN_NAME + ") ON DELETE CASCADE );");
+  this->ExecuteQuery(query);
 }
 
-bool DbManager::ExecuteQuery(QSqlQuery &query){
-  if(!query.exec())  {
+bool DbManager::ExecuteQuery(QSqlQuery &query) {
+  if (!query.exec()) {
     qFatal("Failed to query 'create table' database: %s, %s",
            qPrintable(query.lastError().text()), qPrintable(query.lastQuery()));
-
   }
+  return true;
 }
 
 

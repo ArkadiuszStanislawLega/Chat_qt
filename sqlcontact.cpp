@@ -7,63 +7,61 @@ SqlContact::SqlContact(QObject *parent) : QObject{parent} {
   this->_created_timestamp = QDateTime();
 }
 
-bool SqlContact::createContact() {
-  if (this->readContact())
+bool SqlContact::createUserContact(int &user_id) {
+  QSqlQuery query;
+  query.prepare("INSERT INTO " + *USERS_CONTACT_TABLE_NAME + " (" +
+                *CONTACT_ID_COLUMN_NAME + ", " + *USER_ID_COLUMN_NAME +
+                ") VALUES (:" + *CONTACT_ID_COLUMN_NAME +
+                ", :" + *USER_ID_COLUMN_NAME + ");");
+  query.bindValue(":" + *CONTACT_ID_COLUMN_NAME, this->_id);
+  query.bindValue(":" + *USER_ID_COLUMN_NAME, user_id);
+  return this->executeQuery(query);
+}
+
+bool SqlContact::connectUsersWithContact(int first_contact,
+                                         int second_contact) {
+  QDateTime current_time = QDateTime::currentDateTime();
+  if (!this->createContact(current_time))
+    return false;
+
+  this->getLastCreatedContactId(current_time);
+  if (this->_id <= 0)
+    return false;
+  if (!this->createUserContact(first_contact) ||
+      !this->createUserContact(second_contact)) {
+    this->deleteContact();
+    return false;
+  }
+  return true;
+}
+
+bool SqlContact::getLastCreatedContactId(const QDateTime &timestamp) {
+  QSqlQuery query;
+  query.prepare("SELECT * FROM " + *CONTACTS_TABLE_NAME + " WHERE " +
+                *CREATE_TIMESTAMP_COLUMN_NAME +
+                " = :" + *CREATE_TIMESTAMP_COLUMN_NAME + ";");
+  query.bindValue(":" + *CREATE_TIMESTAMP_COLUMN_NAME, timestamp);
+  if (!this->executeQuery(query))
+    return -1;
+
+  int id_column = query.record().indexOf(*ID_COLUMN_NAME);
+  this->_id = query.value(id_column).toInt();
+
+  return true;
+}
+
+bool SqlContact::createContact(const QDateTime &timestamp) {
+  if (timestamp.isNull())
     return false;
 
   QSqlQuery query;
   query.prepare("INSERT INTO " + *CONTACTS_TABLE_NAME + "(" +
-                *ID_FIRST_USER_COLUMN_NAME + ", " +
-                *ID_SECOND_USER_COLUMN_NAME + ", " +
                 *CREATE_TIMESTAMP_COLUMN_NAME +
-                ") VALUES (:" + *ID_FIRST_USER_COLUMN_NAME +
-                ",:" + *ID_SECOND_USER_COLUMN_NAME +
-                ",:" + *CREATE_TIMESTAMP_COLUMN_NAME + ");");
-  query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_first_user_id);
-  query.bindValue(":" + *ID_SECOND_USER_COLUMN_NAME, this->_second_user_id);
+                ") VALUES (:" + *CREATE_TIMESTAMP_COLUMN_NAME + ");");
   query.bindValue(":" + *CREATE_TIMESTAMP_COLUMN_NAME,
                   this->_created_timestamp);
 
-  return this->executeQuery(query) ? isAddingContactComplited() : false;
-}
-
-bool SqlContact::isAddingContactComplited() {
-  QSqlQuery query;
-  query.prepare(
-      "SELECT * FROM " + *CONTACTS_TABLE_NAME + " WHERE " +
-      *CREATE_TIMESTAMP_COLUMN_NAME + " = :" + *CREATE_TIMESTAMP_COLUMN_NAME +
-      " AND " + *ID_FIRST_USER_COLUMN_NAME +
-      " = :" + *ID_FIRST_USER_COLUMN_NAME + " AND " +
-      *ID_SECOND_USER_COLUMN_NAME + " = :" + *ID_SECOND_USER_COLUMN_NAME + ";");
-
-  query.bindValue(":" + *CREATE_TIMESTAMP_COLUMN_NAME,
-                  this->_created_timestamp);
-  query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_first_user_id);
-  query.bindValue(":" + *ID_SECOND_USER_COLUMN_NAME, this->_second_user_id);
-
-  if (!this->executeQuery(query))
-    return false;
-
-  while (query.next()) {
-    int create_timestamp_column, id_first_column, id_second_column;
-    int first_id, second_id;
-    QDateTime create_timestamp;
-
-    create_timestamp_column =
-        query.record().indexOf(*CREATE_TIMESTAMP_COLUMN_NAME);
-    id_first_column = query.record().indexOf(*ID_FIRST_USER_COLUMN_NAME);
-    id_second_column = query.record().indexOf(*ID_SECOND_USER_COLUMN_NAME);
-
-    first_id = query.value(id_first_column).toInt();
-    second_id = query.value(id_second_column).toInt();
-    create_timestamp = query.value(create_timestamp_column).toDateTime();
-
-    return first_id == this->_first_user_id &&
-           second_id == this->_second_user_id &&
-           create_timestamp == this->_created_timestamp;
-  }
-
-  return false;
+  return this->executeQuery(query);
 }
 
 bool SqlContact::executeQuery(QSqlQuery &query) {
@@ -71,7 +69,6 @@ bool SqlContact::executeQuery(QSqlQuery &query) {
     qDebug() << query.lastError() << query.lastQuery();
     return false;
   }
-
   return true;
 }
 
@@ -124,15 +121,15 @@ bool SqlContact::deleteContact() {
 QVector<Contact *> SqlContact::get_user_contacts() {
   QSqlQuery query;
   query.prepare(
-      "SELECT " + *CONTACTS_TABLE_NAME + "." + *ID_COLUMN_NAME + ", " + *ID_SECOND_USER_COLUMN_NAME + ", " +
-      *CREATE_TIMESTAMP_COLUMN_NAME + ", " + *USERNAME_COLUMN_NAME + " FROM " +
-      *CONTACTS_TABLE_NAME + " INNER JOIN " + *USERS_TABLE_NAME + " ON " +
-      *USERS_TABLE_NAME + "." + *ID_COLUMN_NAME + " = " + *CONTACTS_TABLE_NAME +
-      "." + *ID_SECOND_USER_COLUMN_NAME + " WHERE " +
-      *ID_FIRST_USER_COLUMN_NAME + " = :" + *ID_FIRST_USER_COLUMN_NAME + ";");
+      "SELECT " + *CONTACTS_TABLE_NAME + "." + *ID_COLUMN_NAME + ", " +
+      *ID_SECOND_USER_COLUMN_NAME + ", " + *CREATE_TIMESTAMP_COLUMN_NAME +
+      ", " + *USERNAME_COLUMN_NAME + " FROM " + *CONTACTS_TABLE_NAME +
+      " INNER JOIN " + *USERS_TABLE_NAME + " ON " + *USERS_TABLE_NAME + "." +
+      *ID_COLUMN_NAME + " = " + *CONTACTS_TABLE_NAME + "." +
+      *ID_SECOND_USER_COLUMN_NAME + " WHERE " + *ID_FIRST_USER_COLUMN_NAME +
+      " = :" + *ID_FIRST_USER_COLUMN_NAME + ";");
 
   query.bindValue(":" + *ID_FIRST_USER_COLUMN_NAME, this->_first_user_id);
-
 
   if (!this->executeQuery(query))
     return {};
@@ -163,7 +160,6 @@ QDateTime SqlContact::getCreatedTimestamp() { return this->_created_timestamp; }
 void SqlContact::setCreatedTimestamp(QDateTime value) {
   this->_created_timestamp = value;
 }
-
 
 int SqlContact::getFirstUserId() { return _first_user_id; }
 void SqlContact::setFirstUserId(int value) { this->_first_user_id = value; }
