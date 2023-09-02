@@ -4,33 +4,28 @@ Contact::Contact(QObject *parent) : QObject{parent} {
   this->_created = QDateTime();
 }
 
-Contact::Contact(int id, User *contact, QDateTime created, int ownerId,
-                 QObject *parent)
+Contact::Contact(int id, User *user, QDateTime created, QObject *parent)
     : Contact{parent} {
-  this->_id = id;
-  this->_owner_id = ownerId;
-  this->_contact = contact;
+  this->_contact_id = id;
+  this->_user = user;
   this->_created = created;
 }
 
-int Contact::getContactId() { return this->_id; }
-void Contact::setContactId(int value) { this->_id = value; }
-int Contact::getOwnerId() { return this->_owner_id; }
+int Contact::getContactId() { return this->_contact_id; }
+void Contact::setContactId(int value) { this->_contact_id = value; }
 
-void Contact::setOwnerId(int value) { this->_owner_id = value; }
 
-User *Contact::getContact() { return this->_contact; }
-
-void Contact::setContact(User *value) { this->_contact = value; }
+User *Contact::getUser() { return this->_user; }
+void Contact::setUser(User *value) { this->_user = value; }
 
 QDateTime Contact::getCreated() { return this->_created; }
 
-int Contact::getId() const { return this->_id; }
+int Contact::getId() const { return this->_contact_id; }
 
 void Contact::setId(int value) {
-  if (this->_id == value)
+  if (this->_contact_id == value)
     return;
-  this->_id = value;
+  this->_contact_id = value;
   emit this->contactIdChanged();
 
   this->setMessages({});
@@ -38,9 +33,9 @@ void Contact::setId(int value) {
 
 QList<Message *> Contact::getMessages() {
   SqlContact *sqlContact = new SqlContact(this);
-  sqlContact->setId(this->_id);
-  sqlContact->setFirstUserId(this->_owner_id);
-  sqlContact->setSecondUserId(this->_contact->getDbId().toInt());
+  sqlContact->setId(this->_contact_id);
+  //set user
+  // sqlContact->setSecondUserId(this->_user->getDbId().toInt());
   this->_messages = sqlContact->getMessages();
 
   return this->_messages;
@@ -49,8 +44,8 @@ QList<Message *> Contact::getMessages() {
 void Contact::setMessages(QList<Message *> values) {
   if (values.isEmpty()) {
     SqlContact *sqlContact = new SqlContact(this);
-    sqlContact->setId(this->_id);
-    sqlContact->setFirstUserId(this->_owner_id);
+    sqlContact->setId(this->_contact_id);
+    //sqlContact->setFirstUserId(this->_owner_id);
     this->_messages = sqlContact->getMessages();
     emit this->messagesChanged();
   } else {

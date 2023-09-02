@@ -23,7 +23,6 @@ public:
 
   bool connectUsersWithContact(int, int);
   bool createContact(const QDateTime &);
-  bool getLastCreatedContactId(const QDateTime &);
   bool createUserContact(int &);
   bool readContact();
   bool updateContact();
@@ -35,11 +34,8 @@ public:
 
   bool sendMessage(QString);
 
-  int getFirstUserId();
-  void setFirstUserId(int);
-
-  int getSecondUserId() const;
-  void setSecondUserId(int);
+  int getUserId();
+  void setUserId(int);
 
   int getId() const;
   void setId(int newId);
@@ -50,7 +46,7 @@ public:
 signals:
 
 private:
-  int _id {}, _first_user_id{}, _second_user_id;
+  int _id{}, _user_id{};
   QDateTime _created_timestamp{};
   QList<Message *> _messages;
 

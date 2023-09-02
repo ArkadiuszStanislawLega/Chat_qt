@@ -4,35 +4,31 @@
 #include <QDateTime>
 #include <QObject>
 
-#include "user.h"
-#include "sqluser.h"
 #include "message.h"
+#include "sqluser.h"
+#include "user.h"
 
 class User;
 class Message;
 class Contact : public QObject {
   Q_OBJECT
-      public:
-               explicit Contact(QObject *parent = nullptr);
-  Contact(int id, User *contact, QDateTime created, int ownerId,
-          QObject *parent = nullptr);
+public:
+  explicit Contact(QObject *parent = nullptr);
+  Contact(int id, User *contact, QDateTime created, QObject *parent = nullptr);
 
   Q_PROPERTY(int contactId READ getContactId WRITE setContactId NOTIFY
                  contactIdChanged FINAL)
-  Q_PROPERTY(User *contact READ getContact WRITE setContact NOTIFY
-                 contactChanged FINAL)
+  Q_PROPERTY(User *user READ getUser WRITE setUser NOTIFY userChanged FINAL)
   Q_PROPERTY(
       QDateTime created READ getCreated WRITE setCreated NOTIFY createdChanged)
-  Q_PROPERTY(QList<Message *> messages READ getMessages WRITE setMessages NOTIFY messagesChanged FINAL)
+  Q_PROPERTY(QList<Message *> messages READ getMessages WRITE setMessages NOTIFY
+                 messagesChanged FINAL)
 
   int getContactId();
   void setContactId(int);
 
-  int getOwnerId();
-  void setOwnerId(int value);
-
-  User *getContact();
-  void setContact(User *value);
+  User *getUser();
+  void setUser(User *value);
 
   void setCreated(QDateTime value);
   QDateTime getCreated();
@@ -46,17 +42,16 @@ class Contact : public QObject {
 signals:
   void contactIdChanged();
   void ownerIdChanged();
-  void contactChanged();
+  void userChanged();
   void createdChanged();
   void messagesChanged();
 
 public slots:
   void sendMessage();
 
-
-  private:
-    int _id, _owner_id;
-  User *_contact;
+private:
+  int _contact_id;
+  User *_user;
   QDateTime _created;
   QList<Message *> _messages;
 };

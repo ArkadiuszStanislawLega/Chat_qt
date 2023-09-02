@@ -76,7 +76,7 @@ Page {
             spacing: 20
             model: user.contacts
             delegate: ItemDelegate {
-                text: modelData.contact.username
+                text: modelData.user.username
                 width: list_view.width - list_view.leftMargin - list_view.rightMargin
                 height: 20
                 leftPadding: 20

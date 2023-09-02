@@ -169,8 +169,7 @@ bool SqlUser::createContact(int contact_id) {
 
   SqlContact *contact = new SqlContact(this);
   contact->setCreatedTimestamp(QDateTime::currentDateTime());
-  contact->setFirstUserId(this->_id);
-  contact->setSecondUserId(contact_id);
+  contact->setUserId(this->_id);
   return contact->createUserContact(this->_id);
 }
 
@@ -179,12 +178,10 @@ bool SqlUser::removeContact(int user_id) {
     return false;
 
   SqlContact *contact = new SqlContact(this);
-  contact->setFirstUserId(this->_id);
-  contact->setSecondUserId(user_id);
+  contact->setUserId(this->_id);
 
   if (!contact->deleteContact()) {
-    contact->setFirstUserId(user_id);
-    contact->setSecondUserId(this->_id);
+    contact->setUserId(user_id);
     return contact->deleteContact();
   }
 
@@ -193,6 +190,6 @@ bool SqlUser::removeContact(int user_id) {
 
 QVector<Contact *> SqlUser::getContacts() {
   SqlContact *sql= new SqlContact(this);
-  sql->setFirstUserId(this->_id);
+  sql->setUserId(this->_id);
   return sql->get_user_contacts();
 }
