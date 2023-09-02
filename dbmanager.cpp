@@ -11,21 +11,17 @@ DbManager::DbManager(QObject *parent) : QObject(parent) {
   }
 }
 
-//TODO: Make Contacts new
-/*CREATE TABLE "Contacts" (
-        "id"			INTEGER  PRIMARY KEY AUTOINCREMENT,
-        "first_user"		INTEGER NOT NULL,
-        "second_user"		INTEGER NOT NULL,
-        "create_timestamp"	datetime NOT NULL,
-        FOREIGN KEY(first_user) REFERENCES Users(id) ON DELETE CASCADE,
-        FOREIGN KEY(second_user) REFERENCES Users(id) ON DELETE CASCADE
-);*/
-
 void DbManager::CreateTables() {
   this->CreateContactsTable();
   this->CreateMessagesTable();
   this->CreateUsersTable();
 }
+
+/*
+ * CREATE TABLE IF NOT EXISTS Contacts (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+created_timestamp datetime NOT NULL);
+*/
 void DbManager::CreateContactsTable() {
   QSqlQuery query;
 
@@ -94,3 +90,35 @@ void DbManager::CreateUsersTable() {
            qPrintable(query.lastError().text()), qPrintable(query.lastQuery()));
   }
 }
+
+/*CREATE TABLE IF NOT EXISTS Users_contacts(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+contact_id INTEGER NOT NULL,
+user_id INTEGER NOT NULL,
+FOREIGN KEY(contact_id) REFERENCES Contacts(id) ON DELETE CASCADE,
+FOREIGN KEY(user_id) REFERENCES Users(id) ON DELETE CASCADE
+);*/
+void DbManager::CreateUsersContactTable() {
+  QSqlQuery query;
+  query.prepare("CREATE TABLE IF NOT EXISTS " + *USERS_CONTACT_TABLE_NAME + "(" +
+                *ID_COLUMN_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                *CONTACT_ID_COLUMN_NAME + " INTEGER NOT NULL," +
+                *USER_ID_COLUMN_NAME + " INTEGER NOT NULL, " +
+                "FOREIGN KEY (" + *CONTACT_ID_COLUMN_NAME + ") REFERENCES " + *CONTACTS_TABLE_NAME + "(" + *ID_COLUMN_NAME + ") ON DELETE CASCADE, " +
+                "FOREIGN KEY (" + *USER_ID_COLUMN_NAME + ") REFERENCES " + *USERS_TABLE_NAME + "(" + *ID_COLUMN_NAME + ") ON DELETE CASCADE );"
+                );
+  if(!query.exec()){
+    qFatal("")
+  }
+
+}
+
+bool DbManager::ExecuteQuery(QSqlQuery &query){
+  if(!query.exec())  {
+    qFatal("Failed to query 'create table' database: %s, %s",
+           qPrintable(query.lastError().text()), qPrintable(query.lastQuery()));
+
+  }
+}
+
+
