@@ -170,7 +170,7 @@ bool SqlUser::createContact(int contact_id) {
   SqlContact *contact = new SqlContact(this);
   contact->setCreatedTimestamp(QDateTime::currentDateTime());
   contact->setUserId(this->_id);
-  return contact->createUserContact(this->_id);
+  return contact->connectUsersWithContact(this->_id, contact_id);
 }
 
 bool SqlUser::removeContact(int user_id) {

@@ -46,13 +46,14 @@ bool SqlContact::createContact(const QDateTime &timestamp) {
 
   if (this->executeQuery(query)) {
     this->_id = query.lastInsertId().toInt();
+
     return true;
   }
   return false;
 }
 
 bool SqlContact::executeQuery(QSqlQuery &query) {
-  qDebug() << "Executing: " << query.lastQuery();
+  qDebug() << "SqlContact executing: " << query.lastQuery();
   if (!query.exec()) {
     qDebug() << query.lastError() << query.lastQuery();
     return false;
