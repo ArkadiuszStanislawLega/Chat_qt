@@ -75,23 +75,15 @@ Page {
             rightMargin: 48
             spacing: 20
             model: user.contacts
-            delegate: ItemDelegate {
-                text: modelData.user.username
-                width: list_view.width - list_view.leftMargin - list_view.rightMargin
-                height: 20
-                leftPadding: 20
-                onClicked: root.StackView.view.push("ConversationPage.qml", {
-                                                        "contact": modelData,
-                                                        "owner": user
-                                                    })
+            delegate: ItemContactList {
             }
+        }
 
 
-            /*Image {
+        /*Image {
                     id: avatar
                     source: model.display === "Me" ? "" : "images/" + model.display.replace(
                                                          " ", "_") + ".png"
                 } */
-        }
     }
 }
