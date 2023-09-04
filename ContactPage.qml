@@ -45,24 +45,6 @@ Page {
                     tf_contact_id.text = ""
                 }
             }
-            TextField {
-                Layout.fillWidth: true
-                id: tf_remove_id
-                height: 20
-                validator: IntValidator {
-                    bottom: 1
-                    top: 2000000
-                }
-            }
-            RoundButton {
-                id: b_remove_contact
-                text: qsTr("Delete")
-                enabled: tf_remove_id.length > 0
-                onClicked: {
-                    user.deleteContact(tf_remove_id.text)
-                    tf_remove_id.text = ""
-                }
-            }
         }
 
         ListView {

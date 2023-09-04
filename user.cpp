@@ -67,6 +67,7 @@ void User::deleteContact(QString userId) {
 
   SqlUser *sql = new SqlUser(this);
   sql->setId(this->_id.toInt());
+
   if (sql->removeContact(userId.toInt())) {
     emit contactsChanged();
   }

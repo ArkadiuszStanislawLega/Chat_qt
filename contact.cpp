@@ -56,3 +56,5 @@ void Contact::setMessages(QList<Message *> values) {
 void Contact::setCreated(QDateTime value) { this->_created = value; }
 
 void Contact::sendMessage() {}
+
+void Contact::deleteContact() {}
