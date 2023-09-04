@@ -15,6 +15,7 @@ void DbManager::CreateTables() {
   this->CreateContactsTable();
   this->CreateMessagesTable();
   this->CreateUsersTable();
+  this->CreateUsersContactTable();
 }
 
 /*
