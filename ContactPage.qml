@@ -39,7 +39,7 @@ Page {
             RoundButton {
                 id: b_add_contact
                 text: qsTr("Add")
-                enabled: tf_contact_id.length > 0
+                enabled: tf_contact_id.length > 0 && tf_contact_id.text != user.dbId
                 onClicked: {
                     user.createContact(tf_contact_id.text)
                     tf_contact_id.text = ""

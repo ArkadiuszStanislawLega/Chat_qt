@@ -49,10 +49,13 @@ private:
   int _id{}, _user_id{};
   QDateTime _created_timestamp{};
   QList<Message *> _messages;
+  const QString ALIAS_CONTACT_ID{"contact_id"}, ALIAS_USER_CONTACT_ID{"user_contact_id"};
 
-  QList<Contact *> getContactsFromQuery(QSqlQuery &, QList<QString>);
-  bool executeQuery(QSqlQuery &);
+  QList<Contact *> getContactsFromQuery(QSqlQuery *);
+  Contact *getContactFromQuery(QSqlQuery *);
+  bool executeQuery(QSqlQuery *);
   QString selectContactsQuery();
+  QString selectContactQuery();
 };
 
 #endif // SQLCONTACT_H
