@@ -51,7 +51,11 @@ bool SqlContact::createContact(const QDateTime &timestamp) {
 
 bool SqlContact::executeQuery(QSqlQuery *query)
 {
+  if (!query)
+    return false;
+
   qDebug() << "SqlContact executing: " << query->lastQuery();
+
   if (!query->exec()) {
     qDebug() << query->lastError() << query->lastQuery();
     return false;
@@ -176,7 +180,11 @@ QString SqlContact::selectContactsQuery() {
 
 QVector<Contact *> SqlContact::getContactsFromQuery(QSqlQuery *query)
 {
+  if (!query)
+    return {};
+
   QVector<Contact *> contacts;
+
   while (query->next()) {
     contacts.push_back(this->getContactFromQuery(query));
   }
@@ -185,6 +193,9 @@ QVector<Contact *> SqlContact::getContactsFromQuery(QSqlQuery *query)
 
 Contact *SqlContact::getContactFromQuery(QSqlQuery *query)
 {
+  if (!query)
+    return nullptr;
+
   int id_column{}, id_user_column{}, create_datestamp_column{}, username_column{};
 
   id_column = query->record().indexOf(ALIAS_CONTACT_ID);
