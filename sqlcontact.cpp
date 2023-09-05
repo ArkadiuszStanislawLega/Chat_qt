@@ -283,8 +283,7 @@ void SqlContact::setId(int newId) {
 }
 
 QList<Message *> SqlContact::getMessages() {
-	//SqlMessage *sql = new SqlMessage(this);
-	//sql->setContactId(this->_id);
-	//return sql->readMessages();
-	return {};
+	SqlMessage *sql = new SqlMessage(this);
+	sql->setContactId(this->_id);
+	return sql->readMessages();
 }

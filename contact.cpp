@@ -34,8 +34,6 @@ void Contact::setId(int value) {
 QList<Message *> Contact::getMessages() {
   SqlContact *sqlContact = new SqlContact(this);
   sqlContact->setId(this->_contact_id);
-  //set user
-  // sqlContact->setSecondUserId(this->_user->getDbId().toInt());
   this->_messages = sqlContact->getMessages();
 
   return this->_messages;
