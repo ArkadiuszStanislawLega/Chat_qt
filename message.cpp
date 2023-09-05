@@ -44,11 +44,11 @@ void Message::setAuthorUsername(const QString &value) {
 	emit AuthorUsernameChanged();
 }
 
-QDateTime Message::getsentTimestamp() const {
+QDateTime Message::getSentTimestamp() const {
 	return this->_sentTimestamp;
 }
 
-void Message::setsentTimestamp(const QDateTime &value) {
+void Message::setSentTimestamp(const QDateTime &value) {
 	if (this->_sentTimestamp == value)
 		return;
 	this->_sentTimestamp = value;
@@ -59,8 +59,8 @@ QString Message::getText() const {
 	return this->_text;
 }
 
-void Message::set(const QString &value) {
-	if (_text == value)
+void Message::setText(const QString &value) {
+	if (this->_text == value)
 		return;
 	this->_text = value;
 	emit textChanged();

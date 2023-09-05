@@ -94,39 +94,41 @@ QString SqlMessage::buildQueryReadMessages() {
 		   + " = :" + *CONTACT_ID_COLUMN_NAME + ";";
 }
 
+Message *SqlMessage::getMessageFromQuery(QSqlQuery &query) {
+	int messages_id_column, contact_id_column, author_username_column, author_id_column,
+		text_column, sent_timestamp_column;
+
+	messages_id_column = query.record().indexOf(*ID_COLUMN_NAME);
+	contact_id_column = query.record().indexOf(*CONTACT_ID_COLUMN_NAME);
+
+	author_id_column = query.record().indexOf(*AUTHOR_ID_COLUMN_NAME);
+	author_username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
+
+	text_column = query.record().indexOf(*TEXT_COLUMN_NAME);
+	sent_timestamp_column = query.record().indexOf(*SENT_TIMESTAMP_COLUMN_NAME);
+
+	Message *message = new Message(this);
+	message->setId(query.value(messages_id_column).toInt());
+	message->setContactId(query.value(contact_id_column).toInt());
+	message->setAuthorId(query.value(author_id_column).toInt());
+	message->setAuthorUsername(query.value(author_username_column).toString());
+	message->setText(query.value(text_column).toString());
+	message->setSentTimestamp(query.value(sent_timestamp_column).toDateTime());
+	qDebug() << message->getId() << message->getAuthorId() << message->getAuthorUsername();
+	return message;
+}
+
 QList<Message *> SqlMessage::readMessages() {
 	QSqlQuery query;
 	query.prepare(this->buildQueryReadMessages());
-	query.bindValue(":" + *CONTACT_ID_COLUMN_NAME, this->_author_id);
+	query.bindValue(":" + *CONTACT_ID_COLUMN_NAME, this->_contact_id);
 
 	if (!this->executeQuery(query))
 		return {};
 
 	QVector<Message *> messages;
 	while (query.next()) {
-		int messages_id_column, contact_id_column, author_username_column, author_id_column,
-			text_column, sent_timestamp_column;
-
-		messages_id_column = query.record().indexOf(*ID_COLUMN_NAME);
-		contact_id_column = query.record().indexOf(*CONTACT_ID_COLUMN_NAME);
-
-		author_id_column = query.record().indexOf(*AUTHOR_ID_COLUMN_NAME);
-		author_username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
-
-		text_column = query.record().indexOf(*TEXT_COLUMN_NAME);
-		sent_timestamp_column = query.record().indexOf(*SENT_TIMESTAMP_COLUMN_NAME);
-
-		Message *message = new Message(this);
-		message->setCon message->setAuthorId(query.value(author_id_column).toInt());
-		message->setMessage(query.value(text_column).toString());
-		message->setSentTimestamp(query.value(sent_timestamp_column).toDateTime());
-
-		message->setSenderId(firstId);
-		message->setReceiverId(secondId);
-		message->setSenderUsername(query.value(first_username_column).toString());
-		message->setReceiverUsername(query.value(second_username_column).toString());
-
-		messages.push_back(message);
+		messages.push_back(this->getMessageFromQuery(query));
 	}
 	return messages;
 }

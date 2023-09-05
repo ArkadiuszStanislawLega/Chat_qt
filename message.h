@@ -19,7 +19,7 @@ private:
 	Q_PROPERTY(int authorId READ getAuthorId WRITE setAuthorId NOTIFY authorIdChanged FINAL)
 	Q_PROPERTY(QString authorUsername READ getAuthorUsername WRITE setAuthorUsername NOTIFY
 				   AuthorUsernameChanged FINAL)
-	Q_PROPERTY(QDateTime sentTimestamp READ getsentTimestamp WRITE setsentTimestamp NOTIFY
+	Q_PROPERTY(QDateTime sentTimestamp READ getSentTimestamp WRITE setSentTimestamp NOTIFY
 				   sentTimestampChanged FINAL)
 
 	Q_PROPERTY(QString text READ getText WRITE setText NOTIFY textChanged FINAL)
@@ -39,8 +39,8 @@ public:
 	QString getAuthorUsername() const;
 	void setAuthorUsername(const QString &value);
 
-	QDateTime getsentTimestamp() const;
-	void setsentTimestamp(const QDateTime &value);
+	QDateTime getSentTimestamp() const;
+	void setSentTimestamp(const QDateTime &value);
 
 	QString getText() const;
 	void setText(const QString &value);

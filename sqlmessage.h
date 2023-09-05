@@ -18,6 +18,7 @@ private:
 	QString buildQueryReadMessages();
 
 	bool executeQuery(QSqlQuery &);
+	Message *getMessageFromQuery(QSqlQuery &);
 
 public:
   explicit SqlMessage(QObject *parent = nullptr);
