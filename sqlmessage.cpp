@@ -111,7 +111,7 @@ Message *SqlMessage::getMessageFromQuery(QSqlQuery &query) {
 	Message *message = new Message(this);
 	message->setId(query.value(messages_id_column).toInt());
 	message->setContactId(query.value(contact_id_column).toInt());
-	message->setAuthorId(query.value(author_id_column).toInt());
+	message->setAuthorId(query.value(author_id_column).toString());
 	message->setAuthorUsername(query.value(author_username_column).toString());
 	message->setText(query.value(text_column).toString());
 	message->setSentTimestamp(query.value(sent_timestamp_column).toDateTime());

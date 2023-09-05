@@ -22,11 +22,11 @@ void Message::setContactId(int value) {
 	emit ContactIdChanged();
 }
 
-int Message::getAuthorId() const {
+QString Message::getAuthorId() const {
 	return this->_authorId;
 }
 
-void Message::setAuthorId(int value) {
+void Message::setAuthorId(QString value) {
 	if (this->_authorId == value)
 		return;
 	this->_authorId = value;
