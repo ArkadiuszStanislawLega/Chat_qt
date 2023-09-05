@@ -86,11 +86,12 @@ ORDER BY Messages.sent_timestamp DESC;
 */
 
 QString SqlMessage::buildQueryReadMessages() {
-	return "SELECT " + *MESSAGES_TABLE_NAME + "." + *ID_COLUMN_NAME + ", " + *AUTHOR_ID_COLUMN_NAME
-		   + ", " + *USERS_TABLE_NAME + "." + *USERNAME_COLUMN_NAME + ", " + *TEXT_COLUMN_NAME
-		   + ", " + *SENT_TIMESTAMP_COLUMN_NAME + " FROM " + *MESSAGES_TABLE_NAME + " INNER JOIN "
-		   + *USERS_TABLE_NAME + " ON " + *MESSAGES_TABLE_NAME + "." + *AUTHOR_ID_COLUMN_NAME
-		   + " = " + *USERS_TABLE_NAME + "." + *ID_COLUMN_NAME + " WHERE " + *CONTACT_ID_COLUMN_NAME
+	return "SELECT " + *MESSAGES_TABLE_NAME + "." + *ID_COLUMN_NAME + ", " + *CONTACT_ID_COLUMN_NAME
+		   + "," + *AUTHOR_ID_COLUMN_NAME + ", " + *USERS_TABLE_NAME + "." + *USERNAME_COLUMN_NAME
+		   + ", " + *TEXT_COLUMN_NAME + ", " + *SENT_TIMESTAMP_COLUMN_NAME + " FROM "
+		   + *MESSAGES_TABLE_NAME + " INNER JOIN " + *USERS_TABLE_NAME + " ON "
+		   + *MESSAGES_TABLE_NAME + "." + *AUTHOR_ID_COLUMN_NAME + " = " + *USERS_TABLE_NAME + "."
+		   + *ID_COLUMN_NAME + " WHERE " + *CONTACT_ID_COLUMN_NAME
 		   + " = :" + *CONTACT_ID_COLUMN_NAME + ";";
 }
 
@@ -114,7 +115,6 @@ Message *SqlMessage::getMessageFromQuery(QSqlQuery &query) {
 	message->setAuthorUsername(query.value(author_username_column).toString());
 	message->setText(query.value(text_column).toString());
 	message->setSentTimestamp(query.value(sent_timestamp_column).toDateTime());
-	qDebug() << message->getId() << message->getAuthorId() << message->getAuthorUsername();
 	return message;
 }
 

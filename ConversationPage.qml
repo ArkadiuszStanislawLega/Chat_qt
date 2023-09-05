@@ -78,7 +78,7 @@ Page {
 
                             Label {
                                 id: message_text
-                                text: modelData.message + " " + modelData.authorId + " " + owner.dbId
+                                text: modelData.text
                                 color: sent_by_me ? "black" : "white"
                                 anchors.fill: parent
                                 anchors.margins: 12
