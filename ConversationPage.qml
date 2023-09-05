@@ -34,19 +34,15 @@ Page {
             anchors.verticalCenter: parent.verticalCenter
             text: qsTr("Delete")
             onClicked: {
-                //user.deleteContact(tf_remove_id.text)
-                if(contact.deleteContact()) info.text = "true"
-                else info.text = "false";
+                contact.deleteContact();
+                owner.contactsChanged();
+                root.StackView.view.pop();
+
             }
-        }
-        Label{
-            id: info
-            text: qsTr("TO jest pasek z informacjami")
         }
 
         ColumnLayout {
             anchors.fill: parent
-
             ListView {
                 id: list_view
                 Layout.fillWidth: true
@@ -105,6 +101,7 @@ Page {
             Pane {
                 id: pane
                 Layout.fillWidth: true
+                Layout.alignment: Qt.AlignBottom
 
                 RowLayout {
                     width: parent.width

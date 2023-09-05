@@ -68,14 +68,13 @@ void DbManager::CreateMessagesTable() {
                 ); */
 void DbManager::CreateUsersTable() {
   QSqlQuery query;
-  query.prepare("CREATE TABLE IF NOT EXISTS '" + *USERS_TABLE_NAME + "' (" +
-                "'" + *ID_COLUMN_NAME +
-                "' INTEGER PRIMARY KEY AUTOINCREMENT, "
-                "'" +
-                *USERNAME_COLUMN_NAME +
-                "' TEXT UNIQUE, "
-                "'" +
-                *PASSWORD_COLUMN_NAME + "' TEXT NOT NULL); ");
+  query.prepare("CREATE TABLE IF NOT EXISTS '" + *USERS_TABLE_NAME + "' (" + "'" + *ID_COLUMN_NAME
+				+ "' INTEGER PRIMARY KEY AUTOINCREMENT, "
+				  "'"
+				+ *USERNAME_COLUMN_NAME
+				+ "' TEXT UNIQUE, "
+				  "'"
+				+ *PASSWORD_COLUMN_NAME + "' TEXT NOT NULL); ");
   this->ExecuteQuery(query);
 }
 
@@ -88,15 +87,13 @@ FOREIGN KEY(user_id) REFERENCES Users(id) ON DELETE CASCADE
 );*/
 void DbManager::CreateUsersContactTable() {
   QSqlQuery query;
-  query.prepare("CREATE TABLE IF NOT EXISTS " + *USERS_CONTACT_TABLE_NAME +
-                "(" + *ID_COLUMN_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                *CONTACT_ID_COLUMN_NAME + " INTEGER NOT NULL," +
-                *USER_ID_COLUMN_NAME + " INTEGER NOT NULL, " + "FOREIGN KEY (" +
-                *CONTACT_ID_COLUMN_NAME + ") REFERENCES " +
-                *CONTACTS_TABLE_NAME + "(" + *ID_COLUMN_NAME +
-                ") ON DELETE CASCADE, " + "FOREIGN KEY (" +
-                *USER_ID_COLUMN_NAME + ") REFERENCES " + *USERS_TABLE_NAME +
-                "(" + *ID_COLUMN_NAME + ") ON DELETE CASCADE );");
+  query.prepare("CREATE TABLE IF NOT EXISTS " + *USERS_CONTACT_TABLE_NAME + "(" + *ID_COLUMN_NAME
+				+ " INTEGER PRIMARY KEY AUTOINCREMENT," + *CONTACT_ID_COLUMN_NAME
+				+ " INTEGER NOT NULL," + *USER_ID_COLUMN_NAME + " INTEGER NOT NULL, "
+				+ "FOREIGN KEY (" + *CONTACT_ID_COLUMN_NAME + ") REFERENCES " + *CONTACTS_TABLE_NAME
+				+ "(" + *ID_COLUMN_NAME + ") ON DELETE CASCADE, " + "FOREIGN KEY ("
+				+ *USER_ID_COLUMN_NAME + ") REFERENCES " + *USERS_TABLE_NAME + "(" + *ID_COLUMN_NAME
+				+ ") ON DELETE CASCADE );");
   this->ExecuteQuery(query);
 }
 

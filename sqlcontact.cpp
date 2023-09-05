@@ -72,7 +72,6 @@ bool SqlContact::createContact(const QDateTime &timestamp) {
 bool SqlContact::executeQuery(QSqlQuery *query) {
 	if (!query)
 		return false;
-
 	qDebug() << "SqlContact executing: " << query->lastQuery();
 
 	if (!query->exec()) {
@@ -146,6 +145,7 @@ bool SqlContact::updateContact() {
  */
 bool SqlContact::deleteContact() {
 	QSqlQuery query;
+	query.exec("PRAGMA foreign_keys = ON");
 	query.prepare("DELETE FROM " + *CONTACTS_TABLE_NAME + " WHERE " + *ID_COLUMN_NAME
 				  + " = :" + *ID_COLUMN_NAME + ";");
 	query.bindValue(":" + *ID_COLUMN_NAME, this->_id);
@@ -283,7 +283,8 @@ void SqlContact::setId(int newId) {
 }
 
 QList<Message *> SqlContact::getMessages() {
-	SqlMessage *sql = new SqlMessage(this);
-	sql->setContactId(this->_id);
-	return sql->readMessages();
+	//SqlMessage *sql = new SqlMessage(this);
+	//sql->setContactId(this->_id);
+	//return sql->readMessages();
+	return {};
 }
