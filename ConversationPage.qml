@@ -10,12 +10,8 @@ import com.iam_code.chat.user
 Page {
     id: root
     property string inConversationWith
-    property Contact contact
     property User owner
-
-    onStateChanged: {
-        contact.messages
-    }
+    property Contact contact
 
     header: ChatToolBar {
         ToolButton {
@@ -37,10 +33,15 @@ Page {
             anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             text: qsTr("Delete")
-            enabled: tf_remove_id.length > 0
             onClicked: {
-                user.deleteContact(tf_remove_id.text)
+                //user.deleteContact(tf_remove_id.text)
+                if(contact.deleteContact()) info.text = "true"
+                else info.text = "false";
             }
+        }
+        Label{
+            id: info
+            text: qsTr("TO jest pasek z informacjami")
         }
 
         ColumnLayout {

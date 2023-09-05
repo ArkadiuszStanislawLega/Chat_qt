@@ -145,45 +145,13 @@ bool SqlContact::updateContact() {
  * \return true if deleting is executing correctly>
  */
 bool SqlContact::deleteContact() {
-	this->readContact();
-
 	QSqlQuery query;
-	query.prepare("SELECT COUNT(*) AS counter FROM " + *USERS_CONTACT_TABLE_NAME + " WHERE "
-				  + *CONTACT_ID_COLUMN_NAME + " = :" + *CONTACT_ID_COLUMN_NAME + ";");
+	query.prepare("DELETE FROM " + *CONTACTS_TABLE_NAME + " WHERE " + *ID_COLUMN_NAME
+				  + " = :" + *ID_COLUMN_NAME + ";");
+	query.bindValue(":" + *ID_COLUMN_NAME, this->_id);
 
-	query.bindValue(":" + *CONTACT_ID_COLUMN_NAME, this->_id);
 	if (!this->executeQuery(&query))
 		return false;
-	int contacts_number{};
-	contacts_number = query.value(query.record().indexOf("counter")).toInt();
-
-	qDebug() << "elo " << contacts_number << this->_id;
-
-	while (query.next())
-		contacts_number = query.value(query.record().indexOf("counter")).toInt();
-
-	qDebug() << "DeleteContact(): contacts_number " << contacts_number;
-	query.clear();
-
-	if (contacts_number == 1) {
-		query.prepare("DELETE FROM " + *CONTACTS_TABLE_NAME + " WHERE " + *ID_COLUMN_NAME
-					  + " = :" + *ID_COLUMN_NAME + ";");
-		query.bindValue(":" + *ID_COLUMN_NAME, this->_id);
-
-		if (!this->executeQuery(&query))
-			return false;
-	} else {
-		//DELETE FROM Users_contacts where contact_id = 4 and user_id != 1;
-		qDebug() << "DeleteContact(): user_id " << this->_user_id;
-		query.prepare("DELETE FROM " + *USERS_CONTACT_TABLE_NAME + " WHERE " + *CONTACTS_TABLE_NAME
-					  + " = :" + *CONTACTS_TABLE_NAME + " AND " + *USER_ID_COLUMN_NAME
-					  + " = :" + *USER_ID_COLUMN_NAME + ";");
-		query.bindValue(":" + *CONTACTS_TABLE_NAME, this->_id);
-		query.bindValue(":" + *USER_ID_COLUMN_NAME, this->_user_id);
-
-		if (!this->executeQuery(&query))
-			return false;
-	}
 
 	return true;
 }

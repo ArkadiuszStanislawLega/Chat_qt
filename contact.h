@@ -5,11 +5,13 @@
 #include <QObject>
 
 #include "message.h"
+#include "sqlcontact.h"
 #include "sqluser.h"
 #include "user.h"
 
 class User;
 class Message;
+class SqlContact;
 class Contact : public QObject {
   Q_OBJECT
 public:
@@ -39,17 +41,20 @@ public:
   QList<Message *> getMessages();
   void setMessages(QList<Message *>);
 
-signals:
+  signals:
   void contactIdChanged();
   void ownerIdChanged();
   void userChanged();
   void createdChanged();
   void messagesChanged();
+  void succesfulDeleteContact();
+  void failToDeleteContact();
 
-public slots:
+  public slots:
   void sendMessage();
+  bool deleteContact();
 
-private:
+  private:
   int _contact_id;
   User *_user;
   QDateTime _created;

@@ -102,13 +102,10 @@ void User::setDbId(QString id) {
   emit this->idChanged();
 }
 
-QVector<Contact *> User::getContacts()
-{
-  // TODO: Make function to connect with db.
-  SqlUser *sql= new SqlUser(this);
-  sql->setId(this->_id.toInt());
-  sql->setUsername(this->_username);
-  this->_contacts = sql->getContacts();
+QVector<Contact *> User::getContacts() {
+  SqlContact *sql = new SqlContact(this);
+  sql->setUserId(this->getDbId().toInt());
+  this->_contacts = sql->getUserContacts();
   return this->_contacts;
 }
 void User::setContacts(QVector<Contact *> contacts)

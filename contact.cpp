@@ -57,4 +57,16 @@ void Contact::setCreated(QDateTime value) { this->_created = value; }
 
 void Contact::sendMessage() {}
 
-void Contact::deleteContact() {}
+bool Contact::deleteContact() {
+  SqlContact *contact = new SqlContact(this);
+  contact->setId(this->_contact_id);
+  contact->setUserId(this->_user->getDbId().toInt());
+
+  if (contact->deleteContact()) {
+	emit succesfulDeleteContact();
+	return true;
+  } else {
+	emit failToDeleteContact();
+	return false;
+  }
+}
