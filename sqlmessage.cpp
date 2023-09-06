@@ -91,8 +91,8 @@ QString SqlMessage::buildQueryReadMessages() {
 		   + ", " + *TEXT_COLUMN_NAME + ", " + *SENT_TIMESTAMP_COLUMN_NAME + " FROM "
 		   + *MESSAGES_TABLE_NAME + " INNER JOIN " + *USERS_TABLE_NAME + " ON "
 		   + *MESSAGES_TABLE_NAME + "." + *AUTHOR_ID_COLUMN_NAME + " = " + *USERS_TABLE_NAME + "."
-		   + *ID_COLUMN_NAME + " WHERE " + *CONTACT_ID_COLUMN_NAME
-		   + " = :" + *CONTACT_ID_COLUMN_NAME + ";";
+		   + *ID_COLUMN_NAME + " WHERE " + *CONTACT_ID_COLUMN_NAME + " = :"
+		   + *CONTACT_ID_COLUMN_NAME + " ORDER BY " + *SENT_TIMESTAMP_COLUMN_NAME + " DESC;";
 }
 
 Message *SqlMessage::getMessageFromQuery(QSqlQuery &query) {
