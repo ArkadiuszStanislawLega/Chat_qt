@@ -32,7 +32,6 @@ public:
   QDateTime getCreatedTimestamp();
   void setCreatedTimestamp(QDateTime value);
 
-  bool sendMessage(QString);
 
   int getUserId();
   void setUserId(int);
@@ -43,9 +42,9 @@ public:
   QList<Message *> getMessages();
   void setMessages(QList<Message *>);
 
-signals:
+  bool sendMessage(QString);
 
-private:
+  private:
   int _id{}, _user_id{};
   QDateTime _created_timestamp{};
   QList<Message *> _messages;

@@ -4,6 +4,9 @@
 #include <QDateTime>
 #include <QObject>
 
+#include "sqlmessage.h"
+
+class SqlMessage;
 class Message : public QObject {
 	Q_OBJECT
 private:
@@ -52,6 +55,9 @@ signals:
 	void AuthorUsernameChanged();
 	void sentTimestampChanged();
 	void textChanged();
+
+public slots:
+	bool sendMessage();
 };
 
 #endif // MESSAGE_H

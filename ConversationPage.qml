@@ -120,9 +120,13 @@ Page {
                     text: qsTr("Send")
                     enabled: message_field.length > 0
                     onClicked: {
-                        list_view.model.send_message(inConversationWith,
-                                                     message_field.text)
-                        message_field.text = ""
+                        if(contact.sendMessage(message_field.text)){
+                            contact.messagesChanged();
+
+                            //list_view.model.send_message(inConversationWith,
+                            //message_field.text)
+                            message_field.text = "";
+                        }
                     }
                 }
             }

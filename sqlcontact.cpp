@@ -268,6 +268,23 @@ void SqlContact::setCreatedTimestamp(QDateTime value) {
 	this->_created_timestamp = value;
 }
 
+bool SqlContact::sendMessage(QString text) {
+	QSqlQuery query;
+	query.prepare("INSERT INTO " + *MESSAGES_TABLE_NAME + "(" + *CONTACT_ID_COLUMN_NAME + ","
+				  + *AUTHOR_ID_COLUMN_NAME + "," + *TEXT_COLUMN_NAME + ","
+				  + *SENT_TIMESTAMP_COLUMN_NAME + ")" + " VALUES ( :" + *CONTACT_ID_COLUMN_NAME
+				  + ", :" + *AUTHOR_ID_COLUMN_NAME + ", :" + *TEXT_COLUMN_NAME
+				  + ", :" + *SENT_TIMESTAMP_COLUMN_NAME + ");");
+	query.bindValue(":" + *CONTACT_ID_COLUMN_NAME, this->_id);
+	query.bindValue(":" + *AUTHOR_ID_COLUMN_NAME, this->_user_id);
+	query.bindValue(":" + *TEXT_COLUMN_NAME, text);
+	query.bindValue(":" + *SENT_TIMESTAMP_COLUMN_NAME, QDateTime::currentDateTime());
+
+	qDebug() << query.lastQuery();
+
+	return this->executeQuery(&query);
+}
+
 int SqlContact::getUserId() {
 	return _user_id;
 }

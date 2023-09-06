@@ -51,8 +51,8 @@ public:
   void failToDeleteContact();
 
   public slots:
-  void sendMessage();
-  bool deleteContact();
+	  bool sendMessage(QString);
+	  bool deleteContact();
 
   private:
   int _contact_id;

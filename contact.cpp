@@ -53,7 +53,12 @@ void Contact::setMessages(QList<Message *> values) {
 
 void Contact::setCreated(QDateTime value) { this->_created = value; }
 
-void Contact::sendMessage() {}
+bool Contact::sendMessage(QString text) {
+  SqlContact *sql = new SqlContact(this);
+  sql->setId(this->_contact_id);
+  sql->setUserId(this->_user->getDbId().toInt());
+  return sql->sendMessage(text);
+}
 
 bool Contact::deleteContact() {
   SqlContact *sql = new SqlContact(this);

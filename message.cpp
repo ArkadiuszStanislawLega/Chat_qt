@@ -66,5 +66,15 @@ void Message::setText(const QString &value) {
 	emit textChanged();
 }
 
+bool Message::sendMessage() {
+	SqlMessage *sql = new SqlMessage(this);
+	sql->setContactId(this->_contact_id);
+	sql->setAuthorId(this->_authorId.toInt());
+	sql->setText(this->_text);
+	sql->setSentTimestamp(QDateTime::currentDateTime());
+
+	return sql->createMessage();
+}
+
 Message::Message(QObject *parent)
 	: QObject{parent} {}
