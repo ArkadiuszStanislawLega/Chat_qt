@@ -181,20 +181,21 @@ QString SqlContact::selectContactsQuery() {
 		users_username, ij_users_contacts_to_contacts, ij_users_to_users_contact, second_select,
 		full_query;
 
-	/*  
-    SELECT DISTINCT
-        Contacts.id as conctact_id,
-        Contacts.created_timestamp,
-        Users_contacts.id as user_contact_id,
-        Users_contacts.user_id,
-        Users.username FROM Contacts
-    INNER JOIN Users_contacts ON Users_contacts.contact_id = Contacts.id
-    INNER JOIN Users ON Users_contacts.user_id = Users.id
-    INNER JOIN (SELECT Users_contacts.contact_id, Users_contacts.user_id FROM
-    Users_contacts WHERE user_id = 34) WHERE Users_contacts.user_id != 34;
-    */
+	/*
+	SELECT 
+		contact, 
+		Contacts.created_timestamp,
+		Users_contacts.id as user_contact_id,
+		Users.id as user_id,
+		Users.username
+			FROM Users_contacts 
+			INNER JOIN Users ON Users.id = Users_contacts.user_id
+			INNER JOIN Contacts ON Contacts.id = Users_contacts.contact_id
+			INNER JOIN (SELECT Users_contacts.contact_id as contact FROM Users_contacts WHERE Users_contacts.user_id = 3) 
+		  WHERE Users_contacts.contact_id = contact AND Users_contacts.user_id != 3;*/
 
 	contacts_id = *CONTACTS_TABLE_NAME + "." + *ID_COLUMN_NAME + " AS " + ALIAS_CONTACT_ID;
+
 	created_timestamp = *CONTACTS_TABLE_NAME + "." + *CREATE_TIMESTAMP_COLUMN_NAME;
 	users_contacts_id = *USERS_CONTACT_TABLE_NAME + "." + *ID_COLUMN_NAME + " AS "
 						+ ALIAS_USER_CONTACT_ID;
@@ -207,15 +208,16 @@ QString SqlContact::selectContactsQuery() {
 								+ *USERS_CONTACT_TABLE_NAME + "." + *USER_ID_COLUMN_NAME + " = "
 								+ *USERS_TABLE_NAME + "." + *ID_COLUMN_NAME;
 	second_select = " INNER JOIN (SELECT " + *USERS_CONTACT_TABLE_NAME + "."
-					+ *CONTACT_ID_COLUMN_NAME + "," + *USERS_CONTACT_TABLE_NAME + "."
-					+ *USER_ID_COLUMN_NAME + " FROM " + *USERS_CONTACT_TABLE_NAME + " WHERE "
-					+ *USER_ID_COLUMN_NAME + " = :" + *USER_ID_COLUMN_NAME + ")";
+					+ *CONTACT_ID_COLUMN_NAME + " AS contacts " + " FROM "
+					+ *USERS_CONTACT_TABLE_NAME + " WHERE " + *USER_ID_COLUMN_NAME
+					+ " = :" + *USER_ID_COLUMN_NAME + ")";
 
-	full_query = "SELECT DISTINCT " + contacts_id + ", " + created_timestamp + ", "
-				 + users_contacts_id + ", " + users_contacts_user_id + ", " + users_username
-				 + " FROM " + *CONTACTS_TABLE_NAME + ij_users_contacts_to_contacts
-				 + ij_users_to_users_contact + second_select + " WHERE " + *USERS_CONTACT_TABLE_NAME
-				 + "." + *USER_ID_COLUMN_NAME + " != :" + *USER_ID_COLUMN_NAME + ";";
+	full_query = "SELECT " + contacts_id + ", " + created_timestamp + ", " + users_contacts_id
+				 + ", " + users_contacts_user_id + ", " + users_username + " FROM "
+				 + *CONTACTS_TABLE_NAME + ij_users_contacts_to_contacts + ij_users_to_users_contact
+				 + second_select + " WHERE " + *USERS_CONTACT_TABLE_NAME + "."
+				 + *CONTACT_ID_COLUMN_NAME + " = contacts AND " + *USERS_CONTACT_TABLE_NAME + "."
+				 + *USER_ID_COLUMN_NAME + " != :" + *USER_ID_COLUMN_NAME + ";";
 	return full_query;
 }
 

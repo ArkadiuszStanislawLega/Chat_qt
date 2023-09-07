@@ -43,7 +43,6 @@ void Contact::setMessages(QList<Message *> values) {
   if (values.isEmpty()) {
     SqlContact *sqlContact = new SqlContact(this);
     sqlContact->setId(this->_contact_id);
-    //sqlContact->setFirstUserId(this->_owner_id);
     this->_messages = sqlContact->getMessages();
     emit this->messagesChanged();
   } else {

@@ -58,7 +58,7 @@ Page {
                 readonly property bool sent_by_me: modelData.authorId === owner.dbId
 
                 anchors.right: sent_by_me ? list_view.contentItem.right : undefined
-                anchors.left: !sent_by_me ? list_view.contentItem.left : undefined
+                //anchors.left: !sent_by_me ? list_view.contentItem.left : undefined
                 spacing: 6
 
                 Row {
@@ -68,7 +68,7 @@ Page {
 
                     Image {
                         id: avatar
-                        source: !sent_by_me ? "images/Albert_Einstein" + ".png" : ""
+                        source: sent_by_me ? "images/Albert_Einstein" + ".png" : ""
                     }
                     Rectangle {
                         width: Math.min(
