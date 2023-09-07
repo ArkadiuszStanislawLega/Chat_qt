@@ -1,138 +1,91 @@
 #include "sqluser.h"
 
-SqlUser::SqlUser(QObject *parent) : QObject{parent} {}
+SqlUser::SqlUser(QObject *parent)
+	: QObject{parent} {}
 
-SqlUser *SqlUser::getUserByPasswordAndUsername(QString username,
-                                               QString password) {
-  QSqlQuery query;
-  QString cmd = "SELECT * FROM " + *USERS_TABLE_NAME + " WHERE " +
-                *USERNAME_COLUMN_NAME + " = :" + *USERNAME_COLUMN_NAME +
-                " AND " + *PASSWORD_COLUMN_NAME +
-                " = :" + *PASSWORD_COLUMN_NAME + " LIMIT 1;";
+SqlUser *SqlUser::getUserFromQuery(QSqlQuery &query) {
+	int id{}, id_column{}, username_column{}, password_column{};
+	QString username{}, password{};
 
-  query.prepare(cmd);
-  query.bindValue(":" + *USERNAME_COLUMN_NAME, username);
-  query.bindValue(":" + *PASSWORD_COLUMN_NAME, password);
-  if (!query.exec()) {
-    qDebug() << query.lastError() << query.lastQuery();
+	id_column = query.record().indexOf(*ID_COLUMN_NAME);
+	username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
+	password_column = query.record().indexOf(*PASSWORD_COLUMN_NAME);
 
-    return nullptr;
-  }
+	id = query.value(id_column).toInt();
+	username = query.value(username_column).toString();
+	password = query.value(password_column).toString();
 
-  while (query.next()) {
-    int id, id_column, username_column, password_column;
-    QString username, password;
+	SqlUser *user = new SqlUser(this);
+	user->setId(id);
+	user->setUsername(username);
+	user->setPassword(password);
 
-    id_column = query.record().indexOf(*ID_COLUMN_NAME);
-    username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
-    password_column = query.record().indexOf(*PASSWORD_COLUMN_NAME);
-
-    id = query.value(id_column).toInt();
-    username = query.value(username_column).toString();
-    password = query.value(password_column).toString();
-
-    SqlUser *user = new SqlUser();
-    user->setId(id);
-    user->setUsername(username);
-    user->setPassword(password);
-
-    return user;
-  }
-  return nullptr;
+	return user;
 }
 
 bool SqlUser::createUser() {
   QSqlQuery query;
-  QString cmd = "INSERT INTO " + *USERS_TABLE_NAME + "('" +
-                *USERNAME_COLUMN_NAME + "','" + *PASSWORD_COLUMN_NAME +
-                "')"
-                " VALUES(:" +
-                *USERNAME_COLUMN_NAME + ",:" + *PASSWORD_COLUMN_NAME + ");";
+  query.prepare("INSERT INTO " + *USERS_TABLE_NAME + "('" + *USERNAME_COLUMN_NAME + "','"
+				+ *PASSWORD_COLUMN_NAME
+				+ "')"
+				  " VALUES(:"
+				+ *USERNAME_COLUMN_NAME + ",:" + *PASSWORD_COLUMN_NAME + ");");
 
-  query.prepare(cmd);
   query.bindValue(":" + *USERNAME_COLUMN_NAME, this->_username);
   query.bindValue(":" + *PASSWORD_COLUMN_NAME, this->_password);
 
-  if (!query.exec()) {
-    qDebug() << query.lastError() << query.lastQuery();
-    return false;
-  }
+  if (!this->executeQuery(query))
+	  return false;
 
-  return this->isAddingUserComplieted();
-}
-
-bool SqlUser::isAddingUserComplieted() {
-  SqlUser *user =
-      SqlUser::getUserByPasswordAndUsername(this->_username, this->_password);
-  if (user->getUsername() == this->_username &&
-      user->getPassword() == this->_password) {
-
-    this->_id = user->getId();
-    delete (user);
-    return true;
-  }
-  delete (user);
-  return false;
+  this->_id = query.lastInsertId().toInt();
+  return this->_id > 0;
 }
 
 bool SqlUser::isCredentialsCorrect(int id, QString password) {
   if (password.isEmpty())
-    return false;
+	  return false;
+
   if (id <= 0)
-    return false;
+	  return false;
 
   QSqlQuery query;
-  QString cmd = "SELECT " + *ID_COLUMN_NAME + ", " + *PASSWORD_COLUMN_NAME +
-                " FROM " + *USERS_TABLE_NAME + " WHERE " + *ID_COLUMN_NAME +
-                " = :" + *ID_COLUMN_NAME + ";";
+  query.prepare("SELECT * FROM " + *USERS_TABLE_NAME + " WHERE " + *ID_COLUMN_NAME
+				+ " = :" + *ID_COLUMN_NAME + ";");
 
-  query.prepare(cmd);
   query.bindValue(":" + *ID_COLUMN_NAME, this->_id);
 
-  if (!query.exec()) {
-    qDebug() << query.lastError() << query.lastQuery();
-    return false;
-  }
+  if (!this->executeQuery(query))
+	  return false;
+
+  qDebug() << this->_id << this->_username << this->_password;
 
   while (query.next()) {
-    int id_column{}, password_column{};
-
-    id_column = query.record().indexOf(*ID_COLUMN_NAME);
-    password_column = query.record().indexOf(*PASSWORD_COLUMN_NAME);
-
-    this->_id = query.value(id_column).toInt();
-    this->_password = query.value(password_column).toString();
+	  return this->getUserFromQuery(query)->getPassword() == password;
   }
-
-  return password == this->_password;
+  return false;
 }
 
 bool SqlUser::readUser() {
-
   QSqlQuery query;
-  QString cmd = "SELECT * FROM " + *USERS_TABLE_NAME + " WHERE " +
-                *ID_COLUMN_NAME + " = :" + *ID_COLUMN_NAME + ";";
+  query.prepare("SELECT * FROM " + *USERS_TABLE_NAME + " WHERE " + *ID_COLUMN_NAME
+				+ " = :" + *ID_COLUMN_NAME + ";");
 
-  query.prepare(cmd);
   query.bindValue(":" + *ID_COLUMN_NAME, this->_id);
-  if (!query.exec()) {
-    qDebug() << query.lastError() << query.lastQuery();
-    return false;
-  }
+
+  if (!this->executeQuery(query))
+	  return false;
 
   while (query.next()) {
-    int id_column{}, username_column{}, password_column{};
-
-    id_column = query.record().indexOf(*ID_COLUMN_NAME);
-    username_column = query.record().indexOf(*USERNAME_COLUMN_NAME);
-    password_column = query.record().indexOf(*PASSWORD_COLUMN_NAME);
-
-    this->_id = query.value(id_column).toInt();
-    this->_username = query.value(username_column).toString();
-    this->_password = query.value(password_column).toString();
-
-    return true;
+	  SqlUser *user = this->getUserFromQuery(query);
+	  if (user) {
+		  this->_id = user->getId();
+		  this->_username = user->getUsername();
+		  this->_password = user->getPassword();
+		  delete (user);
+		  return true;
+	  }
   }
+
   return false;
 }
 
@@ -192,4 +145,13 @@ QVector<Contact *> SqlUser::getContacts() {
   SqlContact *sql= new SqlContact(this);
   sql->setUserId(this->_id);
   return sql->getUserContacts();
+}
+
+bool SqlUser::executeQuery(QSqlQuery &query) {
+  qDebug() << "Sql User executing: " << query.lastQuery();
+  if (!query.exec()) {
+	qDebug() << query.lastError() << query.lastQuery();
+	return false;
+  }
+  return true;
 }

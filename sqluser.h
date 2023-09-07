@@ -20,11 +20,8 @@ class SqlUser : public QObject {
   Q_OBJECT
 public:
   explicit SqlUser(QObject *parent = nullptr);
-  static QString getNextId();
-  static SqlUser *getUserByPasswordAndUsername(QString username, QString password);
 
   bool createUser();
-  bool isAddingUserComplieted();
   bool isCredentialsCorrect(int id, QString password);
   bool readUser();
   bool updateUser();
@@ -57,6 +54,9 @@ public:
   QString _username{}, _password{};
   int _id{};
   QDateTime _occupied{}, _last_activity{};
+  bool executeQuery(QSqlQuery &);
+
+  SqlUser *getUserFromQuery(QSqlQuery &);
 
   // TODO: Make field keeping avatar image.
 };
