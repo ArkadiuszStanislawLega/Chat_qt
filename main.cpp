@@ -2,8 +2,6 @@
 #include <QQmlApplicationEngine>
 #include <QtCore>
 
-#include "sqlcontactmodel.h"
-#include "sqlconversationmodel.h"
 #include "dbmanager.h"
 #include "user.h"
 #include "message.h"
@@ -12,8 +10,6 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    qmlRegisterType<SqlContactModel>("com.iam_code.chat.contact_model", 1, 0, "SqlContactModel");
-    qmlRegisterType<SqlConversationModel>("com.iam_code.chat.conversation_model", 1, 0, "SqlConversationModel");
     qmlRegisterType<User>("com.iam_code.chat.user", 1, 0, "User");
     qmlRegisterType<Contact>("com.iam_code.chat.contact", 1, 0, "Contact");
     qmlRegisterType<Message>("com.iam_code.chat.message", 1, 0, "Message");

@@ -3,7 +3,6 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import com.iam_code.chat.contact_model
 import com.iam_code.chat.user
 import com.iam_code.chat.contact
 

@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import com.iam_code.chat.conversation_model
 import com.iam_code.chat.contact
 import com.iam_code.chat.message
 import com.iam_code.chat.user

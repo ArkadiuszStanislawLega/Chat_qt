@@ -15,10 +15,10 @@ qt_add_executable(appChat_qt
     sqlcontact.h sqlcontact.cpp
     dbmanager.h
     dbmanager.cpp
-    sqlcontactmodel.h
-    sqlcontactmodel.cpp
-    sqlconversationmodel.h
-    sqlconversationmodel.cpp
+
+
+
+
     user.h user.cpp
 )
 
