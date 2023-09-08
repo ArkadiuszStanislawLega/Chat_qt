@@ -83,7 +83,7 @@ bool Contact::sendMessage(QString text) {
 	sql->setUserId(this->_user->getDbId().toInt());
 
 	if (sql->sendMessage(text)) {
-		delete (sql);
+		delete sql;
 		emit this->successfulySendedMessage();
 		return true;
 	}
@@ -108,10 +108,10 @@ bool Contact::deleteContact() {
 
 	if (sql->deleteContact()) {
 		emit succesfulDeleteContact();
-		delete (sql);
+		delete sql;
 		return true;
 	}
 	emit failToDeleteContact();
-	delete (sql);
+	delete sql;
 	return false;
 }

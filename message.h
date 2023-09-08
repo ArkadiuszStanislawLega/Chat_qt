@@ -55,9 +55,6 @@ signals:
 	void AuthorUsernameChanged();
 	void sentTimestampChanged();
 	void textChanged();
-
-public slots:
-	bool sendMessage();
 };
 
 #endif // MESSAGE_H
