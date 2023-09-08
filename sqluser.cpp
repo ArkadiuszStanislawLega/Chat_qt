@@ -66,15 +66,11 @@ bool SqlUser::executeQuery(QSqlQuery &query) {
 
 /*!
  * \brief SqlUser::isCredentialsCorrect Compare passed credential with data in database.
- * \param id User Id in database.
  * \param password Hashed password to compare.
  * \return True if user Id is in the database and hashes passed as argument and password from Database are same.
  */
-bool SqlUser::isCredentialsCorrect(int id, QString password) {
-	if (password.isEmpty())
-		return false;
-
-	if (id <= 0)
+bool SqlUser::isCredentialsCorrect(QString password) {
+	if (password.isEmpty() || this->_id <= 0)
 		return false;
 
 	QSqlQuery query;

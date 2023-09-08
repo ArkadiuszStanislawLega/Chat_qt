@@ -22,7 +22,7 @@ public:
   explicit SqlUser(QObject *parent = nullptr);
 
   bool createUser();
-  bool isCredentialsCorrect(int id, QString password);
+  bool isCredentialsCorrect(QString password);
   bool readUser();
   bool updateUser();
   bool deleteUser();

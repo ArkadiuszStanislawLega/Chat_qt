@@ -36,11 +36,10 @@ public slots:
   void addUserToDb(QString);
   void isUserLogin(QString);
   void createContact(QString);
-  void deleteContact(QString);
   bool auteticateUser(QString);
-  bool sendMessage(int, QString);
+  bool sendMessage(QString);
 
-public:
+  public:
   explicit User(QObject *parent = nullptr);
   User(QString id, QString username, QVector<Contact *> contacts, QObject *parent = nullptr);
 
