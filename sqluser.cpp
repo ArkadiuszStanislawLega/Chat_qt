@@ -178,13 +178,20 @@ void SqlUser::userToSqlUserConverter(User &user) {
  * \return True if connection between users successfully created.
  */
 bool SqlUser::createContact(int contact_id) {
+	if (this->_id <= 0)
+		return false;
+
 	if (contact_id <= 0)
 		return false;
 
 	SqlContact *contact = new SqlContact(this);
 	contact->setCreatedTimestamp(QDateTime::currentDateTime());
 	contact->setUserId(this->_id);
-	return contact->connectUsersWithContact(this->_id, contact_id);
+	if (contact->connectUsersWithContact(this->_id, contact_id)) {
+		return true;
+	}
+
+	return false;
 }
 
 /*!
@@ -212,6 +219,10 @@ bool SqlUser::removeContact(int user_id) {
  * \return List of contacts connected with user.
  */
 QVector<Contact *> SqlUser::getContacts() {
+	qDebug() << "SQL user get contacts: " << this->_id;
+	if (this->_id <= 0)
+		return {};
+
 	SqlContact *sql = new SqlContact(this);
 	sql->setUserId(this->_id);
 	return sql->getUserContacts();

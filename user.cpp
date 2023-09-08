@@ -103,8 +103,12 @@ void User::setDbId(QString id) {
 }
 
 QVector<Contact *> User::getContacts() {
+  if (this->_id.isEmpty())
+	return this->_contacts;
+
   SqlContact *sql = new SqlContact(this);
-  sql->setUserId(this->getDbId().toInt());
+  sql->setUserId(this->_id.toInt());
+
   this->_contacts = sql->getUserContacts();
   return this->_contacts;
 }

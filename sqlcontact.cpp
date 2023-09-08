@@ -175,7 +175,7 @@ bool SqlContact::deleteContact() {
  * \return list of users Connected with assigned user to an instance of this class.
  */
 QVector<Contact *> SqlContact::getUserContacts() {
-	if (this->_id <= 0)
+	if (this->_user_id <= 0)
 		return {};
 
 	QSqlQuery query;
@@ -316,8 +316,8 @@ void SqlContact::setUserId(int value) {
 int SqlContact::getId() const {
 	return _id;
 }
-void SqlContact::setId(int newId) {
-	_id = newId;
+void SqlContact::setId(int value) {
+	this->_id = value;
 }
 
 QList<Message *> SqlContact::getMessages() {
