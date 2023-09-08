@@ -27,8 +27,6 @@ public:
   bool updateUser();
   bool deleteUser();
 
-  bool sendMessage();
-
   int getId();
   void setId(int value);
 
@@ -54,10 +52,9 @@ public:
   QString _username{}, _password{};
   int _id{};
   QDateTime _occupied{}, _last_activity{};
-  bool executeQuery(QSqlQuery &);
 
   SqlUser *getUserFromQuery(QSqlQuery &);
-
+  bool executeQuery(QSqlQuery &);
   // TODO: Make field keeping avatar image.
 };
 
