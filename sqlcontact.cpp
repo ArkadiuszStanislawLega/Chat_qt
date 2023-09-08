@@ -5,6 +5,7 @@ SqlContact::SqlContact(QObject *parent)
 	this->_id = 0;
 	this->_user_id = 0;
 	this->_created_timestamp = QDateTime();
+	this->_messages = {};
 }
 
 /*!
@@ -13,6 +14,9 @@ SqlContact::SqlContact(QObject *parent)
  * \return true if connection will created.
  */
 bool SqlContact::createUserContact(int &user_id) {
+	if (this->_id <= 0 || user_id <= 0)
+		return false;
+
 	QSqlQuery query;
 	query.prepare("INSERT INTO " + *USERS_CONTACT_TABLE_NAME + " (" + *CONTACT_ID_COLUMN_NAME + ", "
 				  + *USER_ID_COLUMN_NAME + ") VALUES (:" + *CONTACT_ID_COLUMN_NAME
@@ -29,6 +33,9 @@ bool SqlContact::createUserContact(int &user_id) {
  * \return true if Contact will created and connection with Users.
  */
 bool SqlContact::connectUsersWithContact(int first_contact, int second_contact) {
+	if (first_contact <= 0 || second_contact <= 0)
+		return false;
+
 	QDateTime current_time = QDateTime::currentDateTime();
 	if (!this->createContact(current_time))
 		return false;
@@ -87,6 +94,9 @@ bool SqlContact::executeQuery(QSqlQuery *query) {
  * \return true if query is correctly readed from datase.
  */
 bool SqlContact::readContact() {
+	if (this->_id <= 0)
+		return false;
+
 	QSqlQuery query;
 	query.prepare(this->buildSelectContactQuery());
 	query.bindValue(":" + *CONTACT_ID_COLUMN_NAME, this->_id);
@@ -144,6 +154,9 @@ bool SqlContact::updateContact() {
  * \return true if deleting is executing correctly>
  */
 bool SqlContact::deleteContact() {
+	if (this->_id <= 0)
+		return false;
+
 	QSqlQuery query;
 	query.exec("PRAGMA foreign_keys = ON");
 	query.prepare("DELETE FROM " + *CONTACTS_TABLE_NAME + " WHERE " + *ID_COLUMN_NAME
@@ -162,6 +175,9 @@ bool SqlContact::deleteContact() {
  * \return list of users Connected with assigned user to an instance of this class.
  */
 QVector<Contact *> SqlContact::getUserContacts() {
+	if (this->_id <= 0)
+		return {};
+
 	QSqlQuery query;
 	query.prepare(this->selectContactsQuery());
 	query.bindValue(":" + *USER_ID_COLUMN_NAME, this->_user_id);
@@ -305,6 +321,9 @@ void SqlContact::setId(int newId) {
 }
 
 QList<Message *> SqlContact::getMessages() {
+	if (this->_id <= 0)
+		return this->_messages;
+
 	SqlMessage *sql = new SqlMessage(this);
 	sql->setContactId(this->_id);
 	return sql->readMessages();
