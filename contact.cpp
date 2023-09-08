@@ -44,6 +44,9 @@ void Contact::setId(int value) {
 }
 
 QList<Message *> Contact::getMessages() {
+	if (this->_contact_id <= 0)
+		return this->_messages;
+
 	SqlContact *sqlContact = new SqlContact(this);
 	sqlContact->setId(this->_contact_id);
 	this->_messages = sqlContact->getMessages();
@@ -52,14 +55,7 @@ QList<Message *> Contact::getMessages() {
 }
 
 void Contact::setMessages(QList<Message *> values) {
-	if (values.isEmpty()) {
-		SqlContact *sqlContact = new SqlContact(this);
-		sqlContact->setId(this->_contact_id);
-		this->_messages = sqlContact->getMessages();
-		emit this->messagesChanged();
-	} else {
-		this->_messages = values;
-	}
+	this->_messages = values;
 }
 
 void Contact::setCreated(QDateTime value) {
