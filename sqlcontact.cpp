@@ -88,7 +88,7 @@ bool SqlContact::executeQuery(QSqlQuery *query) {
  */
 bool SqlContact::readContact() {
 	QSqlQuery query;
-	query.prepare(this->selectContactQuery());
+	query.prepare(this->buildSelectContactQuery());
 	query.bindValue(":" + *CONTACT_ID_COLUMN_NAME, this->_id);
 
 	if (!this->executeQuery(&query))
@@ -105,7 +105,7 @@ bool SqlContact::readContact() {
  * \brief SqlContact::selectContactQuery build select query to databse.
  * \return Query to selecting one contact from datbase.
  */
-QString SqlContact::selectContactQuery() {
+QString SqlContact::buildSelectContactQuery() {
 	QString contacts_id, created_timestamp, users_contacts_id, users_contacts_user_id,
 		users_username, ij_users_contacts_to_contacts, ij_users_to_users_contact, second_select,
 		full_query;
@@ -270,6 +270,11 @@ void SqlContact::setCreatedTimestamp(QDateTime value) {
 	this->_created_timestamp = value;
 }
 
+/*!
+ * \brief SqlContact::sendMessage Adddin
+ * \param text
+ * \return 
+ */
 bool SqlContact::sendMessage(QString text) {
 	QSqlQuery query;
 	query.prepare("INSERT INTO " + *MESSAGES_TABLE_NAME + "(" + *CONTACT_ID_COLUMN_NAME + ","
@@ -281,8 +286,6 @@ bool SqlContact::sendMessage(QString text) {
 	query.bindValue(":" + *AUTHOR_ID_COLUMN_NAME, this->_user_id);
 	query.bindValue(":" + *TEXT_COLUMN_NAME, text);
 	query.bindValue(":" + *SENT_TIMESTAMP_COLUMN_NAME, QDateTime::currentDateTime());
-
-	qDebug() << query.lastQuery();
 
 	return this->executeQuery(&query);
 }

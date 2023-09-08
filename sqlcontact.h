@@ -54,7 +54,7 @@ public:
   Contact *getContactFromQuery(QSqlQuery *);
   bool executeQuery(QSqlQuery *);
   QString selectContactsQuery();
-  QString selectContactQuery();
+  QString buildSelectContactQuery();
 };
 
 #endif // SQLCONTACT_H

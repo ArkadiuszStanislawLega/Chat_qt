@@ -47,6 +47,8 @@ public:
   void userChanged();
   void createdChanged();
   void messagesChanged();
+  void failedToSendMessage();
+  void successfulySendedMessage();
   void succesfulDeleteContact();
   void failToDeleteContact();
 
