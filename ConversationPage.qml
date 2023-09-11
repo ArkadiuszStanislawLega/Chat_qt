@@ -12,6 +12,8 @@ Page {
     property User owner
     property Contact contact
 
+    Keys.onReturnPressed:  send_button.action_message_send();
+
     header: ChatToolBar {
         ToolButton {
             text: qsTr("Back")
@@ -118,15 +120,16 @@ Page {
                     id: send_button
                     text: qsTr("Send")
                     enabled: message_field.length > 0
-                    onClicked: {
+
+                    function action_message_send(){
                         if(contact.sendMessage(message_field.text)){
                             contact.messagesChanged();
-
-                            //list_view.model.send_message(inConversationWith,
-                            //message_field.text)
                             message_field.text = "";
+                            message_field.focus = true;
                         }
                     }
+
+                    onClicked:  send_button.action_message_send();
                 }
             }
         }

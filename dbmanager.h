@@ -10,8 +10,6 @@
 #include <QSqlRecord>
 #include <QVector>
 
-// #include "sqluser.h"
-
 Q_GLOBAL_STATIC(QString, DATABASE_NAME, "chat.db");
 Q_GLOBAL_STATIC(QString, CONTACTS_TABLE_NAME, "Contacts");
 Q_GLOBAL_STATIC(QString, USERS_TABLE_NAME, "Users");
