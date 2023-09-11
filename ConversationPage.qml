@@ -136,7 +136,7 @@ Page {
 
                 CheckBox {
                     id: is_enter_sending
-
+                    checked:  true
                     onCheckedChanged: {
                         message_field.focus = true;
                     }
