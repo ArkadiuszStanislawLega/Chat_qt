@@ -114,6 +114,19 @@ Page {
                     Layout.fillWidth: true
                     placeholderText: qsTr("Compose message")
                     wrapMode: TextArea.Wrap
+                    Keys.onReturnPressed: {
+                        if(is_enter_sending.checked){
+                            send_button.action_message_send();
+                        }
+                    }
+                }
+
+                CheckBox {
+                    id: is_enter_sending
+
+                    onCheckedChanged: {
+                        message_field.focus = true;
+                    }
                 }
 
                 RoundButton {
