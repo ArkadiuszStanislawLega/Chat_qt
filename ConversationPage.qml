@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Dialogs
 
 import com.iam_code.chat.contact
 import com.iam_code.chat.message
@@ -13,6 +14,24 @@ Page {
     property Contact contact
 
     Keys.onReturnPressed:  send_button.action_message_send();
+
+    MessageDialog {
+        id: dialog_delete
+        title: qsTr("Remove Contact")
+        text: qsTr("Are you sure to remove user from your contacts?")
+        buttons: MessageDialog.Ok | MessageDialog.Cancel
+
+        onButtonClicked: function (button, role) {
+            switch (button) {
+            case MessageDialog.Ok:
+                contact.deleteContact();
+                owner.contactsChanged();
+                root.StackView.view.pop();
+                dialog_delete.close();
+                break;
+            }
+        }
+    }
 
     header: ChatToolBar {
         ToolButton {
@@ -34,12 +53,7 @@ Page {
             anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             text: qsTr("Delete")
-            onClicked: {
-                contact.deleteContact();
-                owner.contactsChanged();
-                root.StackView.view.pop();
-
-            }
+            onClicked: dialog_delete.open();
         }
     }
 
@@ -59,7 +73,6 @@ Page {
                 readonly property bool sent_by_me: modelData.authorId === owner.dbId
 
                 anchors.right: sent_by_me ? list_view.contentItem.right : undefined
-                //anchors.left: !sent_by_me ? list_view.contentItem.left : undefined
                 spacing: 6
 
                 Row {
