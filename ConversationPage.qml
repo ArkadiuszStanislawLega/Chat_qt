@@ -13,7 +13,10 @@ Page {
     property User owner
     property Contact contact
 
-    Keys.onReturnPressed:  send_button.action_message_send();
+    Keys.onReturnPressed:  {
+        if(message_field.length > 0)
+            send_button.action_message_send();
+    }
 
     MessageDialog {
         id: dialog_delete
@@ -128,7 +131,7 @@ Page {
                     placeholderText: qsTr("Compose message")
                     wrapMode: TextArea.Wrap
                     Keys.onReturnPressed: {
-                        if(is_enter_sending.checked){
+                        if(is_enter_sending.checked && message_field.length > 0) {
                             send_button.action_message_send();
                         }
                     }
